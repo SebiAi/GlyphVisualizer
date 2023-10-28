@@ -16,7 +16,7 @@ public:
     /**
      * @brief Enum definition for the visual modes.
      */
-    enum class Visual { Phone1, Phone2 };
+    enum class Visual { Phone1 = 0, Phone2 = 1 };
 
     /**
      * @brief Tries to set the visual depending on if the currently loaded composition allows it. If it is not possible nothing happens.
@@ -26,6 +26,7 @@ public:
     {
         // TODO: Check if the Visual is compatible with the currently loaded composition.
         this->currentVisual = v;
+        this->GlyphWidgetSizeHint = GlyphWidgetSizes[(int)v];
         this->resizeEvent(NULL);
         this->update();
     }
@@ -47,9 +48,17 @@ private:
     Visual currentVisual = Visual::Phone1;
 
     /**
+     * @brief Size for the Phone (1) and Phone (2) - pulled from the Glyph Composer Android app and under consideration of the size difference in the ringtone settings graphics.
+     */
+    const QSize GlyphWidgetSizes[2] = {
+        QSize(182, 382),    // Phone (1)
+        QSize(182, 389)     // Phone (2)
+    };
+
+    /**
      * @brief Holds the sizeHint of the widget - pulled from the Glyph Composer Android app.
      */
-    const QSize GlyphWidgetSizeHint = QSize(182, 382);
+    QSize GlyphWidgetSizeHint = GlyphWidgetSizes[(int)currentVisual];
 
     /**
      * @brief Holds the size and the position of the painting area - is calculated in the resizeEvent and used in the paintEvent.

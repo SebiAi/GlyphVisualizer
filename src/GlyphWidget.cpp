@@ -66,49 +66,49 @@ void GlyphWidget::calcPhone2Glyphs()
 {
     // Calculate Glyph a1
     glyphsPhone2[0]->resetPaintRectAndScale(currentSizeRatio).moveTopLeft(paintRectangle.topLeft());
-    glyphsPhone2[0]->paintRect.translate(QPointF(13.88, 10) * currentSizeRatio);
+    glyphsPhone2[0]->paintRect.translate(QPointF(13.88, 10 + 3.5) * currentSizeRatio);
 
     // Calculate Glyph a2
     glyphsPhone2[1]->resetPaintRectAndScale(currentSizeRatio).moveTopLeft(paintRectangle.topLeft());
-    glyphsPhone2[1]->paintRect.translate(QPointF(22.75, 51.56) * currentSizeRatio);
+    glyphsPhone2[1]->paintRect.translate(QPointF(22.75, 51.56 + 3.5) * currentSizeRatio);
 
     // Calculate Glyph b
     glyphsPhone2[2]->resetPaintRectAndScale(currentSizeRatio).moveTopRight(paintRectangle.topRight());
-    glyphsPhone2[2]->paintRect.translate(QPointF(-22.51, 20.07) * currentSizeRatio);
+    glyphsPhone2[2]->paintRect.translate(QPointF(-22.51, 20.07 + 3.5) * currentSizeRatio);
 
     // Calculate Glyph c1
     glyphsPhone2[3]->resetPaintRectAndScale(currentSizeRatio).moveTopRight(paintRectangle.topRight());
-    glyphsPhone2[3]->paintRect.translate(QPointF(-11.77, 92.49) * currentSizeRatio);
+    glyphsPhone2[3]->paintRect.translate(QPointF(-11.77, 92.49 + 3.5) * currentSizeRatio);
 
     // Calculate Glyph c2
     glyphsPhone2[4]->resetPaintRectAndScale(currentSizeRatio).moveTopLeft(paintRectangle.topLeft());
-    glyphsPhone2[4]->paintRect.translate(QPointF(13.7, 101.28) * currentSizeRatio);
+    glyphsPhone2[4]->paintRect.translate(QPointF(13.7, 101.28 + 3.5) * currentSizeRatio);
 
     // Calculate Glyph c3
     glyphsPhone2[5]->resetPaintRectAndScale(currentSizeRatio).moveTopLeft(paintRectangle.topLeft());
-    glyphsPhone2[5]->paintRect.translate(QPointF(11.94, 146.3) * currentSizeRatio);
+    glyphsPhone2[5]->paintRect.translate(QPointF(11.94, 146.3 + 3.5) * currentSizeRatio);
 
     // Calculate Glyph c4
     glyphsPhone2[6]->resetPaintRectAndScale(currentSizeRatio).moveBottomLeft(paintRectangle.bottomLeft());
-    glyphsPhone2[6]->paintRect.translate(QPointF(13.7, -88.56) * currentSizeRatio);
+    glyphsPhone2[6]->paintRect.translate(QPointF(13.7, -88.56 - 3.5) * currentSizeRatio);
 
     // Calculate Glyph c5
     glyphsPhone2[7]->resetPaintRectAndScale(currentSizeRatio).moveBottomRight(paintRectangle.bottomRight());
-    glyphsPhone2[7]->paintRect.translate(QPointF(-11.78, -97.36) * currentSizeRatio);
+    glyphsPhone2[7]->paintRect.translate(QPointF(-11.78, -97.36 - 3.5) * currentSizeRatio);
 
     // Calculate Glyph c6
     glyphsPhone2[8]->resetPaintRectAndScale(currentSizeRatio).moveBottomRight(paintRectangle.bottomRight());
-    glyphsPhone2[8]->paintRect.translate(QPointF(-10, -151.83) * currentSizeRatio);
+    glyphsPhone2[8]->paintRect.translate(QPointF(-10, -151.83 - 3.5) * currentSizeRatio);
 
     // Calculate Glyph d
     glyphsPhone2[9]->resetPaintRectAndScale(currentSizeRatio).moveCenter(paintRectangle.center());
     glyphsPhone2[9]->paintRect.moveBottom(paintRectangle.bottom());
-    glyphsPhone2[9]->paintRect.translate(QPointF(0, -24.38) * currentSizeRatio);
+    glyphsPhone2[9]->paintRect.translate(QPointF(0, -24.38 - 3.5) * currentSizeRatio);
 
     // Calculate Glyph e
     glyphsPhone2[10]->resetPaintRectAndScale(currentSizeRatio).moveCenter(paintRectangle.center());
     glyphsPhone2[10]->paintRect.moveBottom(paintRectangle.bottom());
-    glyphsPhone2[10]->paintRect.translate(QPointF(0, -10) * currentSizeRatio);
+    glyphsPhone2[10]->paintRect.translate(QPointF(0, -10 - 3.5) * currentSizeRatio);
 }
 
 void GlyphWidget::resizeEvent(QResizeEvent* event)
