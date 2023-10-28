@@ -134,7 +134,7 @@ void GlyphWidget::resizeEvent(QResizeEvent* event)
             break;
         default:
             // This should never happen
-            throw std::logic_error((QString("[Development Error] switch in function '") + __FUNCTION__ + "' not updated!").toStdString().c_str());
+            throw std::logic_error(QString("[Development Error] switch in function '").append(__FUNCTION__).append("' not updated!").toStdString().c_str());
             return;
     }
 
@@ -161,7 +161,7 @@ void GlyphWidget::paintEvent(QPaintEvent *event)
             break;
         default:
             // This should never happen
-            throw std::logic_error((QString("[Development Error] switch in function '") + __FUNCTION__ + "' not updated!").toStdString().c_str());
+            throw std::logic_error(QString("[Development Error] switch in function '").append(__FUNCTION__).append("' not updated!").toStdString().c_str());
             return;
     }
 
