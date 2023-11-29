@@ -72,3 +72,9 @@ CMakeLists.txt.user*
 *.dll
 *.exe
 
+## My own ignores
+# ----------------
+.vscode
+*.glypha
+*.glyphc1
+*.ogg
