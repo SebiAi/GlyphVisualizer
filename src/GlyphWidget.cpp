@@ -29,13 +29,23 @@ GlyphWidget::GlyphWidget(QWidget *parent)
     glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_c4"));
     glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_c5"));
     glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_c6"));
-    glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_d"));
     glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_e"));
+    glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_d")); // Append the GLYPH_USB_LINE at the end because the light data is structured that way - ask Nothing why
+
+    // Init
+    this->compositionManager = new CompositionManager();
+    connect(this->compositionManager->player, SIGNAL(positionChanged(qint64)), this, SLOT(compositionManager_onPositionChanged(qint64)));
+}
+
+void GlyphWidget::compositionManager_onPositionChanged(qint64 position)
+{
+    // Rerender the widget - this function will only be called every 40-60ms so this is fine.
+    this->update();
 }
 
 QSize GlyphWidget::sizeHint() const
 {
-    return GlyphWidgetSizeHint;
+    return glyphWidgetSizeHint;
 }
 
 void GlyphWidget::calcPhone1Glyphs()
@@ -100,15 +110,15 @@ void GlyphWidget::calcPhone2Glyphs()
     glyphsPhone2[8]->resetPaintRectAndScale(currentSizeRatio).moveBottomRight(paintRectangle.bottomRight());
     glyphsPhone2[8]->paintRect.translate(QPointF(-10, -151.83 - 3.5) * currentSizeRatio);
 
-    // Calculate Glyph d
+    // Calculate Glyph e
     glyphsPhone2[9]->resetPaintRectAndScale(currentSizeRatio).moveCenter(paintRectangle.center());
     glyphsPhone2[9]->paintRect.moveBottom(paintRectangle.bottom());
-    glyphsPhone2[9]->paintRect.translate(QPointF(0, -24.38 - 3.5) * currentSizeRatio);
+    glyphsPhone2[9]->paintRect.translate(QPointF(0, -10 - 3.5) * currentSizeRatio);
 
-    // Calculate Glyph e
+    // Calculate Glyph d
     glyphsPhone2[10]->resetPaintRectAndScale(currentSizeRatio).moveCenter(paintRectangle.center());
     glyphsPhone2[10]->paintRect.moveBottom(paintRectangle.bottom());
-    glyphsPhone2[10]->paintRect.translate(QPointF(0, -10 - 3.5) * currentSizeRatio);
+    glyphsPhone2[10]->paintRect.translate(QPointF(0, -24.38 - 3.5) * currentSizeRatio);
 }
 
 void GlyphWidget::resizeEvent(QResizeEvent* event)
@@ -126,16 +136,16 @@ void GlyphWidget::resizeEvent(QResizeEvent* event)
 
     switch (this->currentVisual)
     {
-        case Visual::Phone1:
-            calcPhone1Glyphs();
-            break;
-        case Visual::Phone2:
-            calcPhone2Glyphs();
-            break;
-        default:
-            // This should never happen
-            throw std::logic_error(QString("[Development Error] switch in function '").append(__FUNCTION__).append("' not updated!").toStdString().c_str());
-            return;
+    case Visual::Phone1:
+        calcPhone1Glyphs();
+        break;
+    case Visual::Phone2:
+        calcPhone2Glyphs();
+        break;
+    default:
+        // This should never happen
+        throw std::logic_error(std::string("[Development Error] switch in function '").append(__FUNCTION__).append("' not updated!"));
+        return;
     }
 
 }
@@ -150,26 +160,56 @@ void GlyphWidget::paintEvent(QPaintEvent *event)
     painter.setBrush(QBrush(QColor::fromRgb(47, 48, 51))); // Set color
     painter.drawRoundedRect(paintRectangle, 22 * currentSizeRatio, 22 * currentSizeRatio);
 
+    // Get pointers to the Phone (1) or Phone (2) versions of each list/function
     QList<Glyph*> *glyphs = NULL;
+    const QList<qreal>* const (CompositionManager::*opacityValuesFunction)(qint64) const;
     switch (this->currentVisual)
     {
-        case Visual::Phone1:
-            glyphs = &glyphsPhone1;
-            break;
-        case Visual::Phone2:
-            glyphs = &glyphsPhone2;
-            break;
-        default:
-            // This should never happen
-            throw std::logic_error(QString("[Development Error] switch in function '").append(__FUNCTION__).append("' not updated!").toStdString().c_str());
-            return;
+    case Visual::Phone1:
+        glyphs = &glyphsPhone1;
+        opacityValuesFunction = &CompositionManager::getPhone1OpacityValues;
+        break;
+    case Visual::Phone2:
+        glyphs = &glyphsPhone2;
+        opacityValuesFunction = &CompositionManager::getPhone2OpacityValues;
+        break;
+    default:
+        // This should never happen
+        throw std::logic_error(std::string("[Development Error] switch in function '").append(__FUNCTION__).append("' not updated!"));
+        return;
     }
 
     // Paint Glyphs
-    for (auto glyph: *glyphs)
+    const QList<qreal> *const opacityValues = (compositionManager->*opacityValuesFunction)(compositionManager->player->position());
+    for (qsizetype i = 0; i < glyphs->length(); i++)
     {
-        // TODO: OPACITY FOR GLYPHS
-        glyph->render(&painter);
+        // Render this Glyph with the appropriate opacity
+        switch (this->currentVisual)
+        {
+        case Visual::Phone1:
+            glyphs->at(i)->render(&painter, opacityValues->at(i));
+            break;
+        case Visual::Phone2:
+            switch (i)
+            {
+            case 3: // GLYPH_BATTERY
+                // Calculate the average as the opacity value from the 16 Zones for now
+                glyphs->at(i)->render(&painter, std::accumulate(opacityValues->begin() + 3, opacityValues->begin() + 19, (qreal)0) / 16.0);
+                break;
+            case 10: // GLYPH_USB_LINE
+                // Calculate the average as the opacity value from the 8 Zones for now
+                glyphs->at(i)->render(&painter, std::accumulate(opacityValues->begin() + 25, opacityValues->begin() + 33, (qreal)0) / 8.0);
+                break;
+            default:
+                glyphs->at(i)->render(&painter, opacityValues->at(zone33To11GlyphsLookupTable[i]));
+                break;
+            }
+            break;
+        default:
+            // This should never happen
+            throw std::logic_error(std::string("[Development Error] switch in function '").append(__FUNCTION__).append("' not updated!"));
+            return;
+        }
     }
 }
 
@@ -181,4 +221,6 @@ GlyphWidget::~GlyphWidget()
     for (auto x: glyphsPhone2) {
         delete x;
     }
+
+    delete this->compositionManager;
 }

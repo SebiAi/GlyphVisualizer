@@ -4,6 +4,7 @@
 #include <QSvgRenderer>
 #include <QRectF>
 #include <QPainter>
+#include "Helper.h"
 
 class Glyph : private QSvgRenderer
 {
@@ -13,7 +14,7 @@ public:
     /**
      * @brief Renders the Glyph with the given painter and with the paintRect as bounds.
      * @param painter The painter to draw with. WARNING: The opacity of the painter will be changed!!
-     * @param opacity At what opacity the Glyph should be rendered. The default is 0.12.
+     * @param opacity At what opacity the Glyph should be rendered. The default is MINIMUM_GLYPH_OPACITY_VALUE.
      */
     void render(QPainter *painter, qreal opacity = -1);
     /**
