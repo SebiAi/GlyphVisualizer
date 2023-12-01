@@ -18,6 +18,8 @@ jobs:
           modules: 'qtmultimedia'
       - name: Setup MSVC for C++
         uses: ilammy/msvc-dev-cmd@v1
+        with:
+          vsversion: '2019'
       
       # Checkout + Build
       - name: Checkout
