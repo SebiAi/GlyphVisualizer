@@ -71,5 +71,5 @@ jobs:
         with:
           name: GlyphVisualizer_linux-ubuntu-x64
           path: |
-            GlyphVisualizer_linux-ubuntu-x64
+            build/GlyphVisualizer_linux-ubuntu-x64
             GlyphVisualizer_linux-ubuntu-x64.sha256
