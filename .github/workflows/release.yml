@@ -44,7 +44,7 @@ jobs:
       # TODO: Use NSIS to create an installer (Extract files, silently install vc_redist.x64.exe, create start menu entry, etc.)
       - name: Use windeployqt and zip (Windows)
         run: |
-          mkdir GlyphVisualizer && cp build\GlyphVisualizer.exe GlyphVisualizer && windeployqt --release GlyphVisualizer\GlyphVisualizer.exe
+          mkdir GlyphVisualizer && mv build\GlyphVisualizer.exe GlyphVisualizer && windeployqt --release GlyphVisualizer\GlyphVisualizer.exe
           Compress-Archive -Path GlyphVisualizer -DestinationPath GlyphVisualizer_windows-x64.zip
         if: matrix.os == 'windows-latest'
       
@@ -74,5 +74,5 @@ jobs:
         with:
           name: GlyphVisualizer_linux-ubuntu-x64
           path: |
-            build/GlyphVisualizer_linux-ubuntu-x64
+            GlyphVisualizer_linux-ubuntu-x64
             GlyphVisualizer_linux-ubuntu-x64.sha256
