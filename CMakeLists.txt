@@ -68,6 +68,10 @@ set_target_properties(GlyphVisualizer PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
+if(APPLE)
+    set_target_properties(GlyphVisualizer PROPERTIES MACOSX_BUNDLE TRUE)
+endif()
+
 include(GNUInstallDirs)
 install(TARGETS GlyphVisualizer
     BUNDLE DESTINATION .
