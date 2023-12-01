@@ -45,21 +45,21 @@ jobs:
       - name: Use windeployqt and zip
         run: |
           mkdir GlyphVisualizer && cp build\GlyphVisualizer.exe GlyphVisualizer && windeployqt --release GlyphVisualizer\GlyphVisualizer.exe
-          Compress-Archive -Path GlyphVisualizer -DestinationPath GlyphVisualizer_windows64x.zip
+          Compress-Archive -Path GlyphVisualizer -DestinationPath GlyphVisualizer_windows-x64.zip
         if: matrix.os == 'windows-latest'
       
       # Calculate checksum + upload (Windows)
       - name: Calculate Checksum
-        run: $(CertUtil -hashfile GlyphVisualizer_windows64x.zip SHA256)[1] -replace ' ','' | tee GlyphVisualizer_windows64x.zip.sha256.txt
+        run: $(CertUtil -hashfile GlyphVisualizer_windows-x64.zip SHA256)[1] -replace ' ','' | tee GlyphVisualizer_windows-x64.zip.sha256.txt
         if: matrix.os == 'windows-latest'
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         if: matrix.os == 'windows-latest'
         with:
-          name: GlyphVisualizer_windows64x
+          name: GlyphVisualizer_windows-x64
           path: |
-            GlyphVisualizer_windows64x.zip
-            GlyphVisualizer_windows64x.zip.sha256.txt
+            GlyphVisualizer_windows-x64.zip
+            GlyphVisualizer_windows-x64.zip.sha256.txt
       
       # Calculate checksum + upload (Ubuntu)
       - name: Rename executable
