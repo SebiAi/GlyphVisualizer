@@ -10,8 +10,7 @@ jobs:
     name: Build
     strategy:
       matrix:
-        # TODO Add macOS: macos-latest
-        os: [ubuntu-22.04, windows-2022]
+        os: [ubuntu-22.04, windows-2022, macos-12]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Update packages (Ubuntu)
@@ -21,6 +20,9 @@ jobs:
       - name: Install Ninja (Ubuntu)
         run: sudo apt install -y ninja-build
         if: matrix.os == 'ubuntu-22.04'
+      - name: Install Ninja (macOS)
+        run: brew install ninja
+        if: matrix.os == 'macos-12'
       - name: Install Qt6.6.0 (All platforms)
         uses: jurplel/install-qt-action@v3
         with:
@@ -77,3 +79,20 @@ jobs:
           path: |
             GlyphVisualizer_linux-ubuntu-x64
             GlyphVisualizer_linux-ubuntu-x64.sha256
+    
+      # Calculate checksum + upload (macOS)
+      # TODO: Create an install packet?
+      - name: Move and rename executable (macOS)
+        run: mv build/GlyphVisualizer GlyphVisualizer_macOS-12-x64
+        if: matrix.os == 'macos-12'
+      - name: Calculate Checksum (macOS)
+        run: sha256sum -b GlyphVisualizer_macOS-12-x64 | tee GlyphVisualizer_macOS-12-x64.sha256
+        if: matrix.os == 'macos-12'
+      - name: Upload artifacts (macOS)
+        uses: actions/upload-artifact@v3
+        if: matrix.os == 'macos-12'
+        with:
+          name: GlyphVisualizer_macOS-12-x64
+          path: |
+            GlyphVisualizer_macOS-12-x64
+            GlyphVisualizer_macOS-12-x64.sha256
