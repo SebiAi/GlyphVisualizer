@@ -11,16 +11,16 @@ jobs:
     strategy:
       matrix:
         # TODO Add macOS: macos-latest
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-22.04, windows-2022]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Update packages (Ubuntu)
         run: sudo apt update
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-22.04'
       # Install Ninja, Qt and setup MSVC - installation of Ninja is not needed on Windows, because it is already installed on the Windows image (in MSVC)
       - name: Install Ninja (Ubuntu)
         run: sudo apt install -y ninja-build
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-22.04'
       - name: Install Qt6.6.0 (All platforms)
         uses: jurplel/install-qt-action@v3
         with:
@@ -31,7 +31,7 @@ jobs:
       - name: Setup MSVC 2022 for C++ (Windows)
         # See supported versions here: https://doc.qt.io/qt-6/windows.html
         uses: ilammy/msvc-dev-cmd@v1
-        if: matrix.os == 'windows-latest'
+        if: matrix.os == 'windows-2022'
       
       # Checkout + Build
       - name: Checkout (All platforms)
@@ -46,15 +46,15 @@ jobs:
         run: |
           mkdir GlyphVisualizer && mv build\GlyphVisualizer.exe GlyphVisualizer && windeployqt --release GlyphVisualizer\GlyphVisualizer.exe
           Compress-Archive -Path GlyphVisualizer -DestinationPath GlyphVisualizer_windows-x64.zip
-        if: matrix.os == 'windows-latest'
+        if: matrix.os == 'windows-2022'
       
       # Calculate checksum + upload (Windows)
       - name: Calculate Checksum (Windows)
         run: $(CertUtil -hashfile GlyphVisualizer_windows-x64.zip SHA256)[1] -replace ' ','' | tee GlyphVisualizer_windows-x64.zip.sha256.txt
-        if: matrix.os == 'windows-latest'
+        if: matrix.os == 'windows-2022'
       - name: Upload artifacts (Windows)
         uses: actions/upload-artifact@v3
-        if: matrix.os == 'windows-latest'
+        if: matrix.os == 'windows-2022'
         with:
           name: GlyphVisualizer_windows-x64
           path: |
@@ -65,13 +65,13 @@ jobs:
       # TODO: Create a deb packet (Extract files to right location, create start menu entry, etc.)
       - name: Move and rename executable (Ubuntu)
         run: mv build/GlyphVisualizer GlyphVisualizer_linux-ubuntu-x64
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-22.04'
       - name: Calculate Checksum (Ubuntu)
         run: sha256sum -b GlyphVisualizer_linux-ubuntu-x64 | tee GlyphVisualizer_linux-ubuntu-x64.sha256
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-22.04'
       - name: Upload artifacts (Ubuntu)
         uses: actions/upload-artifact@v3
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-22.04'
         with:
           name: GlyphVisualizer_linux-ubuntu-x64
           path: |
