@@ -57,9 +57,9 @@ target_link_libraries(GlyphVisualizer PRIVATE Qt${QT_VERSION_MAJOR}::Multimedia)
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
-if(${QT_VERSION} VERSION_LESS 6.1.0)
-  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.GlyphVisualizer)
-endif()
+#if(${QT_VERSION} VERSION_LESS 6.1.0)
+set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.sebiai.GlyphVisualizer)
+#endif()
 set_target_properties(GlyphVisualizer PROPERTIES
     ${BUNDLE_ID_OPTION}
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
