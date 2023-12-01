@@ -8,8 +8,8 @@
 #include <QPushButton>
 #include <QStyle>
 
-#include "GlyphWidget.h"
-#include "OpenCompositionDialog.h"
+#include "glyph_widget.h"
+#include "open_composition_dialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

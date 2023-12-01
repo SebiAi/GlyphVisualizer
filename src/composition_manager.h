@@ -10,7 +10,7 @@
 #include <QFile>
 #include <QElapsedTimer>
 #include <QTimer>
-#include "Helper.h"
+#include "helper.h"
 
 // TODO: [Next] Use QTimer to create a signal at 15ms and call GlyphWidget::update() with that
 // TODO: To fix the low "refresh" issue: Make per Glyph glyphdata + spawn a thread for each glyph which waits and then changes the glyph/start a timer for each glyph

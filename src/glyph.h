@@ -4,7 +4,7 @@
 #include <QSvgRenderer>
 #include <QRectF>
 #include <QPainter>
-#include "Helper.h"
+#include "helper.h"
 
 class Glyph : private QSvgRenderer
 {

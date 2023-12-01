@@ -1,4 +1,4 @@
-#include "GlyphWidget.h"
+#include "glyph_widget.h"
 
 GlyphWidget::GlyphWidget(QWidget *parent)
     : QWidget{parent}

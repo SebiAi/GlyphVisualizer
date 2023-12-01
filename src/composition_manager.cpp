@@ -1,4 +1,4 @@
-#include "CompositionManager.h"
+#include "composition_manager.h"
 
 inline void CompositionManager::init()
 {

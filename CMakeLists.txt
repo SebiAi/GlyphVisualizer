@@ -25,12 +25,12 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(GlyphVisualizer
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        src/GlyphWidget.h src/GlyphWidget.cpp
+        src/glyph_widget.h src/glyph_widget.cpp
         resources.qrc
-        src/Glyph.h src/Glyph.cpp
-        src/CompositionManager.h src/CompositionManager.cpp
-        src/Helper.h src/Helper.cpp
-        src/OpenCompositionDialog.h src/OpenCompositionDialog.cpp
+        src/glyph.h src/glyph.cpp
+        src/composition_manager.h src/composition_manager.cpp
+        src/helper.h src/helper.cpp
+        src/open_composition_dialog.h src/open_composition_dialog.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET GlyphVisualizer APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

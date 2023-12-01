@@ -1,4 +1,4 @@
-#include "OpenCompositionDialog.h"
+#include "open_composition_dialog.h"
 
 // TODO: [NOW + 1] Use the new Signal Slot Syntax: https://wiki.qt.io/New_Signal_Slot_Syntax
 // TODO: [NOW + 2] Remove redundant delete commands and trust Qt to delete them if they have a parrent.

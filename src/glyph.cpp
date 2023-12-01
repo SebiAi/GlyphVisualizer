@@ -1,4 +1,4 @@
-#include "Glyph.h"
+#include "glyph.h"
 
 Glyph::Glyph(const QString &filename)
     : QSvgRenderer{filename}

@@ -5,8 +5,8 @@
 #include <QPainter>
 #include <QResizeEvent>
 #include <QMessageBox>
-#include "Glyph.h"
-#include "CompositionManager.h"
+#include "glyph.h"
+#include "composition_manager.h"
 
 class GlyphWidget : public QWidget
 {
