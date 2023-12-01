@@ -83,7 +83,7 @@ jobs:
       # Calculate checksum + upload (macOS)
       # TODO: Create an install packet?
       - name: Move and rename executable (macOS)
-        run: mv build/GlyphVisualizer.app GlyphVisualizer_macOS-12-x64.app
+        run: mv build/GlyphVisualizer.app/Contents/MacOS/GlyphVisualizer GlyphVisualizer_macOS-12-x64.app
         if: matrix.os == 'macos-12'
       - name: Calculate Checksum (macOS)
         run: shasum -a 256 -b GlyphVisualizer_macOS-12-x64.app | tee GlyphVisualizer_macOS-12-x64.app.sha256
