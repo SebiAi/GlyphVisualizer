@@ -16,10 +16,9 @@ jobs:
           aqtversion: '==3.1.*'
           version: '6.6.0'
           modules: 'qtmultimedia'
-      - name: Setup MSVC for C++
+      - name: Setup MSVC 2022 for C++
+        # See supported versions here: https://doc.qt.io/qt-6/windows.html
         uses: ilammy/msvc-dev-cmd@v1
-        with:
-          vsversion: '2019'
       
       # Checkout + Build
       - name: Checkout
