@@ -28,6 +28,7 @@ jobs:
         run: cmake -G Ninja "-DCMAKE_BUILD_TYPE:STRING=Release" -S . -B build && cmake --build build --config Release
       
       # Package with windeployqt + zip
+      # TODO: Use NSIS to create an installer (Extract files, silently install vc_redist.x64.exe, create start menu entry, etc.)
       - name: Use windeployqt
         run: mkdir GlyphVisualizer && cp build\GlyphVisualizer.exe GlyphVisualizer && windeployqt --release GlyphVisualizer\GlyphVisualizer.exe
       - name: Create zip
