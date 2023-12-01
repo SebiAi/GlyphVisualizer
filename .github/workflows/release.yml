@@ -14,8 +14,8 @@ jobs:
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Upgrade packages (Ubuntu)
-        run: sudo apt update && sudo apt upgrade -y
+      - name: Update packages (Ubuntu)
+        run: sudo apt update
         if: matrix.os == 'ubuntu-latest'
       # Install Ninja, Qt and setup MSVC - installation of Ninja is not needed on Windows, because it is already installed on the Windows image (in MSVC)
       - name: Install Ninja (Ubuntu)
