@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_windows:
-    name: Build Windows
+  # TODO: Add version number to the zip and executable file with semantic-release/semantic-release: https://github.com/semantic-release/semantic-release/issues/753
+  # See also this: https://github.com/jpoehnelt/semantic-release-replace-plugin
     runs-on: windows-latest
     steps:
       # Install Qt and setup MSVC - installation of Ninja is not needed, because it is already installed on the Windows image (in MSVC)
