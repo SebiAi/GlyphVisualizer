@@ -80,13 +80,17 @@ jobs:
             GlyphVisualizer_linux-ubuntu-x64
             GlyphVisualizer_linux-ubuntu-x64.sha256
     
+      # Package with macdeployqt
+      - name: Use macdeployqt (macOS)
+        run: |
+          cd build && macdeployqt GlyphVisualizer.app -dmg && cd ..
+        if: matrix.os == 'macos-12'
       # Calculate checksum + upload (macOS)
-      # TODO: Create an install packet?
       - name: Move and rename executable (macOS)
-        run: mv build/GlyphVisualizer.app/Contents/MacOS/GlyphVisualizer GlyphVisualizer_macOS-12-x64
+        run: mv build/GlyphVisualizer.app.dmg GlyphVisualizer_macOS-12-x64.dmg
         if: matrix.os == 'macos-12'
       - name: Calculate Checksum (macOS)
-        run: shasum -a 256 -b GlyphVisualizer_macOS-12-x64 | tee GlyphVisualizer_macOS-12-x64.sha256
+        run: shasum -a 256 -b GlyphVisualizer_macOS-12-x64.dmg | tee GlyphVisualizer_macOS-12-x64.dmg.sha256
         if: matrix.os == 'macos-12'
       - name: Upload artifacts (macOS)
         uses: actions/upload-artifact@v3
@@ -94,5 +98,5 @@ jobs:
         with:
           name: GlyphVisualizer_macOS-12-x64
           path: |
-            GlyphVisualizer_macOS-12-x64
-            GlyphVisualizer_macOS-12-x64.sha256
+            GlyphVisualizer_macOS-12-x64.dmg
+            GlyphVisualizer_macOS-12-x64.dmg.sha256
