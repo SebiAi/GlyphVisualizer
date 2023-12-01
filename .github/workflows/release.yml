@@ -62,6 +62,7 @@ jobs:
             GlyphVisualizer_windows-x64.zip.sha256.txt
       
       # Calculate checksum + upload (Ubuntu)
+      # TODO: Create a deb packet (Extract files to right location, create start menu entry, etc.)
       - name: Move and rename executable (Ubuntu)
         run: mv build/GlyphVisualizer GlyphVisualizer_linux-ubuntu-x64
         if: matrix.os == 'ubuntu-latest'
