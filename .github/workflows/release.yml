@@ -15,41 +15,41 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       # Install Ninja, Qt and setup MSVC - installation of Ninja is not needed on Windows, because it is already installed on the Windows image (in MSVC)
-      - name: Install Ninja
+      - name: Install Ninja (Ubuntu)
         run: sudo apt install -y ninja-build
         if: matrix.os == 'ubuntu-latest'
-      - name: Install Qt6.6.0
+      - name: Install Qt6.6.0 (All platforms)
         uses: jurplel/install-qt-action@v3
         with:
           # See https://ddalcino.github.io/aqt-list-server/
           aqtversion: '==3.1.*'
           version: '6.6.0'
           modules: 'qtmultimedia'
-      - name: Setup MSVC 2022 for C++
+      - name: Setup MSVC 2022 for C++ (Windows)
         # See supported versions here: https://doc.qt.io/qt-6/windows.html
         uses: ilammy/msvc-dev-cmd@v1
         if: matrix.os == 'windows-latest'
       
       # Checkout + Build
-      - name: Checkout
+      - name: Checkout (All platforms)
         uses: actions/checkout@v4
-      - name: Build
+      - name: Build (All platforms)
         # No need to set CMAKE_PREFIX_PATH, because install-qt-action did the work for us
         run: cmake -G Ninja "-DCMAKE_BUILD_TYPE:STRING=Release" -S . -B build && cmake --build build --config Release
       
       # Package with windeployqt + zip
       # TODO: Use NSIS to create an installer (Extract files, silently install vc_redist.x64.exe, create start menu entry, etc.)
-      - name: Use windeployqt and zip
+      - name: Use windeployqt and zip (Windows)
         run: |
           mkdir GlyphVisualizer && cp build\GlyphVisualizer.exe GlyphVisualizer && windeployqt --release GlyphVisualizer\GlyphVisualizer.exe
           Compress-Archive -Path GlyphVisualizer -DestinationPath GlyphVisualizer_windows-x64.zip
         if: matrix.os == 'windows-latest'
       
       # Calculate checksum + upload (Windows)
-      - name: Calculate Checksum
+      - name: Calculate Checksum (Windows)
         run: $(CertUtil -hashfile GlyphVisualizer_windows-x64.zip SHA256)[1] -replace ' ','' | tee GlyphVisualizer_windows-x64.zip.sha256.txt
         if: matrix.os == 'windows-latest'
-      - name: Upload artifacts
+      - name: Upload artifacts (Windows)
         uses: actions/upload-artifact@v2
         if: matrix.os == 'windows-latest'
         with:
@@ -59,13 +59,13 @@ jobs:
             GlyphVisualizer_windows-x64.zip.sha256.txt
       
       # Calculate checksum + upload (Ubuntu)
-      - name: Rename executable
+      - name: Rename executable (Ubuntu)
         run: mv build/GlyphVisualizer build/GlyphVisualizer_linux-ubuntu-x64
         if: matrix.os == 'ubuntu-latest'
-      - name: Calculate Checksum
+      - name: Calculate Checksum (Ubuntu)
         run: sha256sum -b build/GlyphVisualizer_linux-ubuntu-x64 | tee GlyphVisualizer_linux-ubuntu-x64.sha256
         if: matrix.os == 'ubuntu-latest'
-      - name: Upload artifacts
+      - name: Upload artifacts (Ubuntu)
         uses: actions/upload-artifact@v2
         if: matrix.os == 'ubuntu-latest'
         with:
