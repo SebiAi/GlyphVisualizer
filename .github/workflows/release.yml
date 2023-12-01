@@ -8,9 +8,7 @@ jobs:
     name: Build Windows
     runs-on: windows-latest
     steps:
-      # Install ninja, Qt and setup MSVC
-      - name: Install ninja
-        run: choco install ninja -y
+      # Install Qt and setup MSVC - installation of Ninja is not needed, because it is already installed on the Windows image (in MSVC)
       - name: Install Qt6.6.0
         uses: jurplel/install-qt-action@v3
         with:
