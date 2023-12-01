@@ -35,11 +35,11 @@ jobs:
       
       # Calculate checksum + upload
       - name: Calculate Checksum
-        run: powershell -Command "$(CertUtil -hashfile GlyphVisualizer_windows64x.zip SHA256)[1] -replace ' ','' | tee GlyphVisualizer_windows64x.zip.sha256"
+        run: powershell -Command "$(CertUtil -hashfile GlyphVisualizer_windows64x.zip SHA256)[1] -replace ' ','' | tee GlyphVisualizer_windows64x.zip.sha256.txt"
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
           name: GlyphVisualizer_windows64x
           path: |
             GlyphVisualizer_windows64x.zip
-            GlyphVisualizer_windows64x.zip.sha256
+            GlyphVisualizer_windows64x.zip.sha256.txt
