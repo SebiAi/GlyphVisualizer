@@ -83,10 +83,10 @@ jobs:
       # Calculate checksum + upload (macOS)
       # TODO: Create an install packet?
       - name: Move and rename executable (macOS)
-        run: mv build/GlyphVisualizer.app/Contents/MacOS/GlyphVisualizer GlyphVisualizer_macOS-12-x64.app
+        run: mv build/GlyphVisualizer.app/Contents/MacOS/GlyphVisualizer GlyphVisualizer_macOS-12-x64
         if: matrix.os == 'macos-12'
       - name: Calculate Checksum (macOS)
-        run: shasum -a 256 -b GlyphVisualizer_macOS-12-x64.app | tee GlyphVisualizer_macOS-12-x64.app.sha256
+        run: shasum -a 256 -b GlyphVisualizer_macOS-12-x64 | tee GlyphVisualizer_macOS-12-x64.sha256
         if: matrix.os == 'macos-12'
       - name: Upload artifacts (macOS)
         uses: actions/upload-artifact@v3
@@ -94,5 +94,5 @@ jobs:
         with:
           name: GlyphVisualizer_macOS-12-x64
           path: |
-            GlyphVisualizer_macOS-12-x64.app
+            GlyphVisualizer_macOS-12-x64
             GlyphVisualizer_macOS-12-x64.sha256
