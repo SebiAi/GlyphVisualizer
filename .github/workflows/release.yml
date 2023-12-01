@@ -86,7 +86,7 @@ jobs:
         run: mv build/GlyphVisualizer.app GlyphVisualizer_macOS-12-x64.app
         if: matrix.os == 'macos-12'
       - name: Calculate Checksum (macOS)
-        run: sha256sum -b GlyphVisualizer_macOS-12-x64.app | tee GlyphVisualizer_macOS-12-x64.app.sha256
+        run: shasum -a 256 -b GlyphVisualizer_macOS-12-x64.app | tee GlyphVisualizer_macOS-12-x64.app.sha256
         if: matrix.os == 'macos-12'
       - name: Upload artifacts (macOS)
         uses: actions/upload-artifact@v3
