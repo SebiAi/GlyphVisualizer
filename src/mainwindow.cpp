@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Add style sheets
     // TODO: [END] Test style sheet in white and black mode
-    this->setStyleSheet("QLabel {color: rgb(240, 242, 242);} QMainWindow {background: rgb(30, 32, 34);} QMenuBar {background: rgb(47, 48, 51);color: rgb(240, 242, 242)}");
+    this->setStyleSheet("* {background: rgb(30, 32, 34); color: rgb(240, 242, 242)} QLineEdit,QMenuBar,QPushButton,QComboBox {background: rgb(47, 48, 51)} QPushButton:hover,QComboBox:hover,QMenuBar::item:selected,QMenuBar::item::drop-down {background: rgb(73, 75, 80)}");
 
     // Add 'File' entry to MenuBar
     this->fileMenu = ui->menubar->addMenu("&File");
