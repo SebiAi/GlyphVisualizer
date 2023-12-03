@@ -26,17 +26,7 @@ public:
      *
      * @throws std::invalid_argument When trying to set the visual mode to Phone (1) and the currently loaded composition is only compatible with Phone (2)
      */
-    void setVisual(Visual v)
-    {
-        // Check if the Visual is compatible with the currently loaded composition.
-        if (this->compositionManager->getGlyphMode() == CompositionManager::GlyphMode::Phone2 && v == Visual::Phone1)
-            throw std::invalid_argument("Can't switch to the Phone (1) visualisation because the currently loaded Composition only supports Phone (2)");
-
-        this->currentVisual = v;
-        this->glyphWidgetSizeHint = glyphWidgetSizes[(int)v];
-        this->resizeEvent(NULL);
-        this->update();
-    }
+    void setVisual(Visual v);
 
     /**
      * @brief Get the current visual mode.
@@ -127,8 +117,6 @@ private:
     void resizeEvent(QResizeEvent* event) override;
     QSize sizeHint() const override;
     void paintEvent(QPaintEvent *event) override;
-signals:
-
 };
 
 #endif // GLYPHWIDGET_H

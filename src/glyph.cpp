@@ -6,6 +6,12 @@ Glyph::Glyph(const QString &filename)
 
 }
 
+/*
+ * ==================================
+ *             Functions
+ * ==================================
+ */
+
 void Glyph::render(QPainter *painter, qreal opacity)
 {
     Q_ASSERT(opacity >= MINIMUM_GLYPH_OPACITY_VALUE);

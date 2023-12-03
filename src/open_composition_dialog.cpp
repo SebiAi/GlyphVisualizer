@@ -2,7 +2,6 @@
 
 // TODO: [NOW + 1] Use the new Signal Slot Syntax: https://wiki.qt.io/New_Signal_Slot_Syntax
 // TODO: [NOW + 2] Remove redundant delete commands and trust Qt to delete them if they have a parrent.
-// TODO: [NOW + 3] Do header comments like in CompositionManager
 
 OpenCompositionDialog::OpenCompositionDialog(QWidget *parent)
     : QDialog{parent, Qt::Dialog}
@@ -78,6 +77,53 @@ OpenCompositionDialog::OpenCompositionDialog(QWidget *parent)
     }
     Q_ASSERT(foundDefault); // There must be at least one option which is enabled
 }
+
+/*
+ * ==================================
+ *             Functions
+ * ==================================
+ */
+
+void OpenCompositionDialog::setComboBoxItemEnabled(const QComboBox* comboBox, int index, bool enabled)
+{
+    // Cast to the QStandardItemModel (see https://doc.qt.io/qt-6/qcombobox.html#model-view-framework)
+    QStandardItemModel *model = qobject_cast<QStandardItemModel*>(this->comboBox_openMode->model());
+    Q_ASSERT(model);
+
+    // Get the item
+    QStandardItem *item = model->item(index);
+    Q_ASSERT(item);
+
+    // Set the flag
+    item->setEnabled(enabled);
+}
+
+/**
+ * @brief [Helper Function] Enable or disable a widget row in the QFormLayout.
+ * @param enabled true: Enable the widgets; false: Disable the widgets.
+ * @param widgets An widget array with size 3
+ */
+void setRowEnabled(bool enabled, QWidget* widgets[3])
+{
+    for (int i = 0; i < 3; i++)
+    {
+        widgets[i]->setEnabled(enabled);
+    }
+}
+void OpenCompositionDialog::setRow0Enabled(bool enabled)
+{
+    setRowEnabled(enabled, this->row0Container);
+}
+void OpenCompositionDialog::setRow1Enabled(bool enabled)
+{
+    setRowEnabled(enabled, this->row1Container);
+}
+
+/*
+ * ==================================
+ *               Slots
+ * ==================================
+ */
 
 void OpenCompositionDialog::buttonBox_onAccepted()
 {
@@ -183,40 +229,11 @@ void OpenCompositionDialog::browseRow1FileButton_onClicked(bool checked)
     browseButtonHelper(this->row1Container[1], openModes.at(this->comboBox_openMode->currentIndex()), 1);
 }
 
-void OpenCompositionDialog::setComboBoxItemEnabled(const QComboBox* comboBox, int index, bool enabled)
-{
-    // Cast to the QStandardItemModel (see https://doc.qt.io/qt-6/qcombobox.html#model-view-framework)
-    QStandardItemModel *model = qobject_cast<QStandardItemModel*>(this->comboBox_openMode->model());
-    Q_ASSERT(model);
-
-    // Get the item
-    QStandardItem *item = model->item(index);
-    Q_ASSERT(item);
-
-    // Set the flag
-    item->setEnabled(enabled);
-}
-
-/**
- * @brief [Helper Function] Enable or disable a widget row in the QFormLayout.
- * @param enabled true: Enable the widgets; false: Disable the widgets.
- * @param widgets An widget array with size 3
+/*
+ * ==================================
+ *           Deconstructor
+ * ==================================
  */
-void setRowEnabled(bool enabled, QWidget* widgets[3])
-{
-    for (int i = 0; i < 3; i++)
-    {
-        widgets[i]->setEnabled(enabled);
-    }
-}
-void OpenCompositionDialog::setRow0Enabled(bool enabled)
-{
-    setRowEnabled(enabled, this->row0Container);
-}
-void OpenCompositionDialog::setRow1Enabled(bool enabled)
-{
-    setRowEnabled(enabled, this->row1Container);
-}
 
 OpenCompositionDialog::~OpenCompositionDialog(){
     // Qt deletes for us as long as it is a QObject and is linked through parents to this.

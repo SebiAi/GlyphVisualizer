@@ -49,26 +49,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->centralwidget->layout()->setAlignment(button, Qt::AlignHCenter);
 }
 
-void MainWindow::button_onClicked(bool checked)
-{
-    switch (glyphWidget->getVisualMode())
-    {
-    case GlyphWidget::Visual::Phone1:
-        glyphWidget->setVisual(GlyphWidget::Visual::Phone2);
-        break;
-    case GlyphWidget::Visual::Phone2:
-        // Only switch to Phone (1) visual if the currently loaded light data is compatible with it.
-        if (glyphWidget->compositionManager->getGlyphMode() != CompositionManager::GlyphMode::Phone2)
-            glyphWidget->setVisual(GlyphWidget::Visual::Phone1);
-        break;
-    }
-}
-
-void MainWindow::openFileAction_onTriggered(bool checked)
-{
-    // Open the OpenCompositionDialog
-    this->openCompositionDialog->open();
-}
+/*
+ * ==================================
+ *             Functions
+ * ==================================
+ */
 
 void MainWindow::processOpenCompositionDialogAccepted(const OpenCompositionDialog::CompositionOpenModeResult& openMode, const QString& str0, const QString& str1)
 {
@@ -123,6 +108,34 @@ void MainWindow::processOpenCompositionDialogAccepted(const OpenCompositionDialo
     this->glyphWidget->compositionManager->player->setPosition(0);
     this->glyphWidget->compositionManager->player->play();
 }
+
+/*
+ * ==================================
+ *               Slots
+ * ==================================
+ */
+
+void MainWindow::button_onClicked(bool checked)
+{
+    switch (glyphWidget->getVisualMode())
+    {
+    case GlyphWidget::Visual::Phone1:
+        glyphWidget->setVisual(GlyphWidget::Visual::Phone2);
+        break;
+    case GlyphWidget::Visual::Phone2:
+        // Only switch to Phone (1) visual if the currently loaded light data is compatible with it.
+        if (glyphWidget->compositionManager->getGlyphMode() != CompositionManager::GlyphMode::Phone2)
+            glyphWidget->setVisual(GlyphWidget::Visual::Phone1);
+        break;
+    }
+}
+
+void MainWindow::openFileAction_onTriggered(bool checked)
+{
+    // Open the OpenCompositionDialog
+    this->openCompositionDialog->open();
+}
+
 void MainWindow::openCompositionDialog_onFinished(int result)
 {
     // Respond to result code
@@ -140,6 +153,12 @@ void MainWindow::openCompositionDialog_onFinished(int result)
         break;
     }
 }
+
+/*
+ * ==================================
+ *           Deconstructor
+ * ==================================
+ */
 
 MainWindow::~MainWindow()
 {

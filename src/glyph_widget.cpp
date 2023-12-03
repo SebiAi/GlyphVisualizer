@@ -37,16 +37,29 @@ GlyphWidget::GlyphWidget(QWidget *parent)
     connect(this->compositionManager->player, SIGNAL(positionChanged(qint64)), this, SLOT(compositionManager_onPositionChanged(qint64)));
 }
 
-void GlyphWidget::compositionManager_onPositionChanged(qint64 position)
+/*
+ * ==================================
+ *           Getter/Setter
+ * ==================================
+ */
+
+void GlyphWidget::setVisual(Visual v)
 {
-    // Rerender the widget - this function will only be called every 40-60ms so this is fine.
+    // Check if the Visual is compatible with the currently loaded composition.
+    if (this->compositionManager->getGlyphMode() == CompositionManager::GlyphMode::Phone2 && v == Visual::Phone1)
+        throw std::invalid_argument("Can't switch to the Phone (1) visualisation because the currently loaded Composition only supports Phone (2)");
+
+    this->currentVisual = v;
+    this->glyphWidgetSizeHint = glyphWidgetSizes[(int)v];
+    this->resizeEvent(NULL);
     this->update();
 }
 
-QSize GlyphWidget::sizeHint() const
-{
-    return glyphWidgetSizeHint;
-}
+/*
+ * ==================================
+ *             Functions
+ * ==================================
+ */
 
 void GlyphWidget::calcPhone1Glyphs()
 {
@@ -150,6 +163,11 @@ void GlyphWidget::resizeEvent(QResizeEvent* event)
 
 }
 
+QSize GlyphWidget::sizeHint() const
+{
+    return glyphWidgetSizeHint;
+}
+
 void GlyphWidget::paintEvent(QPaintEvent *event)
 {
     // Get the painter
@@ -212,6 +230,24 @@ void GlyphWidget::paintEvent(QPaintEvent *event)
         }
     }
 }
+
+/*
+ * ==================================
+ *               Slots
+ * ==================================
+ */
+
+void GlyphWidget::compositionManager_onPositionChanged(qint64 position)
+{
+    // Rerender the widget - this function will only be called every 40-60ms so this is fine.
+    this->update();
+}
+
+/*
+ * ==================================
+ *           Deconstructor
+ * ==================================
+ */
 
 GlyphWidget::~GlyphWidget()
 {

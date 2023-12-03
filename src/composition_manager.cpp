@@ -41,6 +41,7 @@ CompositionManager::CompositionManager(const QString &filepathAudio, const QStri
  *           Getter/Setter
  * ==================================
  */
+
 qsizetype lastIndex = 0;
 const QList<qreal>* const CompositionManager::getPhone1OpacityValues(qint64 position) const
 {
