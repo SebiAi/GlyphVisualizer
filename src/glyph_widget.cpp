@@ -13,27 +13,27 @@ GlyphWidget::GlyphWidget(QWidget *parent)
     this->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
 
     // Load Phone (1) Glyphs from resources.qrc
-    glyphsPhone1.append(new Glyph(":/glyphs/phone1/led_1"));
-    glyphsPhone1.append(new Glyph(":/glyphs/phone1/led_2"));
-    glyphsPhone1.append(new Glyph(":/glyphs/phone1/led_3"));
-    glyphsPhone1.append(new Glyph(":/glyphs/phone1/led_4"));
-    glyphsPhone1.append(new Glyph(":/glyphs/phone1/led_5"));
+    glyphsPhone1.append(new Glyph(":/glyphs/phone1/led_1", MINIMUM_GLYPH_OPACITY_VALUE));
+    glyphsPhone1.append(new Glyph(":/glyphs/phone1/led_2", MINIMUM_GLYPH_OPACITY_VALUE));
+    glyphsPhone1.append(new Glyph(":/glyphs/phone1/led_3", MINIMUM_GLYPH_OPACITY_VALUE));
+    glyphsPhone1.append(new Glyph(":/glyphs/phone1/led_4", MINIMUM_GLYPH_OPACITY_VALUE));
+    glyphsPhone1.append(new Glyph(":/glyphs/phone1/led_5", MINIMUM_GLYPH_OPACITY_VALUE));
 
     // Load Phone (2) Glyphs from resources.qrc
-    glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_a1"));
-    glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_a2"));
-    glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_b"));
-    glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_c1"));
-    glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_c2"));
-    glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_c3"));
-    glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_c4"));
-    glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_c5"));
-    glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_c6"));
-    glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_e"));
-    glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_d")); // Append the GLYPH_USB_LINE at the end because the light data is structured that way - ask Nothing why
+    glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_a1", MINIMUM_GLYPH_OPACITY_VALUE));
+    glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_a2", MINIMUM_GLYPH_OPACITY_VALUE));
+    glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_b", MINIMUM_GLYPH_OPACITY_VALUE));
+    glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_c1", MINIMUM_GLYPH_OPACITY_VALUE));
+    glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_c2", MINIMUM_GLYPH_OPACITY_VALUE));
+    glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_c3", MINIMUM_GLYPH_OPACITY_VALUE));
+    glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_c4", MINIMUM_GLYPH_OPACITY_VALUE));
+    glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_c5", MINIMUM_GLYPH_OPACITY_VALUE));
+    glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_c6", MINIMUM_GLYPH_OPACITY_VALUE));
+    glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_e", MINIMUM_GLYPH_OPACITY_VALUE));
+    glyphsPhone2.append(new Glyph(":/glyphs/phone2/led_d", MINIMUM_GLYPH_OPACITY_VALUE)); // Append the GLYPH_USB_LINE at the end because the light data is structured that way - ask Nothing why
 
     // Init
-    this->compositionManager = new CompositionManager();
+    this->compositionManager = new CompositionManager(MINIMUM_GLYPH_OPACITY_VALUE);
     connect(this->compositionManager->player, SIGNAL(positionChanged(qint64)), this, SLOT(compositionManager_onPositionChanged(qint64)));
 }
 

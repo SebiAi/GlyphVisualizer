@@ -8,6 +8,9 @@
 #include "glyph.h"
 #include "composition_manager.h"
 
+// The minimum percentage value the Glyphs should have. Must be between 0 - 1 (default: 0.12 => 12%)
+#define MINIMUM_GLYPH_OPACITY_VALUE 0.12
+
 class GlyphWidget : public QWidget
 {
     Q_OBJECT

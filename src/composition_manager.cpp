@@ -5,10 +5,10 @@ inline void CompositionManager::init()
     // Init off values
     opacityOffValuesPhone1 = new QList<qreal>();
     for (quint8 i = 0; i < numberOfZones[(int)GlyphMode::Compatibility]; i++)
-        opacityOffValuesPhone1->append(MINIMUM_GLYPH_OPACITY_VALUE);
+        opacityOffValuesPhone1->append(this->minGlyphOpacityValue);
     opacityOffValuesPhone2 = new QList<qreal>();
     for (quint8 i = 0; i < numberOfZones[(int)GlyphMode::Phone2]; i++)
-        opacityOffValuesPhone2->append(MINIMUM_GLYPH_OPACITY_VALUE);
+        opacityOffValuesPhone2->append(this->minGlyphOpacityValue);
 
     // Init lists
     opacityValuesPhone1 = new QList<QList<qreal>>();
@@ -22,15 +22,17 @@ inline void CompositionManager::init()
     this->elapsedTimer = new QElapsedTimer();
 }
 
-CompositionManager::CompositionManager()
-    : QObject{}
+CompositionManager::CompositionManager(const qreal& minGlyphOpacityValue)
+    : QObject{}, minGlyphOpacityValue{minGlyphOpacityValue}
 {
+    Q_ASSERT(this->minGlyphOpacityValue >= 0 && this->minGlyphOpacityValue <= 1.0);
     this->init();
 }
 
-CompositionManager::CompositionManager(const QString &filepathAudio, const QString &filepathLightData)
-    : QObject{}
+CompositionManager::CompositionManager(const QString &filepathAudio, const QString &filepathLightData, const qreal& minGlyphOpacityValue)
+    : QObject{}, minGlyphOpacityValue{minGlyphOpacityValue}
 {
+    Q_ASSERT(this->minGlyphOpacityValue >= 0 && this->minGlyphOpacityValue <= 1.0);
     this->init();
 
     this->loadComposition(filepathAudio, filepathLightData);
@@ -196,7 +198,7 @@ void CompositionManager::parseLightData(const QString &filepathLightData)
         for (const QString& s: line.split(','))
         {
             // Calculate opacity
-            opacityValues.append((1.0 - MINIMUM_GLYPH_OPACITY_VALUE) * std::min(s.toUInt(&conversionSuccess), (uint)COMPOSITION_MANAGER_MAX_LIGHT_VALUE) / (qreal)COMPOSITION_MANAGER_MAX_LIGHT_VALUE + MINIMUM_GLYPH_OPACITY_VALUE);
+            opacityValues.append((1.0 - this->minGlyphOpacityValue) * std::min(s.toUInt(&conversionSuccess), (uint)COMPOSITION_MANAGER_MAX_LIGHT_VALUE) / (qreal)COMPOSITION_MANAGER_MAX_LIGHT_VALUE + this->minGlyphOpacityValue);
             // Check if the conversion was successfull
             if (!conversionSuccess)
                 throw InvalidLightDataContentException(std::string("Malformed light data! Could not convert '").append(s.toStdString()).append("' to an unsigned integer in line ").append(std::to_string(lineN)).append("."));

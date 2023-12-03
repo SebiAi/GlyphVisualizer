@@ -1,9 +1,9 @@
 #include "glyph.h"
 
-Glyph::Glyph(const QString &filename)
-    : QSvgRenderer{filename}
+Glyph::Glyph(const QString &filename, const qreal& minOpacityValue)
+    : QSvgRenderer{filename}, minOpacityValue{minOpacityValue}
 {
-
+    Q_ASSERT(this->minOpacityValue >= 0 && this->minOpacityValue <= 1.0);
 }
 
 /*
@@ -14,8 +14,7 @@ Glyph::Glyph(const QString &filename)
 
 void Glyph::render(QPainter *painter, const qreal& opacity)
 {
-    Q_ASSERT(opacity >= MINIMUM_GLYPH_OPACITY_VALUE);
-    painter->setOpacity(opacity);
+    painter->setOpacity(opacity < this->minOpacityValue ? this->minOpacityValue : opacity);
     this->QSvgRenderer::render(painter, paintRect);
 }
 

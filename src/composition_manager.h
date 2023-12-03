@@ -52,19 +52,21 @@ public:
 
     /**
      * @brief Empty constructor for the CompositionManager class. Use the CompositionManager::loadComposition() function to load a Composition.
+     * @param minGlyphOpacityValue The minimum opacity value of the Glyphs. Is needed to calculate the final opacity levels. Must be between 0 and 1.
      */
-    explicit CompositionManager();
+    explicit CompositionManager(const qreal& minGlyphOpacityValue);
     /**
      * @brief Load a Composition with a seperate ogg and light data file.
      * @param filepathAudio Filepath to the audio ogg file.
      * @param filepathLightData Filepath to the light data file.
+     * @param minGlyphOpacityValue The minimum opacity value of the Glyphs. Is needed to calculate the final opacity levels. Must be between 0 and 1.
      *
      * @throws std::invalid_argument Audio file does not exist.
      * @throws std::invalid_argument Light data file does not exist.
      * @throws std::invalid_argument Can not open the light data file.
      * @throws CompositionManager::InvalidLightDataContentException Invalid light data in light data file.
      */
-    explicit CompositionManager(const QString &filepathAudio, const QString &filepathLightData);
+    explicit CompositionManager(const QString &filepathAudio, const QString &filepathLightData, const qreal& minGlyphOpacityValue);
     ~CompositionManager();
 
     /**
@@ -145,6 +147,11 @@ private:
         4,                                              // GLYPH_USB_DOT => GLYPH_USB_DOT
         3, 3, 3, 3, 3, 3, 3, 3                          // GLYPH_USB_LINE => GLYPH_USB_LINE(8)
     };
+
+    /**
+     * @brief The minimal opacity value the Glyphs should have.
+     */
+    const qreal minGlyphOpacityValue;
 
     /**
      * @brief This function contains the initialisation code. It will be called by all constructors.
