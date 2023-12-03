@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.5
+Name=GlyphVisualizer
+X-AppImage-Name=GlyphVisualizer
+Comment=Visualizes 'Glyph Composer' compositions on desktop
+TryExec=GlyphVisualizer
+Exec=GlyphVisualizer
+Icon=GlyphVisualizer
+Type=Application
+Keywords=Nothing;Glyph;Composition;glypha;glyphc1
+NoDisplay=false
+Terminal=false
+Categories=Utility;Viewer;Graphics;Qt;
+X-AppImage-Arch=x86_64

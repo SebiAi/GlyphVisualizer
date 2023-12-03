@@ -42,7 +42,7 @@ jobs:
         # No need to set CMAKE_PREFIX_PATH, because install-qt-action did the work for us
         run: cmake -G Ninja "-DCMAKE_BUILD_TYPE:STRING=Release" -S . -B build && cmake --build build --config Release
       
-      # Package with windeployqt + zip
+      # Package with windeployqt + zip (Windows)
       # TODO: Use NSIS to create an installer (Extract files, silently install vc_redist.x64.exe, create start menu entry, etc.)
       - name: Use windeployqt and zip (Windows)
         run: |
@@ -63,13 +63,23 @@ jobs:
             GlyphVisualizer_windows-x64.zip
             GlyphVisualizer_windows-x64.zip.sha256.txt
       
-      # Calculate checksum + upload (Ubuntu)
-      # TODO: Create a deb packet (Extract files to right location, create start menu entry, etc.)
-      - name: Move and rename executable (Ubuntu)
-        run: mv build/GlyphVisualizer GlyphVisualizer_linux-ubuntu-x64
+      # Package AppImage (Ubuntu)
+      - name: Download linuxdeploy tools (Ubuntu)
+        run: |
+          wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
+          wget https://github.com/linuxdeploy/linuxdeploy-plugin-appimage/releases/download/continuous/linuxdeploy-plugin-appimage-x86_64.AppImage
+          chmod +x linuxdeploy-x86_64.AppImage
+          chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
+          chmod +x linuxdeploy-plugin-appimage-x86_64.AppImage
         if: matrix.os == 'ubuntu-22.04'
+      - name: Package AppImage (Ubuntu)
+        # TODO: Resulting file name with version number: GlyphVisualizer-v0.1.0_linux-ubuntu-x64.AppImage
+        run: LDAI_VERSION="v0.1.0" LDAI_OUTPUT="GlyphVisualizer_linux-ubuntu-x64.AppImage" LDAI_UPDATE_INFORMATION="gh-releases-zsync|SebiAi|GlyphVisualizer|latest|GlyphVisualizer*_linux-ubuntu-x64.AppImage.zsync" ./linuxdeploy-x86_64.AppImage --executable "build/GlyphVisualizer" --desktop-file "deploy/linux/AppImage/com.sebiai.GlyphVisualizer.desktop" --icon-file "deploy/linux/AppImage/GlyphVisualizer.png" --plugin qt --appdir AppDir --output appimage
+        if: matrix.os == 'ubuntu-22.04'
+      # Calculate checksum + upload (Ubuntu)
       - name: Calculate Checksum (Ubuntu)
-        run: sha256sum -b GlyphVisualizer_linux-ubuntu-x64 | tee GlyphVisualizer_linux-ubuntu-x64.sha256
+        run: sha256sum -b GlyphVisualizer_linux-ubuntu-x64.AppImage | tee GlyphVisualizer_linux-ubuntu-x64.AppImage.sha256
         if: matrix.os == 'ubuntu-22.04'
       - name: Upload artifacts (Ubuntu)
         uses: actions/upload-artifact@v3
@@ -77,8 +87,9 @@ jobs:
         with:
           name: GlyphVisualizer_linux-ubuntu-x64
           path: |
-            GlyphVisualizer_linux-ubuntu-x64
-            GlyphVisualizer_linux-ubuntu-x64.sha256
+            GlyphVisualizer_linux-ubuntu-x64.AppImage
+            GlyphVisualizer_linux-ubuntu-x64.AppImage.zsync
+            GlyphVisualizer_linux-ubuntu-x64.AppImage.sha256
     
       # Package with macdeployqt
       - name: Use macdeployqt (macOS)
