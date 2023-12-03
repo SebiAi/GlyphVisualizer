@@ -12,14 +12,14 @@ Glyph::Glyph(const QString &filename)
  * ==================================
  */
 
-void Glyph::render(QPainter *painter, qreal opacity)
+void Glyph::render(QPainter *painter, const qreal& opacity)
 {
     Q_ASSERT(opacity >= MINIMUM_GLYPH_OPACITY_VALUE);
     painter->setOpacity(opacity);
     this->QSvgRenderer::render(painter, paintRect);
 }
 
-QRectF& Glyph::resetPaintRectAndScale(qreal factor)
+QRectF& Glyph::resetPaintRectAndScale(const qreal& factor)
 {
     this->paintRect = this->viewBoxF();
     this->paintRect.setSize(this->paintRect.size() * factor);
