@@ -194,6 +194,37 @@ void OpenCompositionDialog::comboBox_openMode_onCurrentIndexChanged(int index)
 }
 
 /**
+ * @brief [Helper Function] Try to autocomplete the given QLineEdit by combining the filter with the source path.
+ * @param filePathSource From which path it should autocomplete.
+ * @param fileDialogFilterDestination The filter of the destination. Should contain an extension which will be added to the basename of filePathSource. E.g.: "*.txt"
+ * @param lineEditDestination Where to write the autocompleted path to.
+ * @return An empty string if the filePathSource is empty, if the autocompleted file does not exist. The path to the autocompleted file if it exists.
+ */
+QString autoCompleteHelper(const QString& filePathSource, const QString& fileDialogFilterDestination, QWidget *lineEditDestination)
+{
+    // Get the QLineEdit
+    QLineEdit *lineEdit = qobject_cast<QLineEdit*>(lineEditDestination);
+    Q_ASSERT(lineEdit);
+
+    // Check if filePathSource is empty
+    if (filePathSource.isEmpty())
+    {
+        return QString(); // Return empty string
+    }
+
+    // Try to autocomplete row1
+    QFileInfo fileInfoSource = QFileInfo(filePathSource);
+    QFileInfo fileInfoDestination = QFileInfo(fileInfoSource.dir().filePath(fileInfoSource.completeBaseName().append('.').append(QFileInfo(fileDialogFilterDestination).suffix())));
+    qDebug() << "Autocomplete file:" << fileInfoDestination.filePath();
+    if (!fileInfoDestination.exists() || !fileInfoDestination.isFile())
+        return QString(); // Return empty string
+
+    // Found a matching file
+    lineEdit->setText(fileInfoDestination.filePath());
+
+    return fileInfoDestination.filePath();
+}
+/**
  * @brief [Helper Function] Open the FileOpen Dialog and let the user choose a file. (Bit messy but what ever)
  * @param lineEdit Where to insert the fileName. Can be nullptr to skip setting the text of the QLineEdit.
  * @param mode The current CompositionOpenMode.
@@ -221,12 +252,24 @@ QString browseButtonHelper(QWidget *lineEdit, const OpenCompositionDialog::Compo
 void OpenCompositionDialog::browseRow0FileButton_onClicked(bool checked)
 {
     // Call the helper function
-    browseButtonHelper(this->row0Container[1], openModes.at(this->comboBox_openMode->currentIndex()), 0);
+    const CompositionOpenMode& mode = openModes.at(this->comboBox_openMode->currentIndex());
+    QString filePath = browseButtonHelper(this->row0Container[1], mode, 0);
+
+    // Check if we should autocomplete
+    if (!mode.needsRow1)
+        return;
+
+    // Try to autocomplete
+    autoCompleteHelper(filePath, mode.fileDialogFilter[1], this->row1Container[1]);
 }
 void OpenCompositionDialog::browseRow1FileButton_onClicked(bool checked)
 {
     // Call the helper function
-    browseButtonHelper(this->row1Container[1], openModes.at(this->comboBox_openMode->currentIndex()), 1);
+    const CompositionOpenMode& mode = openModes.at(this->comboBox_openMode->currentIndex());
+    QString filePath = browseButtonHelper(this->row1Container[1], mode, 1);
+
+    // Try to autocomplete
+    autoCompleteHelper(filePath, mode.fileDialogFilter[0], this->row0Container[1]);
 }
 
 /*
