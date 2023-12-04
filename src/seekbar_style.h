@@ -5,9 +5,9 @@
 
 /**
  * @brief This style is needed so the slider value jumps to our mouse cursor if we click on the slider bar.
- * @example seekbar.setStyle(new SeekbarStyle(seekbar->style()));
+ * @example seekBar.setStyle(new SeekBarStyle(seekBar->style()));
  */
-class SeekbarStyle : public QProxyStyle
+class SeekBarStyle : public QProxyStyle
 {
 public:
     using QProxyStyle::QProxyStyle;

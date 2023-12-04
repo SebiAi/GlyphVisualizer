@@ -45,6 +45,8 @@ MainWindow::MainWindow(QWidget *parent)
     // Add GlyphWidget
     glyphWidget = new GlyphWidget(); // No parent needed - layout does this for us
     ui->centralwidget->layout()->addWidget(glyphWidget);
+    connect(this->glyphWidget->compositionManager->player, SIGNAL(positionChanged(qint64)), this, SLOT(glyphWidget_onPositionChanged(qint64)));
+    connect(this->glyphWidget->compositionManager->player, SIGNAL(playbackStateChanged(QMediaPlayer::PlaybackState)), this, SLOT(glyphWidget_onPlaybackStateChanged(QMediaPlayer::PlaybackState)));
 
     // Test layout
     QHBoxLayout *playerControllsLayout = new QHBoxLayout(); // No parent needed - layout does this for us
@@ -53,25 +55,30 @@ MainWindow::MainWindow(QWidget *parent)
     this->mainLayout->addLayout(playerControllsLayout);
     ui->centralwidget->layout()->setAlignment(playerControllsLayout, Qt::AlignHCenter);
 
-    this->pausePlayButton = new QToolButton();
-    this->pausePlayButton->setIcon(this->style()->standardIcon(QStyle::StandardPixmap::SP_MediaPlay));
-    this->pausePlayButton->setIconSize(QSize(40, 40));
-    this->pausePlayButton->setAutoRaise(true);
-    playerControllsLayout->addWidget(this->pausePlayButton);
+    this->playPauseButton = new QToolButton();
+    this->playPauseButton->setIcon(this->style()->standardIcon(QStyle::StandardPixmap::SP_MediaPlay));
+    this->playPauseButton->setIconSize(QSize(40, 40));
+    this->playPauseButton->setAutoRaise(true);
+    playerControllsLayout->addWidget(this->playPauseButton);
+    connect(this->playPauseButton, SIGNAL(clicked(bool)), this, SLOT(pausePlayButton_onClicked(bool)));
 
     this->currentTimeLabel = new QLabel("--:--");
     playerControllsLayout->addWidget(this->currentTimeLabel);
 
     this->seekBar = new QSlider(Qt::Orientation::Horizontal);
-    this->seekBar->setSliderPosition(50);
-    this->seekBar->setStyle(new SeekbarStyle(this->seekBar->style()));
-//    this->seekBar->setEnabled(false);
-//    this->seekBar->setMinimumHeight(20);
+    this->seekBar->setStyle(new SeekBarStyle(this->seekBar->style())); // Needed so the bar moves exactly to where we click with the mouse
+    this->seekBar->setEnabled(false);
+    this->seekBar->setMinimum(0);
+    this->seekBar->setSingleStep(1000);
+    this->seekBar->setPageStep(5000);
+    // TODO: Set transparent QSlider::groove:horizontal {background: transparent} until the value is big enough to not clip so weird. Or set the border-radius to something smaller.
     playerControllsLayout->addWidget(this->seekBar);
+    connect(this->seekBar, SIGNAL(valueChanged(int)), this, SLOT(seekBar_onValueChanged(int)));
+    connect(this->seekBar, SIGNAL(sliderReleased()), this, SLOT(seekBar_onSliderReleased()));
 
     this->lengthTimeLabel = new QLabel("--:--");
     playerControllsLayout->addWidget(this->lengthTimeLabel);
-
+    connect(this->glyphWidget->compositionManager->player, SIGNAL(durationChanged(qint64)), this, SLOT(glyphWidget_onDurationChanged(qint64)));
 
     QPushButton *button = new QPushButton("Toggle Phone (1) and Phone (2) Glyphs"); // No parent needed - layout does this for us
     connect(button, SIGNAL(clicked(bool)), this, SLOT(button_onClicked(bool)));
@@ -139,6 +146,17 @@ void MainWindow::processOpenCompositionDialogAccepted(const OpenCompositionDialo
     this->glyphWidget->compositionManager->player->play();
 }
 
+QString MainWindow::millisecondsToTimeRepresentation(qint64 milliseconds) const
+{
+    quint64 minutes = (quint64)(milliseconds / 1000 / 60);
+    quint64 seconds = (quint64)(milliseconds / 1000 - minutes * 60);
+    QString result;
+    QTextStream textStream(&result);
+    textStream.setPadChar('0');
+    textStream << qSetFieldWidth(2) << minutes << qSetFieldWidth(0) << ':'<< qSetFieldWidth(2) << seconds;
+    return result;
+}
+
 /*
  * ==================================
  *               Slots
@@ -180,6 +198,71 @@ void MainWindow::openCompositionDialog_onFinished(int result)
     default:
         // This should never happen
         throw std::logic_error(std::string("[Development Error] switch case not accounted for in function '").append(__FUNCTION__).append("'!"));
+        break;
+    }
+}
+
+void MainWindow::glyphWidget_onDurationChanged(qint64 duration)
+{
+    // Set the lengthTimeLabel
+    this->lengthTimeLabel->setText(millisecondsToTimeRepresentation(duration));
+
+    // Set seekBar
+    this->seekBar->setEnabled(true);
+    this->seekBar->setMaximum(duration);
+}
+
+void MainWindow::seekBar_onValueChanged(int value)
+{
+    // Update currentTimeLabel
+    this->currentTimeLabel->setText(millisecondsToTimeRepresentation(value));
+
+    // Set player position if we have a position missmatch (the user moved the slider)
+    if (value != this->glyphWidget->compositionManager->player->position())
+        this->glyphWidget->compositionManager->player->setPosition(this->seekBar->value());
+}
+
+void MainWindow::glyphWidget_onPositionChanged(qint64 position)
+{
+    // Change the seekBar position when the slider is not beeing held down
+    if (!this->seekBar->isSliderDown())
+        this->seekBar->setValue(position);
+}
+
+void MainWindow::seekBar_onSliderReleased()
+{
+    // Set the player position after the slider is released
+    this->glyphWidget->compositionManager->player->setPosition(this->seekBar->value());
+}
+
+void MainWindow::glyphWidget_onPlaybackStateChanged(QMediaPlayer::PlaybackState newState)
+{
+    // Set the icon depending on the playback state
+    switch (newState)
+    {
+    case QMediaPlayer::PlaybackState::PlayingState:
+        this->playPauseButton->setIcon(this->style()->standardIcon(QStyle::StandardPixmap::SP_MediaPause));
+        break;
+    case QMediaPlayer::PlaybackState::StoppedState:
+        // Stop the player to reset the position to 0
+        this->glyphWidget->compositionManager->player->stop();
+    case QMediaPlayer::PlaybackState::PausedState:
+        this->playPauseButton->setIcon(this->style()->standardIcon(QStyle::StandardPixmap::SP_MediaPlay));
+        break;
+    }
+}
+
+void MainWindow::pausePlayButton_onClicked(bool checked)
+{
+    // Change playback state
+    switch (this->glyphWidget->compositionManager->player->playbackState())
+    {
+    case QMediaPlayer::PlaybackState::PlayingState:
+        this->glyphWidget->compositionManager->player->pause();
+        break;
+    case QMediaPlayer::PlaybackState::StoppedState:
+    case QMediaPlayer::PlaybackState::PausedState:
+        this->glyphWidget->compositionManager->player->play();
         break;
     }
 }
