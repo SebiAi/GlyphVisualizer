@@ -182,6 +182,7 @@ void OpenCompositionDialog::comboBox_openMode_onCurrentIndexChanged(int index)
     Q_ASSERT(label0);
     label0->setText(labelRow0.isEmpty() ? "-" : labelRow0);
 
+    // Change row 1 label
     QLabel *label1 = qobject_cast<QLabel*>(this->row1Container[0]);
     Q_ASSERT(label1);
     label1->setText(labelRow1.isEmpty() ? "-" : labelRow1);
