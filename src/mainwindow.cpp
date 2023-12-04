@@ -2,6 +2,7 @@
 #include "./ui_mainwindow.h"
 
 // TODO: [END] Leak check with Valgrind: 'valgrind --leak-check=full ./GlyphVisualizer'
+// TODO: Set the application icon: https://doc.qt.io/qt-6/appicon.html
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
