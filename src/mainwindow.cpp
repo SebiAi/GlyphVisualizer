@@ -13,12 +13,12 @@ MainWindow::MainWindow(QWidget *parent)
     // Add style sheets (see here: https://doc.qt.io/qt-6/stylesheet-reference.html)
     // TODO: [END] Test style sheet in white and black mode
     this->setStyleSheet("* {background: rgb(30, 32, 34); color: rgb(240, 242, 242)}"
-                        "QLineEdit,QMenuBar,QPushButton,QComboBox,QMenu {background: rgb(47, 48, 51)}"
+                        "QLineEdit,QMenuBar,QPushButton,QComboBox,QMenu,QSlider::groove:horizontal {background: rgb(47, 48, 51)}"
                         "QPushButton:hover,QComboBox:hover,QMenuBar::item:selected,QMenu::item:selected {background: rgb(73, 75, 80)}"
                         "QSlider {height: 23px}"
-                        "QSlider::sub-page:horizontal {background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgb(215,25,33), stop:1 rgb(160, 19, 26));border-radius: 5px;margin: 0px 2px}"
-                        "QSlider::groove:horizontal {border: 1px solid #5c5c5c;background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #0C0D0E, stop:1 #303336);height: 12px;margin: -2px 0px;border-radius: 5px}"
-                        "QSlider::handle:horizontal {background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #303336, stop:1 #0C0D0E);border: 1px solid #5c5c5c;width: 15px;margin: -3px 0;border-radius: 8px}"
+                        "QSlider::sub-page:horizontal {background: rgb(215,25,33);border-radius: 5px;margin: 0px 2px}"
+                        "QSlider::groove:horizontal {border: 1px solid rgb(73, 75, 80);height: 12px;margin: -2px 0px;border-radius: 5px}"
+                        "QSlider::handle:horizontal {background: transparent}"
                         );
 
     // Add 'File' entry to MenuBar
