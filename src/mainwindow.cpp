@@ -12,7 +12,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Add style sheets (see here: https://doc.qt.io/qt-6/stylesheet-reference.html)
     // TODO: [END] Test style sheet in white and black mode
-    this->setStyleSheet("* {background: rgb(30, 32, 34); color: rgb(240, 242, 242)} QLineEdit,QMenuBar,QPushButton,QComboBox,QMenu {background: rgb(47, 48, 51)} QPushButton:hover,QComboBox:hover,QMenuBar::item:selected,QMenu::item:selected {background: rgb(73, 75, 80)}");
+    this->setStyleSheet("* {background: rgb(30, 32, 34); color: rgb(240, 242, 242)}"
+                        "QLineEdit,QMenuBar,QPushButton,QComboBox,QMenu {background: rgb(47, 48, 51)}"
+                        "QPushButton:hover,QComboBox:hover,QMenuBar::item:selected,QMenu::item:selected {background: rgb(73, 75, 80)}"
+                        "QSlider {height: 23px}"
+                        "QSlider::sub-page:horizontal {background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgb(215,25,33), stop:1 rgb(160, 19, 26));border-radius: 5px;margin: 0px 2px}"
+                        "QSlider::groove:horizontal {border: 1px solid #5c5c5c;background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #0C0D0E, stop:1 #303336);height: 12px;margin: -2px 0px;border-radius: 5px}"
+                        "QSlider::handle:horizontal {background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #303336, stop:1 #0C0D0E);border: 1px solid #5c5c5c;width: 15px;margin: -3px 0;border-radius: 8px}"
+                        );
 
     // Add 'File' entry to MenuBar
     this->fileMenu = ui->menubar->addMenu("&File");
@@ -32,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Set vertical layout
     mainLayout = new QVBoxLayout(ui->centralwidget);
-    mainLayout->setSpacing(20);
+    mainLayout->setSpacing(4);
     ui->centralwidget->setLayout(mainLayout);
 
     // Add GlyphWidget
@@ -40,9 +47,31 @@ MainWindow::MainWindow(QWidget *parent)
     ui->centralwidget->layout()->addWidget(glyphWidget);
 
     // Test layout
-    QLabel *label = new QLabel("Hello World!"); // No parent needed - layout does this for us
-    ui->centralwidget->layout()->addWidget(label);
-    ui->centralwidget->layout()->setAlignment(label, Qt::AlignHCenter);
+    QHBoxLayout *playerControllsLayout = new QHBoxLayout(); // No parent needed - layout does this for us
+    playerControllsLayout->setSpacing(8);
+    playerControllsLayout->setContentsMargins(11, 0, 22, 0);
+    this->mainLayout->addLayout(playerControllsLayout);
+    ui->centralwidget->layout()->setAlignment(playerControllsLayout, Qt::AlignHCenter);
+
+    this->pausePlayButton = new QToolButton();
+    this->pausePlayButton->setIcon(this->style()->standardIcon(QStyle::StandardPixmap::SP_MediaPlay));
+    this->pausePlayButton->setIconSize(QSize(40, 40));
+    this->pausePlayButton->setAutoRaise(true);
+    playerControllsLayout->addWidget(this->pausePlayButton);
+
+    this->currentTimeLabel = new QLabel("--:--");
+    playerControllsLayout->addWidget(this->currentTimeLabel);
+
+    this->seekBar = new QSlider(Qt::Orientation::Horizontal);
+    this->seekBar->setSliderPosition(50);
+    this->seekBar->setStyle(new SeekbarStyle(this->seekBar->style()));
+//    this->seekBar->setEnabled(false);
+//    this->seekBar->setMinimumHeight(20);
+    playerControllsLayout->addWidget(this->seekBar);
+
+    this->lengthTimeLabel = new QLabel("--:--");
+    playerControllsLayout->addWidget(this->lengthTimeLabel);
+
 
     QPushButton *button = new QPushButton("Toggle Phone (1) and Phone (2) Glyphs"); // No parent needed - layout does this for us
     connect(button, SIGNAL(clicked(bool)), this, SLOT(button_onClicked(bool)));

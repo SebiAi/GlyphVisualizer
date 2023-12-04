@@ -7,9 +7,12 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QStyle>
+#include <QToolButton>
+#include <QSlider>
 
 #include "glyph_widget.h"
 #include "open_composition_dialog.h"
+#include "seekbar_style.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -33,6 +36,11 @@ private:
     QAction *openFileAction;
 
     OpenCompositionDialog *openCompositionDialog;
+
+    QToolButton *pausePlayButton;
+    QLabel *currentTimeLabel;
+    QSlider *seekBar;
+    QLabel *lengthTimeLabel;
 
     /**
      * @brief Loads the composition with the glyphWidget. Will be executed after the OpenCompositionDialog closes with the Accept return value.
