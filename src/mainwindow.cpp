@@ -48,13 +48,14 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this->glyphWidget->compositionManager->player, SIGNAL(positionChanged(qint64)), this, SLOT(glyphWidget_onPositionChanged(qint64)));
     connect(this->glyphWidget->compositionManager->player, SIGNAL(playbackStateChanged(QMediaPlayer::PlaybackState)), this, SLOT(glyphWidget_onPlaybackStateChanged(QMediaPlayer::PlaybackState)));
 
-    // Test layout
-    QHBoxLayout *playerControllsLayout = new QHBoxLayout(); // No parent needed - layout does this for us
+    // Add layout for the player controls
+    QHBoxLayout *playerControllsLayout = new QHBoxLayout();
     playerControllsLayout->setSpacing(8);
     playerControllsLayout->setContentsMargins(11, 0, 22, 0);
     this->mainLayout->addLayout(playerControllsLayout);
     ui->centralwidget->layout()->setAlignment(playerControllsLayout, Qt::AlignHCenter);
 
+    // Play button
     this->playPauseButton = new QToolButton();
     this->playPauseButton->setIcon(this->style()->standardIcon(QStyle::StandardPixmap::SP_MediaPlay));
     this->playPauseButton->setIconSize(QSize(40, 40));
@@ -65,9 +66,11 @@ MainWindow::MainWindow(QWidget *parent)
     playPauseShortcut = new QShortcut(QKeySequence(" "), this);
     connect(this->playPauseShortcut, SIGNAL(activated()), this->playPauseButton, SLOT(click()));
 
+    // Current time label
     this->currentTimeLabel = new QLabel("--:--");
     playerControllsLayout->addWidget(this->currentTimeLabel);
 
+    // Seek bar
     this->seekBar = new QSlider(Qt::Orientation::Horizontal);
     this->seekBar->setStyle(new SeekBarStyle(this->seekBar->style())); // Needed so the bar moves exactly to where we click with the mouse
     this->seekBar->setEnabled(false);
@@ -79,11 +82,13 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this->seekBar, SIGNAL(valueChanged(int)), this, SLOT(seekBar_onValueChanged(int)));
     connect(this->seekBar, SIGNAL(sliderReleased()), this, SLOT(seekBar_onSliderReleased()));
 
+    // Length time label
     this->lengthTimeLabel = new QLabel("--:--");
     playerControllsLayout->addWidget(this->lengthTimeLabel);
     connect(this->glyphWidget->compositionManager->player, SIGNAL(durationChanged(qint64)), this, SLOT(glyphWidget_onDurationChanged(qint64)));
 
-    QPushButton *button = new QPushButton("Toggle Phone (1) and Phone (2) Glyphs"); // No parent needed - layout does this for us
+    // Toggle button
+    QPushButton *button = new QPushButton("Toggle Phone (1) and Phone (2) Glyphs");
     connect(button, SIGNAL(clicked(bool)), this, SLOT(button_onClicked(bool)));
     ui->centralwidget->layout()->addWidget(button);
     ui->centralwidget->layout()->setAlignment(button, Qt::AlignHCenter);
