@@ -183,6 +183,9 @@ void MainWindow::button_onClicked(bool checked)
 
 void MainWindow::openFileAction_onTriggered(bool checked)
 {
+    // Pause the player
+    this->glyphWidget->compositionManager->player->pause();
+
     // Open the OpenCompositionDialog
     this->openCompositionDialog->open();
 }
