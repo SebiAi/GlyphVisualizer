@@ -61,6 +61,9 @@ MainWindow::MainWindow(QWidget *parent)
     this->playPauseButton->setAutoRaise(true);
     playerControllsLayout->addWidget(this->playPauseButton);
     connect(this->playPauseButton, SIGNAL(clicked(bool)), this, SLOT(pausePlayButton_onClicked(bool)));
+    // Create a shortcut for the play/pause button
+    playPauseShortcut = new QShortcut(QKeySequence(" "), this);
+    connect(this->playPauseShortcut, SIGNAL(activated()), this->playPauseButton, SLOT(click()));
 
     this->currentTimeLabel = new QLabel("--:--");
     playerControllsLayout->addWidget(this->currentTimeLabel);

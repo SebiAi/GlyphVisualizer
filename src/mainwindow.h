@@ -10,6 +10,7 @@
 #include <QToolButton>
 #include <QSlider>
 #include <QTextStream>
+#include <QShortcut>
 
 #include "glyph_widget.h"
 #include "open_composition_dialog.h"
@@ -38,6 +39,7 @@ private:
 
     OpenCompositionDialog *openCompositionDialog;
 
+    QShortcut *playPauseShortcut;
     QToolButton *playPauseButton;
     QLabel *currentTimeLabel;
     QSlider *seekBar;
