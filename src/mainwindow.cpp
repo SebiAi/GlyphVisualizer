@@ -49,18 +49,18 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this->glyphWidget->compositionManager->player, SIGNAL(playbackStateChanged(QMediaPlayer::PlaybackState)), this, SLOT(glyphWidget_onPlaybackStateChanged(QMediaPlayer::PlaybackState)));
 
     // Add layout for the player controls
-    QHBoxLayout *playerControllsLayout = new QHBoxLayout();
-    playerControllsLayout->setSpacing(8);
-    playerControllsLayout->setContentsMargins(11, 0, 22, 0);
-    this->mainLayout->addLayout(playerControllsLayout);
-    ui->centralwidget->layout()->setAlignment(playerControllsLayout, Qt::AlignHCenter);
+    QHBoxLayout *playerControlsLayout = new QHBoxLayout();
+    playerControlsLayout->setSpacing(8);
+    playerControlsLayout->setContentsMargins(11, 0, 22, 0);
+    this->mainLayout->addLayout(playerControlsLayout);
+    ui->centralwidget->layout()->setAlignment(playerControlsLayout, Qt::AlignHCenter);
 
     // Play button
     this->playPauseButton = new QToolButton();
     this->playPauseButton->setIcon(this->style()->standardIcon(QStyle::StandardPixmap::SP_MediaPlay));
     this->playPauseButton->setIconSize(QSize(40, 40));
     this->playPauseButton->setAutoRaise(true);
-    playerControllsLayout->addWidget(this->playPauseButton);
+    playerControlsLayout->addWidget(this->playPauseButton);
     connect(this->playPauseButton, SIGNAL(clicked(bool)), this, SLOT(pausePlayButton_onClicked(bool)));
     // Create a shortcut for the play/pause button
     playPauseShortcut = new QShortcut(QKeySequence(" "), this);
@@ -68,7 +68,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Current time label
     this->currentTimeLabel = new QLabel("--:--");
-    playerControllsLayout->addWidget(this->currentTimeLabel);
+    playerControlsLayout->addWidget(this->currentTimeLabel);
 
     // Seek bar
     this->seekBar = new QSlider(Qt::Orientation::Horizontal);
@@ -78,13 +78,13 @@ MainWindow::MainWindow(QWidget *parent)
     this->seekBar->setSingleStep(1000);
     this->seekBar->setPageStep(5000);
     // TODO: Set transparent QSlider::groove:horizontal {background: transparent} until the value is big enough to not clip so weird. Or set the border-radius to something smaller.
-    playerControllsLayout->addWidget(this->seekBar);
+    playerControlsLayout->addWidget(this->seekBar);
     connect(this->seekBar, SIGNAL(valueChanged(int)), this, SLOT(seekBar_onValueChanged(int)));
     connect(this->seekBar, SIGNAL(sliderReleased()), this, SLOT(seekBar_onSliderReleased()));
 
     // Length time label
     this->lengthTimeLabel = new QLabel("--:--");
-    playerControllsLayout->addWidget(this->lengthTimeLabel);
+    playerControlsLayout->addWidget(this->lengthTimeLabel);
     connect(this->glyphWidget->compositionManager->player, SIGNAL(durationChanged(qint64)), this, SLOT(glyphWidget_onDurationChanged(qint64)));
 
     // Toggle button
