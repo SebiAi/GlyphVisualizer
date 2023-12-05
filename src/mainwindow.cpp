@@ -13,12 +13,12 @@ MainWindow::MainWindow(QWidget *parent)
     // Add style sheets (see here: https://doc.qt.io/qt-6/stylesheet-reference.html)
     // TODO: [END] Test style sheet in white and black mode
     this->setStyleSheet("* {background: rgb(30, 32, 34); color: rgb(240, 242, 242)}"
-                        "QLineEdit,QMenuBar,QPushButton,QComboBox,QMenu,QSlider::groove:horizontal {background: rgb(47, 48, 51)}"
+                        "QLineEdit,QMenuBar,QPushButton,QComboBox,QMenu,SeekBar::groove:horizontal {background: rgb(47, 48, 51)}"
                         "QPushButton:hover,QComboBox:hover,QMenuBar::item:selected,QMenu::item:selected {background: rgb(73, 75, 80)}"
-                        "QSlider {height: 23px}"
-                        "QSlider::sub-page:horizontal {background: rgb(215,25,33);border-radius: 5px;margin: 0px 2px}"
-                        "QSlider::groove:horizontal {border: 1px solid rgb(73, 75, 80);height: 12px;margin: -2px 0px;border-radius: 5px}"
-                        "QSlider::handle:horizontal {background: transparent}"
+                        "SeekBar {height: 23px}"
+                        "SeekBar::sub-page:horizontal {background: rgb(215,25,33);border-radius: 5px;margin: 0px 2px}"
+                        "SeekBar::groove:horizontal {border: 1px solid rgb(73, 75, 80);height: 12px;margin: -2px 0px;border-radius: 5px}"
+                        "SeekBar::handle:horizontal {background: transparent}"
                         );
 
     // Add 'File' entry to MenuBar
@@ -71,15 +71,9 @@ MainWindow::MainWindow(QWidget *parent)
     playerControlsLayout->addWidget(this->currentTimeLabel);
 
     // Seek bar
-    this->seekBar = new QSlider(Qt::Orientation::Horizontal);
-    this->seekBar->setStyle(new SeekBarStyle(this->seekBar->style())); // Needed so the bar moves exactly to where we click with the mouse
-    this->seekBar->setEnabled(false);
-    this->seekBar->setMinimum(0);
-    this->seekBar->setSingleStep(1000);
-    this->seekBar->setPageStep(5000);
-    // TODO: Set transparent QSlider::groove:horizontal {background: transparent} until the value is big enough to not clip so weird. Or set the border-radius to something smaller.
+    this->seekBar = new SeekBar();
     playerControlsLayout->addWidget(this->seekBar);
-    connect(this->seekBar, SIGNAL(valueChanged(int)), this, SLOT(seekBar_onValueChanged(int)));
+    connect(this->seekBar, SIGNAL(valueChanged(int)), this, SLOT(seekBar_onValueChanged()));
     connect(this->seekBar, SIGNAL(sliderReleased()), this, SLOT(seekBar_onSliderReleased()));
 
     // Length time label
@@ -220,30 +214,34 @@ void MainWindow::glyphWidget_onDurationChanged(qint64 duration)
 
     // Set seekBar
     this->seekBar->setEnabled(true);
-    this->seekBar->setMaximum(duration);
+    this->seekBar->setActualMaximum(duration);
 }
 
-void MainWindow::seekBar_onValueChanged(int value)
+void MainWindow::seekBar_onValueChanged()
 {
+    // Calculate current value
+    int value = this->seekBar->getActualValue();
+
     // Update currentTimeLabel
-    this->currentTimeLabel->setText(millisecondsToTimeRepresentation(value));
+    if (this->glyphWidget->compositionManager->player->mediaStatus() != QMediaPlayer::MediaStatus::NoMedia)
+        this->currentTimeLabel->setText(millisecondsToTimeRepresentation(value));
 
     // Set player position if we have a position missmatch (the user moved the slider)
     if (value != this->glyphWidget->compositionManager->player->position())
-        this->glyphWidget->compositionManager->player->setPosition(this->seekBar->value());
+        this->glyphWidget->compositionManager->player->setPosition(value);
 }
 
 void MainWindow::glyphWidget_onPositionChanged(qint64 position)
 {
     // Change the seekBar position when the slider is not beeing held down
     if (!this->seekBar->isSliderDown())
-        this->seekBar->setValue(position);
+        this->seekBar->setActualValue(position);
 }
 
 void MainWindow::seekBar_onSliderReleased()
 {
     // Set the player position after the slider is released
-    this->glyphWidget->compositionManager->player->setPosition(this->seekBar->value());
+    this->glyphWidget->compositionManager->player->setPosition(this->seekBar->getActualValue());
 }
 
 void MainWindow::glyphWidget_onPlaybackStateChanged(QMediaPlayer::PlaybackState newState)

@@ -51,10 +51,10 @@ const QList<qreal>* const CompositionManager::getPhone1OpacityValues(qint64 posi
 
 
     // TODO: REMOVE ME!
-    qsizetype indexDelta = index - lastIndex - 1;
-    if (indexDelta != 0)
-        qDebug().nospace() << "[WARNING] Skipped " << indexDelta << " indexes!";
-    lastIndex = index;
+//    qsizetype indexDelta = index - lastIndex - 1;
+//    if (indexDelta != 0)
+//        qDebug().nospace() << "[WARNING] Skipped " << indexDelta << " indexes!";
+//    lastIndex = index;
 
 
     if (index >= opacityValuesPhone1->length())
@@ -71,10 +71,10 @@ const QList<qreal>* const CompositionManager::getPhone2OpacityValues(qint64 posi
 
 
     // TODO: REMOVE ME!
-    qsizetype indexDelta = index - lastIndex - 1;
-    if (indexDelta != 0)
-        qDebug().nospace() << "[WARNING] Skipped " << indexDelta << " indexes!";
-    lastIndex = index;
+//    qsizetype indexDelta = index - lastIndex - 1;
+//    if (indexDelta != 0)
+//        qDebug().nospace() << "[WARNING] Skipped " << indexDelta << " indexes!";
+//    lastIndex = index;
 
 
     if (index >= opacityValuesPhone2->length())

@@ -8,13 +8,12 @@
 #include <QPushButton>
 #include <QStyle>
 #include <QToolButton>
-#include <QSlider>
 #include <QTextStream>
 #include <QShortcut>
 
 #include "glyph_widget.h"
 #include "open_composition_dialog.h"
-#include "seekbar_style.h"
+#include "seek_bar.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -42,7 +41,7 @@ private:
     QShortcut *playPauseShortcut;
     QToolButton *playPauseButton;
     QLabel *currentTimeLabel;
-    QSlider *seekBar;
+    SeekBar *seekBar;
     QLabel *lengthTimeLabel;
 
     /**
@@ -83,9 +82,8 @@ public slots:
     void glyphWidget_onDurationChanged(qint64 duration);
     /**
      * @brief Will be called by the void QSlider::valueChanged(int value) signal.
-     * @param value The value of the slider.
      */
-    void seekBar_onValueChanged(int value);
+    void seekBar_onValueChanged();
     /**
      * @brief Will be called by the void QMediaPlayer::positionChanged(qint64 position) signal.
      * @param position The position in milliseconds.
