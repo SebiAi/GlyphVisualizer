@@ -65,22 +65,6 @@ private:
         QSize(182, 382),    // Phone (1)
         QSize(182, 389)     // Phone (2)
     };
-    /**
-     * @brief Defines a lookup table to convert the 33 Phone (2) Zones to the 11 Phone (2) Glyphs. Usage: glyphs[x] = zones[zone33To11GlyphsLookupTable[x]]
-     */
-    static constexpr quint8 zone33To11GlyphsLookupTable[11] = {
-        0,  // 0
-        1,  // 1
-        2,  // 2
-        3,  // 3
-        19, // 4
-        20, // 5
-        21, // 6
-        22, // 7
-        23, // 8
-        24, // 9
-        25  // 10
-    };
 
     /**
      * @brief Holds the sizeHint of the widget - pulled from the Glyph Composer Android app.
@@ -100,11 +84,61 @@ private:
     /**
      * @brief Holds the Phone (1) Glyphs.
      */
-    QList<Glyph*> glyphsPhone1;
+    QList<Glyph*> glyphsPhone1 = QList<Glyph*>(5);
+    /**
+     * @brief Use this enum to better access glyphsPhone1.
+     */
+    enum class GlyphsPhone1Enum
+    {
+        Camera = 0,
+        Diagonal = 1,
+        Battery = 2,
+        USBLine = 3,
+        USBDot = 4
+    };
     /**
      * @brief Holds the Phone (2) Glyphs.
      */
-    QList<Glyph*> glyphsPhone2;
+    QList<Glyph*> glyphsPhone2 = QList<Glyph*>(33);
+    /**
+     * @brief Use this enum to better access glyphsPhone2.
+     */
+    enum class GlyphsPhone2Enum
+    {
+        CameraTop = 0,
+        CameraBottom = 1,
+        Diagonal = 2,
+        BatteryTopRight_Zone0 = 3,
+        BatteryTopRight_Zone1 = 4,
+        BatteryTopRight_Zone2 = 5,
+        BatteryTopRight_Zone3 = 6,
+        BatteryTopRight_Zone4 = 7,
+        BatteryTopRight_Zone5 = 8,
+        BatteryTopRight_Zone6 = 9,
+        BatteryTopRight_Zone7 = 10,
+        BatteryTopRight_Zone8 = 11,
+        BatteryTopRight_Zone9 = 12,
+        BatteryTopRight_Zone10 = 13,
+        BatteryTopRight_Zone11 = 14,
+        BatteryTopRight_Zone12 = 15,
+        BatteryTopRight_Zone13 = 16,
+        BatteryTopRight_Zone14 = 17,
+        BatteryTopRight_Zone15 = 18,
+        BatteryTopLeft = 19,
+        BatteryTopVertical = 20,
+        BatteryBottomLeft = 21,
+        BatteryBottomRight = 22,
+        BatteryBottomVertical = 23,
+        USBDot = 24,
+        USBLine_Zone0 = 25,
+        USBLine_Zone1 = 26,
+        USBLine_Zone2 = 27,
+        USBLine_Zone3 = 28,
+        USBLine_Zone4 = 29,
+        USBLine_Zone5 = 30,
+        USBLine_Zone6 = 31,
+        USBLine_Zone7 = 32
+    };
 
     /**
      * @brief Calculates the positions and sizes of the Phone (1) Glyphs.
