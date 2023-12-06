@@ -93,8 +93,8 @@ void GlyphWidget::calcPhone1Glyphs()
 
     // Calculate Glyph 4
     QRect tmp = QRect(paintRectangle);
-    tmp.setBottom(glyphsPhone1[(int)GlyphsPhone1Enum::USBLine]->paintRect.top()); // Modify the paintRectangle so the glyph gets aligned to the top of the Glyph 5
-    glyphsPhone1[(int)GlyphsPhone1Enum::USBDot]->calculate(tmp, currentSizeRatio);
+    tmp.setBottom(glyphsPhone1[(int)GlyphsPhone1Enum::USBDot]->paintRect.top()); // Modify the paintRectangle so the glyph gets aligned to the top of the Glyph 5
+    glyphsPhone1[(int)GlyphsPhone1Enum::USBLine]->calculate(tmp, currentSizeRatio);
 }
 
 void GlyphWidget::calcPhone2Glyphs()
