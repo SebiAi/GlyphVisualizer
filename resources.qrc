@@ -18,5 +18,7 @@
         <file alias="led_c6">assets/glyphs/phone2/led_c6.svg</file>
         <file alias="led_d">assets/glyphs/phone2/led_d.svg</file>
         <file alias="led_e">assets/glyphs/phone2/led_e.svg</file>
+        <file alias="led_c1_zones">assets/glyphs/phone2/led_c1_zones.svg</file>
+        <file alias="led_d_zones">assets/glyphs/phone2/led_d_zones.svg</file>
     </qresource>
 </RCC>
