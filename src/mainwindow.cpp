@@ -204,7 +204,8 @@ void MainWindow::openCompositionDialog_onFinished(int result)
         processOpenCompositionDialogAccepted(this->openCompositionDialog->openModeResult, this->openCompositionDialog->row0Result, this->openCompositionDialog->row1Result);
         break;
     case QDialog::DialogCode::Rejected: // == 1
-        // Do nothing
+        // Resume playing the composition
+        this->glyphWidget->compositionManager->player->play();
         break;
     default:
         // This should never happen
