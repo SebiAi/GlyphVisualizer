@@ -5,11 +5,9 @@
 #include <QPainter>
 #include <QResizeEvent>
 #include <QMessageBox>
+#include <QColor>
 #include "glyph.h"
 #include "composition_manager.h"
-
-// The minimum percentage value the Glyphs should have. Must be between 0 - 1 (default: 0.12 => 12%)
-#define MINIMUM_GLYPH_OPACITY_VALUE 0.12
 
 class GlyphWidget : public QWidget
 {
@@ -53,6 +51,15 @@ public slots:
     void compositionManager_onPositionChanged(qint64 position);
 
 private:
+    /**
+     * @brief The color of the Glyphs if they are 100% on.
+     */
+    QColor glyphOnColor = QColor::fromString("#f0f2f2").toHsv();
+    /**
+     * @brief Value of the HSV glyphOnColor where the Glyphs are 0% on.
+     */
+    static constexpr qreal glyphOffValue = 0.285;
+
     /**
      * @brief Holds the current visual mode.
      */

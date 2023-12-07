@@ -2,17 +2,22 @@
 
 inline void CompositionManager::init()
 {
+    // Check glyphOffValue
+    Q_ASSERT(this->glyphOffValue >= 0 && this->glyphOffValue <= 1.0);
+
     // Init off values
-    opacityOffValuesPhone1 = new QList<qreal>();
+    colorOffValuesPhone1 = new QList<QColor>();
+    colorOffValuesPhone1->reserve((int)GlyphMode::Compatibility);
     for (quint8 i = 0; i < numberOfZones[(int)GlyphMode::Compatibility]; i++)
-        opacityOffValuesPhone1->append(this->minGlyphOpacityValue);
-    opacityOffValuesPhone2 = new QList<qreal>();
+        colorOffValuesPhone1->append(this->getGlyphColor(0));
+    colorOffValuesPhone2 = new QList<QColor>();
+    colorOffValuesPhone2->reserve(numberOfZones[(int)GlyphMode::Phone2]);
     for (quint8 i = 0; i < numberOfZones[(int)GlyphMode::Phone2]; i++)
-        opacityOffValuesPhone2->append(this->minGlyphOpacityValue);
+        colorOffValuesPhone2->append(this->getGlyphColor(0));
 
     // Init lists
-    opacityValuesPhone1 = new QList<QList<qreal>>();
-    opacityValuesPhone2 = new QList<QList<qreal>>();
+    colorValuesPhone1 = new QList<QList<QColor>>();
+    colorValuesPhone2 = new QList<QList<QColor>>();
 
     // Create player
     this->player = new QMediaPlayer();
@@ -22,17 +27,15 @@ inline void CompositionManager::init()
     this->elapsedTimer = new QElapsedTimer();
 }
 
-CompositionManager::CompositionManager(const qreal& minGlyphOpacityValue)
-    : QObject{}, minGlyphOpacityValue{minGlyphOpacityValue}
+CompositionManager::CompositionManager(const QColor& glyphOnColor, const qreal& glyphOffValue)
+    : QObject{}, glyphOnColor{glyphOnColor}, glyphOffValue{glyphOffValue}
 {
-    Q_ASSERT(this->minGlyphOpacityValue >= 0 && this->minGlyphOpacityValue <= 1.0);
     this->init();
 }
 
-CompositionManager::CompositionManager(const QString &filepathAudio, const QString &filepathLightData, const qreal& minGlyphOpacityValue)
-    : QObject{}, minGlyphOpacityValue{minGlyphOpacityValue}
+CompositionManager::CompositionManager(const QColor& glyphOnColor, const qreal& glyphOffValue, const QString &filepathAudio, const QString &filepathLightData)
+    : QObject{}, glyphOnColor{glyphOnColor}, glyphOffValue{glyphOffValue}
 {
-    Q_ASSERT(this->minGlyphOpacityValue >= 0 && this->minGlyphOpacityValue <= 1.0);
     this->init();
 
     this->loadComposition(filepathAudio, filepathLightData);
@@ -45,9 +48,9 @@ CompositionManager::CompositionManager(const QString &filepathAudio, const QStri
  */
 
 qsizetype lastIndex = 0;
-const QList<qreal>* const CompositionManager::getPhone1OpacityValues(qint64 position) const
+const QList<QColor>* const CompositionManager::getPhone1ColorValues(qint64 position) const
 {
-    qsizetype index =  position / COMPOSITION_MANAGER_MS_PER_LINE;
+    qsizetype index = position / COMPOSITION_MANAGER_MS_PER_LINE;
 
 
     // TODO: REMOVE ME!
@@ -57,17 +60,17 @@ const QList<qreal>* const CompositionManager::getPhone1OpacityValues(qint64 posi
     lastIndex = index;
 
 
-    if (index >= opacityValuesPhone1->length())
+    if (index >= colorValuesPhone1->length())
     {
         // Overrun => just return off state
-        return opacityOffValuesPhone1;
+        return colorOffValuesPhone1;
     }
 
-    return &opacityValuesPhone1->at(index);
+    return &colorValuesPhone1->at(index);
 }
-const QList<qreal>* const CompositionManager::getPhone2OpacityValues(qint64 position) const
+const QList<QColor>* const CompositionManager::getPhone2ColorValues(qint64 position) const
 {
-    qsizetype index =  position / COMPOSITION_MANAGER_MS_PER_LINE;
+    qsizetype index = position / COMPOSITION_MANAGER_MS_PER_LINE;
 
 
     // TODO: REMOVE ME!
@@ -77,13 +80,13 @@ const QList<qreal>* const CompositionManager::getPhone2OpacityValues(qint64 posi
     lastIndex = index;
 
 
-    if (index >= opacityValuesPhone2->length())
+    if (index >= colorValuesPhone2->length())
     {
         // Overrun => just return off state
-        return opacityOffValuesPhone2;
+        return colorOffValuesPhone2;
     }
 
-    return &opacityValuesPhone2->at(index);
+    return &colorValuesPhone2->at(index);
 }
 
 /*
@@ -132,13 +135,13 @@ void CompositionManager::parseLightData(const QString &filepathLightData)
         throw std::invalid_argument(std::string("Could not open light data file '").append(filepathLightData.toStdString()).append("':\n").append(file.errorString().toStdString()));
     }
 
-    // Clear current opacity value list
-    opacityValuesPhone1->clear();
-    opacityValuesPhone2->clear();
+    // Clear current color value list
+    colorValuesPhone1->clear();
+    colorValuesPhone2->clear();
 
     bool firstLine = true;
     qsizetype lineN = 1;
-    QList<QList<qreal>> *globalOpacityValues;
+    QList<QList<QColor>> *globalColorValues;
     // Read all lines
     while (!file.atEnd())
     {
@@ -179,10 +182,10 @@ void CompositionManager::parseLightData(const QString &filepathLightData)
                 throw InvalidLightDataContentException(std::string("Malformed light data! Does not have ").append(columnExceptionString).append(" columns."));
                 return;
             case GlyphMode::Compatibility:
-                globalOpacityValues = opacityValuesPhone1;
+                globalColorValues = colorValuesPhone1;
                 break;
             case GlyphMode::Phone2:
-                globalOpacityValues = opacityValuesPhone2;
+                globalColorValues = colorValuesPhone2;
                 break;
             default:
                 // This should never happen
@@ -193,36 +196,45 @@ void CompositionManager::parseLightData(const QString &filepathLightData)
             firstLine = false;
         }
 
-        QList<qreal> opacityValues;
+        QList<QColor> colorValues;
         bool conversionSuccess;
         for (const QString& s: line.split(','))
         {
-            // Calculate opacity
-            opacityValues.append((1.0 - this->minGlyphOpacityValue) * std::min(s.toUInt(&conversionSuccess), (uint)COMPOSITION_MANAGER_MAX_LIGHT_VALUE) / (qreal)COMPOSITION_MANAGER_MAX_LIGHT_VALUE + this->minGlyphOpacityValue);
+            // Calculate color
+            colorValues.append(this->getGlyphColor(std::min(s.toUInt(&conversionSuccess), (uint)COMPOSITION_MANAGER_MAX_LIGHT_VALUE) / (qreal)COMPOSITION_MANAGER_MAX_LIGHT_VALUE));
             // Check if the conversion was successfull
             if (!conversionSuccess)
                 throw InvalidLightDataContentException(std::string("Malformed light data! Could not convert '").append(s.toStdString()).append("' to an unsigned integer in line ").append(std::to_string(lineN)).append("."));
         }
         // Check the number of columns in the light data
-        if (opacityValues.length() != numberOfZones[(int)currentGlyphMode])
+        if (colorValues.length() != numberOfZones[(int)currentGlyphMode])
             throw InvalidLightDataContentException(std::string("Malformed light data! Line ").append(std::to_string(lineN)).append(" does not have ").append(std::to_string(numberOfZones[(int)currentGlyphMode])).append(" columns."));
 
         // Add current line to the data
-        globalOpacityValues->append(opacityValues);
+        globalColorValues->append(colorValues);
 
         if (currentGlyphMode == GlyphMode::Compatibility)
         {
             // Convert the Phone (1) light data to Phone (2) light data
-            QList<qreal> tmp(numberOfZones[(int)GlyphMode::Phone2]);
+            QList<QColor> tmp(numberOfZones[(int)GlyphMode::Phone2]);
             for (qsizetype i = 0; i < numberOfZones[(int)GlyphMode::Phone2]; i++)
-                tmp[i] = opacityValues.at(zone5To33LookupTable[i]);
+                tmp[i] = colorValues.at(zone5To33LookupTable[i]);
 
             // Add current line to the data
-            opacityValuesPhone2->append(tmp);
+            colorValuesPhone2->append(tmp);
         }
 
         lineN++;
     }
+}
+
+QColor CompositionManager::getGlyphColor(const qreal& percent)
+{
+    Q_ASSERT(percent >= 0 && percent <= 1);
+    return QColor::fromHsvF(this->glyphOnColor.hueF(),
+                            this->glyphOnColor.saturationF(),
+                            percent * (this->glyphOnColor.valueF() - this->glyphOffValue) + this->glyphOffValue
+                            );
 }
 
 /*
@@ -276,10 +288,10 @@ CompositionManager::~CompositionManager()
     delete player;
     delete audioOutput;
 
-    delete opacityValuesPhone1;
-    delete opacityOffValuesPhone1;
-    delete opacityValuesPhone2;
-    delete opacityOffValuesPhone2;
+    delete colorValuesPhone1;
+    delete colorOffValuesPhone1;
+    delete colorValuesPhone2;
+    delete colorOffValuesPhone2;
 
     delete elapsedTimer;
 }

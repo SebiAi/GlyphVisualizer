@@ -7,49 +7,49 @@ GlyphWidget::GlyphWidget(QWidget *parent)
     this->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
 
     // Load Phone (1) Glyphs from resources.qrc
-    glyphsPhone1[(int)GlyphsPhone1Enum::Camera] = new Glyph(":/glyphs/phone1/led_1", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::TopLeft, QPointF(9.35, 10));
-    glyphsPhone1[(int)GlyphsPhone1Enum::Diagonal] = new Glyph(":/glyphs/phone1/led_2", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::TopRight, QPointF(-21.7, 21.56));
-    glyphsPhone1[(int)GlyphsPhone1Enum::Battery] = new Glyph(":/glyphs/phone1/led_3", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::Centered, QPointF(0, 0));
-    glyphsPhone1[(int)GlyphsPhone1Enum::USBLine] = new Glyph(":/glyphs/phone1/led_4", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::CenteredHBottom, QPointF(0, -7.33));
-    glyphsPhone1[(int)GlyphsPhone1Enum::USBDot] = new Glyph(":/glyphs/phone1/led_5", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::CenteredHBottom, QPointF(0, -10));
+    glyphsPhone1[(int)GlyphsPhone1Enum::Camera] = new Glyph(":/glyphs/phone1/led_1", Glyph::Reference::TopLeft, QPointF(9.35, 10));
+    glyphsPhone1[(int)GlyphsPhone1Enum::Diagonal] = new Glyph(":/glyphs/phone1/led_2", Glyph::Reference::TopRight, QPointF(-21.7, 21.56));
+    glyphsPhone1[(int)GlyphsPhone1Enum::Battery] = new Glyph(":/glyphs/phone1/led_3", Glyph::Reference::Centered, QPointF(0, 0));
+    glyphsPhone1[(int)GlyphsPhone1Enum::USBLine] = new Glyph(":/glyphs/phone1/led_4", Glyph::Reference::CenteredHBottom, QPointF(0, -7.33));
+    glyphsPhone1[(int)GlyphsPhone1Enum::USBDot] = new Glyph(":/glyphs/phone1/led_5", Glyph::Reference::CenteredHBottom, QPointF(0, -10));
 
     // Load Phone (2) Glyphs from resources.qrc
-    glyphsPhone2[(int)GlyphsPhone2Enum::CameraTop] = new Glyph(":/glyphs/phone2/led_a1", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::TopLeft, QPointF(13.88, 10 + 3.5));
-    glyphsPhone2[(int)GlyphsPhone2Enum::CameraBottom] = new Glyph(":/glyphs/phone2/led_a2", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::TopLeft, QPointF(22.75, 51.56 + 3.5));
-    glyphsPhone2[(int)GlyphsPhone2Enum::Diagonal] = new Glyph(":/glyphs/phone2/led_b", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::TopRight, QPointF(-22.51, 20.07 + 3.5));
-    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone0] = new Glyph(":/glyphs/phone2/led_c1_zones", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_0");
-    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone1] = new Glyph(":/glyphs/phone2/led_c1_zones", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_1");
-    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone2] = new Glyph(":/glyphs/phone2/led_c1_zones", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_2");
-    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone3] = new Glyph(":/glyphs/phone2/led_c1_zones", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_3");
-    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone4] = new Glyph(":/glyphs/phone2/led_c1_zones", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_4");
-    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone5] = new Glyph(":/glyphs/phone2/led_c1_zones", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_5");
-    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone6] = new Glyph(":/glyphs/phone2/led_c1_zones", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_6");
-    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone7] = new Glyph(":/glyphs/phone2/led_c1_zones", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_7");
-    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone8] = new Glyph(":/glyphs/phone2/led_c1_zones", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_8");
-    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone9] = new Glyph(":/glyphs/phone2/led_c1_zones", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_9");
-    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone10] = new Glyph(":/glyphs/phone2/led_c1_zones", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_10");
-    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone11] = new Glyph(":/glyphs/phone2/led_c1_zones", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_11");
-    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone12] = new Glyph(":/glyphs/phone2/led_c1_zones", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_12");
-    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone13] = new Glyph(":/glyphs/phone2/led_c1_zones", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_13");
-    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone14] = new Glyph(":/glyphs/phone2/led_c1_zones", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_14");
-    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone15] = new Glyph(":/glyphs/phone2/led_c1_zones", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_15");
-    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopLeft] = new Glyph(":/glyphs/phone2/led_c2", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::TopLeft, QPointF(13.7, 101.28 + 3.5));
-    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopVertical] = new Glyph(":/glyphs/phone2/led_c3", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::TopLeft, QPointF(11.94, 146.3 + 3.5));
-    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryBottomLeft] = new Glyph(":/glyphs/phone2/led_c4", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::BottomLeft, QPointF(13.7, -88.56 - 3.5));
-    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryBottomRight] = new Glyph(":/glyphs/phone2/led_c5", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::BottomRight, QPointF(-11.78, -97.36 - 3.5));
-    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryBottomVertical] = new Glyph(":/glyphs/phone2/led_c6", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::BottomRight, QPointF(-10, -151.83 - 3.5));
-    glyphsPhone2[(int)GlyphsPhone2Enum::USBDot] = new Glyph(":/glyphs/phone2/led_e", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::CenteredHBottom, QPointF(0, -10 - 3.5));
-    glyphsPhone2[(int)GlyphsPhone2Enum::USBLine_Zone0] = new Glyph(":/glyphs/phone2/led_d_zones", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::CenteredHBottom, QPointF(0, -24.38 - 3.5), "path_0"); // Append the GLYPH_USB_LINE at the end because the light data is structured that way - ask Nothing why
-    glyphsPhone2[(int)GlyphsPhone2Enum::USBLine_Zone1] = new Glyph(":/glyphs/phone2/led_d_zones", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::CenteredHBottom, QPointF(0, -24.38 - 3.5), "path_1");
-    glyphsPhone2[(int)GlyphsPhone2Enum::USBLine_Zone2] = new Glyph(":/glyphs/phone2/led_d_zones", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::CenteredHBottom, QPointF(0, -24.38 - 3.5), "path_2");
-    glyphsPhone2[(int)GlyphsPhone2Enum::USBLine_Zone3] = new Glyph(":/glyphs/phone2/led_d_zones", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::CenteredHBottom, QPointF(0, -24.38 - 3.5), "path_3");
-    glyphsPhone2[(int)GlyphsPhone2Enum::USBLine_Zone4] = new Glyph(":/glyphs/phone2/led_d_zones", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::CenteredHBottom, QPointF(0, -24.38 - 3.5), "path_4");
-    glyphsPhone2[(int)GlyphsPhone2Enum::USBLine_Zone5] = new Glyph(":/glyphs/phone2/led_d_zones", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::CenteredHBottom, QPointF(0, -24.38 - 3.5), "path_5");
-    glyphsPhone2[(int)GlyphsPhone2Enum::USBLine_Zone6] = new Glyph(":/glyphs/phone2/led_d_zones", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::CenteredHBottom, QPointF(0, -24.38 - 3.5), "path_6");
-    glyphsPhone2[(int)GlyphsPhone2Enum::USBLine_Zone7] = new Glyph(":/glyphs/phone2/led_d_zones", MINIMUM_GLYPH_OPACITY_VALUE, Glyph::Reference::CenteredHBottom, QPointF(0, -24.38 - 3.5), "path_7");
+    glyphsPhone2[(int)GlyphsPhone2Enum::CameraTop] = new Glyph(":/glyphs/phone2/led_a1", Glyph::Reference::TopLeft, QPointF(13.88, 10 + 3.5));
+    glyphsPhone2[(int)GlyphsPhone2Enum::CameraBottom] = new Glyph(":/glyphs/phone2/led_a2", Glyph::Reference::TopLeft, QPointF(22.75, 51.56 + 3.5));
+    glyphsPhone2[(int)GlyphsPhone2Enum::Diagonal] = new Glyph(":/glyphs/phone2/led_b", Glyph::Reference::TopRight, QPointF(-22.51, 20.07 + 3.5));
+    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone0] = new Glyph(":/glyphs/phone2/led_c1_zones", Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_0");
+    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone1] = new Glyph(":/glyphs/phone2/led_c1_zones", Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_1");
+    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone2] = new Glyph(":/glyphs/phone2/led_c1_zones", Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_2");
+    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone3] = new Glyph(":/glyphs/phone2/led_c1_zones", Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_3");
+    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone4] = new Glyph(":/glyphs/phone2/led_c1_zones", Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_4");
+    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone5] = new Glyph(":/glyphs/phone2/led_c1_zones", Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_5");
+    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone6] = new Glyph(":/glyphs/phone2/led_c1_zones", Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_6");
+    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone7] = new Glyph(":/glyphs/phone2/led_c1_zones", Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_7");
+    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone8] = new Glyph(":/glyphs/phone2/led_c1_zones", Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_8");
+    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone9] = new Glyph(":/glyphs/phone2/led_c1_zones", Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_9");
+    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone10] = new Glyph(":/glyphs/phone2/led_c1_zones", Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_10");
+    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone11] = new Glyph(":/glyphs/phone2/led_c1_zones", Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_11");
+    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone12] = new Glyph(":/glyphs/phone2/led_c1_zones", Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_12");
+    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone13] = new Glyph(":/glyphs/phone2/led_c1_zones", Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_13");
+    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone14] = new Glyph(":/glyphs/phone2/led_c1_zones", Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_14");
+    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopRight_Zone15] = new Glyph(":/glyphs/phone2/led_c1_zones", Glyph::Reference::TopRight, QPointF(-11.77, 92.49 + 3.5), "path_15");
+    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopLeft] = new Glyph(":/glyphs/phone2/led_c2", Glyph::Reference::TopLeft, QPointF(13.7, 101.28 + 3.5));
+    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryTopVertical] = new Glyph(":/glyphs/phone2/led_c3", Glyph::Reference::TopLeft, QPointF(11.94, 146.3 + 3.5));
+    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryBottomLeft] = new Glyph(":/glyphs/phone2/led_c4", Glyph::Reference::BottomLeft, QPointF(13.7, -88.56 - 3.5));
+    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryBottomRight] = new Glyph(":/glyphs/phone2/led_c5", Glyph::Reference::BottomRight, QPointF(-11.78, -97.36 - 3.5));
+    glyphsPhone2[(int)GlyphsPhone2Enum::BatteryBottomVertical] = new Glyph(":/glyphs/phone2/led_c6", Glyph::Reference::BottomRight, QPointF(-10, -151.83 - 3.5));
+    glyphsPhone2[(int)GlyphsPhone2Enum::USBDot] = new Glyph(":/glyphs/phone2/led_e", Glyph::Reference::CenteredHBottom, QPointF(0, -10 - 3.5));
+    glyphsPhone2[(int)GlyphsPhone2Enum::USBLine_Zone0] = new Glyph(":/glyphs/phone2/led_d_zones", Glyph::Reference::CenteredHBottom, QPointF(0, -24.38 - 3.5), "path_0"); // Append the GLYPH_USB_LINE at the end because the light data is structured that way - ask Nothing why
+    glyphsPhone2[(int)GlyphsPhone2Enum::USBLine_Zone1] = new Glyph(":/glyphs/phone2/led_d_zones", Glyph::Reference::CenteredHBottom, QPointF(0, -24.38 - 3.5), "path_1");
+    glyphsPhone2[(int)GlyphsPhone2Enum::USBLine_Zone2] = new Glyph(":/glyphs/phone2/led_d_zones", Glyph::Reference::CenteredHBottom, QPointF(0, -24.38 - 3.5), "path_2");
+    glyphsPhone2[(int)GlyphsPhone2Enum::USBLine_Zone3] = new Glyph(":/glyphs/phone2/led_d_zones", Glyph::Reference::CenteredHBottom, QPointF(0, -24.38 - 3.5), "path_3");
+    glyphsPhone2[(int)GlyphsPhone2Enum::USBLine_Zone4] = new Glyph(":/glyphs/phone2/led_d_zones", Glyph::Reference::CenteredHBottom, QPointF(0, -24.38 - 3.5), "path_4");
+    glyphsPhone2[(int)GlyphsPhone2Enum::USBLine_Zone5] = new Glyph(":/glyphs/phone2/led_d_zones", Glyph::Reference::CenteredHBottom, QPointF(0, -24.38 - 3.5), "path_5");
+    glyphsPhone2[(int)GlyphsPhone2Enum::USBLine_Zone6] = new Glyph(":/glyphs/phone2/led_d_zones", Glyph::Reference::CenteredHBottom, QPointF(0, -24.38 - 3.5), "path_6");
+    glyphsPhone2[(int)GlyphsPhone2Enum::USBLine_Zone7] = new Glyph(":/glyphs/phone2/led_d_zones", Glyph::Reference::CenteredHBottom, QPointF(0, -24.38 - 3.5), "path_7");
 
     // Init
-    this->compositionManager = new CompositionManager(MINIMUM_GLYPH_OPACITY_VALUE);
+    this->compositionManager = new CompositionManager(this->glyphOnColor, glyphOffValue);
     connect(this->compositionManager->player, SIGNAL(positionChanged(qint64)), this, SLOT(compositionManager_onPositionChanged(qint64)));
 }
 
@@ -150,16 +150,16 @@ void GlyphWidget::paintEvent(QPaintEvent *event)
 
     // Get pointers to the Phone (1) or Phone (2) versions of each list/function
     QList<Glyph*> *glyphs = NULL;
-    const QList<qreal>* const (CompositionManager::*opacityValuesFunction)(qint64) const;
+    const QList<QColor>* const (CompositionManager::*colorValuesFunction)(qint64) const;
     switch (this->currentVisual)
     {
     case Visual::Phone1:
         glyphs = &glyphsPhone1;
-        opacityValuesFunction = &CompositionManager::getPhone1OpacityValues;
+        colorValuesFunction = &CompositionManager::getPhone1ColorValues;
         break;
     case Visual::Phone2:
         glyphs = &glyphsPhone2;
-        opacityValuesFunction = &CompositionManager::getPhone2OpacityValues;
+        colorValuesFunction = &CompositionManager::getPhone2ColorValues;
         break;
     default:
         // This should never happen
@@ -168,15 +168,15 @@ void GlyphWidget::paintEvent(QPaintEvent *event)
     }
 
     // Paint Glyphs
-    const QList<qreal> *const opacityValues = (compositionManager->*opacityValuesFunction)(compositionManager->player->position());
+    const QList<QColor> *const colorValues = (compositionManager->*colorValuesFunction)(compositionManager->player->position());
     for (qsizetype i = 0; i < glyphs->length(); i++)
     {
-        // Render this Glyph with the appropriate opacity
+        // Render this Glyph with the appropriate color
         switch (this->currentVisual)
         {
         case Visual::Phone1:
         case Visual::Phone2:
-            glyphs->at(i)->render(&painter, opacityValues->at(i));
+            glyphs->at(i)->render(&painter, colorValues->at(i));
             break;
         default:
             // This should never happen

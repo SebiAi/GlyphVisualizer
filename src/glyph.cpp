@@ -1,9 +1,9 @@
 #include "glyph.h"
 
-Glyph::Glyph(const QString &filename, const qreal& minOpacityValue, const Glyph::Reference& reference, const QPointF& referenceOffset, const QString& id)
-    : QSvgRenderer{filename}, minOpacityValue{minOpacityValue}, reference{reference}, referenceOffset{referenceOffset}, id{id}
+Glyph::Glyph(const QString &filename, const Glyph::Reference& reference, const QPointF& referenceOffset, const QString& id)
+    : QSvgRenderer{filename}, filename{filename}, reference{reference}, referenceOffset{referenceOffset}, id{id}
 {
-    Q_ASSERT(this->minOpacityValue >= 0 && this->minOpacityValue <= 1.0);
+
 }
 
 /*
@@ -12,10 +12,15 @@ Glyph::Glyph(const QString &filename, const qreal& minOpacityValue, const Glyph:
  * ==================================
  */
 
-void Glyph::render(QPainter *painter, const qreal& opacity)
+void Glyph::render(QPainter* const painter, const QColor& color)
 {
-    // Set opacity
-    painter->setOpacity(opacity < this->minOpacityValue ? this->minOpacityValue : opacity);
+    // Set color
+    QFile f(this->filename);
+    if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    QString content(f.readAll());
+    content.replace(this->svgFillColorRegex, color.name(QColor::NameFormat::HexRgb));
+    this->QSvgRenderer::load(content.toUtf8());
 
     // Render svg
     if (this->QSvgRenderer::elementExists(this->id))

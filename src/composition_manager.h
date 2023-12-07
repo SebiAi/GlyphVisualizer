@@ -10,6 +10,7 @@
 #include <QFile>
 #include <QElapsedTimer>
 #include <QTimer>
+#include <QColor>
 #include "helper.h"
 
 // TODO: [Next] Use QTimer to create a signal at 15ms and call GlyphWidget::update() with that
@@ -17,7 +18,7 @@
 
 // TODO: [END] Try libvlc.so instead of the QMediaPlayer. The QMediaPlayer does not trigger the positionChanged signal only triggers every 40-60ms but we need 16ms or lower.
 
-// The maximal value a light can be. Is used to calculate the opacity percent
+// The maximal value a light can be.
 #define COMPOSITION_MANAGER_MAX_LIGHT_VALUE 4080
 // How many milliseconds each line in the light data file is.
 #define COMPOSITION_MANAGER_MS_PER_LINE 16
@@ -52,21 +53,23 @@ public:
 
     /**
      * @brief Empty constructor for the CompositionManager class. Use the CompositionManager::loadComposition() function to load a Composition.
-     * @param minGlyphOpacityValue The minimum opacity value of the Glyphs. Is needed to calculate the final opacity levels. Must be between 0 and 1.
+     * @param glyphOnColor The color of the Glyphs if they are 100% on.
+     * @param glyphOffValue Value of the HSV glyphOnColor where the Glyphs are 0% on. Range 0 to 1.
      */
-    explicit CompositionManager(const qreal& minGlyphOpacityValue);
+    explicit CompositionManager(const QColor& glyphOnColor, const qreal& glyphOffValue);
     /**
      * @brief Load a Composition with a seperate ogg and light data file.
+     * @param glyphOnColor The color of the Glyphs if they are 100% on.
+     * @param glyphOffValue Value of the HSV glyphOnColor where the Glyphs are 0% on. Range 0 to 1.
      * @param filepathAudio Filepath to the audio ogg file.
      * @param filepathLightData Filepath to the light data file.
-     * @param minGlyphOpacityValue The minimum opacity value of the Glyphs. Is needed to calculate the final opacity levels. Must be between 0 and 1.
      *
      * @throws std::invalid_argument Audio file does not exist.
      * @throws std::invalid_argument Light data file does not exist.
      * @throws std::invalid_argument Can not open the light data file.
      * @throws CompositionManager::InvalidLightDataContentException Invalid light data in light data file.
      */
-    explicit CompositionManager(const QString &filepathAudio, const QString &filepathLightData, const qreal& minGlyphOpacityValue);
+    explicit CompositionManager(const QColor& glyphOnColor, const qreal& glyphOffValue, const QString &filepathAudio, const QString &filepathLightData);
     ~CompositionManager();
 
     /**
@@ -75,17 +78,17 @@ public:
      */
     const GlyphMode& getGlyphMode() const { return currentGlyphMode; }
     /**
-     * @brief Get the calculated opacity values for each of the Phone (1) Glyphs for the position.
+     * @brief Get the calculated color values for each of the Phone (1) Glyphs for the position.
      * @param position The audio time in milliseconds.
      * @return A list with numberOfZones[(int)GlyphMode::Compatibility] elements, each corresponding to one Zone on Phone (1).
      */
-    const QList<qreal>* const getPhone1OpacityValues(qint64 position) const;
+    const QList<QColor>* const getPhone1ColorValues(qint64 position) const;
     /**
-     * @brief Get the calculated opacity values for each of the Phone (2) Glyphs for the position.
+     * @brief Get the calculated color values for each of the Phone (2) Glyphs for the position.
      * @param position The audio time in milliseconds.
      * @return A list with numberOfZones[(int)GlyphMode::Phone2] elements, each corresponding to one Zone on Phone (2).
      */
-    const QList<qreal>* const getPhone2OpacityValues(qint64 position) const;
+    const QList<QColor>* const getPhone2ColorValues(qint64 position) const;
 
 
     /**
@@ -149,9 +152,13 @@ private:
     };
 
     /**
-     * @brief The minimal opacity value the Glyphs should have.
+     * @brief The color of the Glyphs if they are 100% on.
      */
-    const qreal minGlyphOpacityValue;
+    const QColor glyphOnColor;
+    /**
+     * @brief Value of the HSV glyphOnColor where the Glyphs are 0% on.
+     */
+    const qreal glyphOffValue;
 
     /**
      * @brief This function contains the initialisation code. It will be called by all constructors.
@@ -159,13 +166,13 @@ private:
     inline void init();
 
     /**
-     * @brief Holds the default off values for Phone (1) - will be used by getPhone1OpacityValues. Has a size of numberOfZones[(int)GlyphMode::Compatibility].
+     * @brief Holds the default off values for Phone (1). Has a size of numberOfZones[(int)GlyphMode::Compatibility].
      */
-    QList<qreal> *opacityOffValuesPhone1;
+    QList<QColor> *colorOffValuesPhone1;
     /**
-     * @brief Holds the default off values for Phone (2) - will be used by getPhone2OpacityValues. Has a size of numberOfZones[(int)GlyphMode::Phone2].
+     * @brief Holds the default off values for Phone (2). Has a size of numberOfZones[(int)GlyphMode::Phone2].
      */
-    QList<qreal> *opacityOffValuesPhone2;
+    QList<QColor> *colorOffValuesPhone2;
 
     /**
      * @brief Audio output.
@@ -178,13 +185,13 @@ private:
     GlyphMode currentGlyphMode = GlyphMode::None;
 
     /**
-     * @brief Holds the opacity values for each of the Phone (1) Glyphs. Inner list has a length of numberOfZones[(int)GlyphMode::Compatibility] when set.
+     * @brief Holds the color values for each of the Phone (1) Glyphs. Inner list has a length of numberOfZones[(int)GlyphMode::Compatibility] when set.
      */
-    QList<QList<qreal>> *opacityValuesPhone1;
+    QList<QList<QColor>> *colorValuesPhone1;
     /**
-     * @brief Holds the opacity values for each of the Phone (2) Zones. Inner list has a length of numberOfZones[(int)GlyphMode::Phone2] when set.
+     * @brief Holds the color values for each of the Phone (2) Zones. Inner list has a length of numberOfZones[(int)GlyphMode::Phone2] when set.
      */
-    QList<QList<qreal>> *opacityValuesPhone2;
+    QList<QList<QColor>> *colorValuesPhone2;
 
     /**
      * @brief Initialize the media player. Does NOT check file type, compatibility or extension - YOLO!
@@ -199,6 +206,13 @@ private:
      * @throws CompositionManager::InvalidLightDataContentException Invalid light data in light data file.
      */
     void parseLightData(const QString &filepathLightData);
+
+    /**
+     * @brief Get the color where the Glyph is on for a certain percent.
+     * @param percent How much percent the Glyph is on. Range: 0 - 1
+     * @return The color which reflects the Glyph on state depending on the percent.
+     */
+    QColor getGlyphColor(const qreal& percent);
 };
 
 #endif // COMPOSITIONMANAGER_H
