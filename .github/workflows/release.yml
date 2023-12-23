@@ -5,9 +5,10 @@ on:
 
 jobs:
   # TODO: Add version number to the zip and executable file with semantic-release/semantic-release: https://github.com/semantic-release/semantic-release/issues/753
-  # See also this: https://github.com/jpoehnelt/semantic-release-replace-plugin
   build:
     name: Build
+    permissions:
+      contents: read
     strategy:
       matrix:
         os: [ubuntu-22.04, windows-2022, macos-12]
@@ -37,9 +38,22 @@ jobs:
         uses: ilammy/msvc-dev-cmd@v1
         if: matrix.os == 'windows-2022'
       
-      # Checkout + Build
+      # Checkout
       - name: Checkout (All platforms)
         uses: actions/checkout@v4
+      # Update version
+      - name: Cache Node modules (All platforms)
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node-${{ matrix.os }}-${{ hashFiles('package-lock.json') }}
+      - name: Install semantic-release (All platforms)
+        run: npm install
+      - name: Update version (All platforms)
+        run: python deploy/update_version.py src/VERSION.h
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Build
       - name: Build (All platforms)
         # No need to set CMAKE_PREFIX_PATH, because install-qt-action did the work for us
         run: cmake -G Ninja "-DCMAKE_BUILD_TYPE:STRING=Release" -S . -B build && cmake --build build --config Release
@@ -114,3 +128,34 @@ jobs:
           path: |
             GlyphVisualizer_macOS-12-x64.dmg
             GlyphVisualizer_macOS-12-x64.dmg.sha256
+
+  create_release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      # Prepare
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Cache Node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - name: Install semantic-release
+        run: npm install
+
+      # Get artifacts
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: GlyphVisualizer_*
+
+      # Create release
+      - name: Create Release with semantic-release
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
