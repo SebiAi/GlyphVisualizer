@@ -57,7 +57,7 @@ jobs:
         run: $(CertUtil -hashfile GlyphVisualizer_windows-x64.zip SHA256)[1] -replace ' ','' | tee GlyphVisualizer_windows-x64.zip.sha256.txt
         if: matrix.os == 'windows-2022'
       - name: Upload artifacts (Windows)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: matrix.os == 'windows-2022'
         with:
           name: GlyphVisualizer_windows-x64
@@ -85,7 +85,7 @@ jobs:
         run: sha256sum -b GlyphVisualizer_linux-ubuntu-x64.AppImage | tee GlyphVisualizer_linux-ubuntu-x64.AppImage.sha256
         if: matrix.os == 'ubuntu-22.04'
       - name: Upload artifacts (Ubuntu)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: matrix.os == 'ubuntu-22.04'
         with:
           name: GlyphVisualizer_linux-ubuntu-x64
@@ -107,7 +107,7 @@ jobs:
         run: shasum -a 256 -b GlyphVisualizer_macOS-12-x64.dmg | tee GlyphVisualizer_macOS-12-x64.dmg.sha256
         if: matrix.os == 'macos-12'
       - name: Upload artifacts (macOS)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: matrix.os == 'macos-12'
         with:
           name: GlyphVisualizer_macOS-12-x64
