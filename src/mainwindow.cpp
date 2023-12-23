@@ -21,14 +21,20 @@ MainWindow::MainWindow(QWidget *parent)
                         "QSlider::handle:horizontal {background: transparent}"
                         );
 
-    // Add 'File' entry to MenuBar
+    // Add entrys to MenuBar
     this->fileMenu = ui->menubar->addMenu("&File");
+    this->helpMenu = ui->menubar->addMenu("&Help");
 
     // Add 'Open File' action to the fileMenu
-    this->openFileAction = new QAction(this->style()->standardIcon(QStyle::SP_DirOpenIcon), "&Open Composition", fileMenu);
-    openFileAction->setShortcut(QKeySequence("Ctrl+O"));
-    fileMenu->addAction(openFileAction);
-    connect(openFileAction, SIGNAL(triggered(bool)), this, SLOT(openFileAction_onTriggered(bool)));
+    this->openFileAction = new QAction(this->style()->standardIcon(QStyle::SP_DirOpenIcon), "&Open Composition", this->fileMenu);
+    this->openFileAction->setShortcut(QKeySequence("Ctrl+O"));
+    this->fileMenu->addAction(this->openFileAction);
+    connect(this->openFileAction, SIGNAL(triggered(bool)), this, SLOT(openFileAction_onTriggered(bool)));
+
+    // Add 'About GlyphVisualizer' action to helpMenu
+    this->aboutAction = new QAction("About GlyphVisualizer", this->helpMenu);
+    this->helpMenu->addAction(this->aboutAction);
+    connect(this->aboutAction, SIGNAL(triggered(bool)), this, SLOT(aboutAction_onTriggered(bool)));
 
     // Create OpenCompositionDialog
     this->openCompositionDialog = new OpenCompositionDialog(this);
@@ -195,6 +201,16 @@ void MainWindow::openFileAction_onTriggered(bool checked)
     this->openCompositionDialog->open();
 }
 
+void MainWindow::aboutAction_onTriggered(bool checked)
+{
+    // TODO: Make own about dialog with markdown supported label (see Audacity about window)
+    // Display an about dialog
+    QMessageBox::about(this, QString("About GlyphVisualizer"),
+                       QString("An open source Glyph composition player written with the Qt6 framework in C++ which plays Glyph compositions from Nothing Phones.\n\nVersion: ").append(APPLICATION_VERSION)
+                           .append("\nCommit Hash: ").append(APPLICATION_GIT_COMMIT_HASH)
+                           .append("\n\nCreator: Sebastian Aigner aka. SebiAi\nGitHub: https://github.com/SebiAi/GlyphVisualizer"));
+}
+
 void MainWindow::openCompositionDialog_onFinished(int result)
 {
     // Respond to result code
@@ -294,6 +310,9 @@ MainWindow::~MainWindow()
 
     delete this->openFileAction;
     delete this->fileMenu;
+
+    delete this->aboutAction;
+    delete this->helpMenu;
 
     delete this->openCompositionDialog;
 }

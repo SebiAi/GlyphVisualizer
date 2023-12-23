@@ -12,6 +12,7 @@
 #include <QTextStream>
 #include <QShortcut>
 
+#include "VERSION.h"
 #include "glyph_widget.h"
 #include "open_composition_dialog.h"
 #include "seekbar_style.h"
@@ -36,6 +37,8 @@ private:
 
     QMenu *fileMenu;
     QAction *openFileAction;
+    QMenu *helpMenu;
+    QAction *aboutAction;
 
     OpenCompositionDialog *openCompositionDialog;
 
@@ -71,6 +74,11 @@ public slots:
      * @param checked If the action is checked.
      */
     void openFileAction_onTriggered(bool checked);
+    /**
+     * @brief Will be called by the void QAction::triggered(bool checked) signal.
+     * @param checked If the action is checked.
+     */
+    void aboutAction_onTriggered(bool checked);
     /**
      * @brief Will be called by the void OpenCompositionDialog::finished(int result) signal.
      * @param result The result code.
