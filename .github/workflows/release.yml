@@ -30,6 +30,8 @@ jobs:
           aqtversion: '==3.1.*'
           version: '6.6.0'
           modules: 'qtmultimedia'
+          cache: true
+          cache-key-prefix: install-qt-6.6.0-action-${{ matrix.os }}
       - name: Setup MSVC 2022 for C++ (Windows)
         # See supported versions here: https://doc.qt.io/qt-6/windows.html
         uses: ilammy/msvc-dev-cmd@v1
