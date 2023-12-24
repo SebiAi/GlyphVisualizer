@@ -3,6 +3,7 @@
 # It also writes the version to a file called ".version".
 # GITHUB_TOKEN needs to be set as an environment variable because it's needed to run semantic-release.
 
+import os
 import subprocess
 import sys
 import re
@@ -10,7 +11,10 @@ import re
 def main() -> int:
     # Get the output of a semantic-release dry-run
     output = subprocess.check_output("npx semantic-release --dry-run", shell=True).decode()
-    print(output, end="\n\n\n")
+    if (os.name == "nt"):
+        print(output.encode('cp1252', errors='ignore').decode('cp1252'), end="\n\n\n")
+    else:
+        print(output, end="\n\n\n")
 
     # Extract the version from the output
     result = re.search(r'he next release version is (\S+)', output)
