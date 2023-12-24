@@ -10,6 +10,7 @@ import re
 def main() -> int:
     # Get the output of a semantic-release dry-run
     output = subprocess.check_output("npx semantic-release --dry-run", shell=True).decode()
+    print(output, end="\n\n\n")
 
     # Extract the version from the output
     result = re.search(r'The next release version is (\S+)', output)
