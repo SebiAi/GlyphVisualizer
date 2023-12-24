@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  # TODO: Add version number to the zip and executable file with semantic-release/semantic-release: https://github.com/semantic-release/semantic-release/issues/753
   build:
     name: Build
     permissions:
@@ -62,22 +61,22 @@ jobs:
       # TODO: Use NSIS to create an installer (Extract files, silently install vc_redist.x64.exe, create start menu entry, etc.)
       - name: Use windeployqt and zip (Windows)
         run: |
-          mkdir GlyphVisualizer && mv build\GlyphVisualizer.exe GlyphVisualizer && windeployqt --release GlyphVisualizer\GlyphVisualizer.exe
-          Compress-Archive -Path GlyphVisualizer -DestinationPath GlyphVisualizer_windows-x64.zip
+          mkdir GlyphVisualizer-$((Get-Content .version)) && mv build\GlyphVisualizer.exe GlyphVisualizer-$((Get-Content .version)) && windeployqt --release GlyphVisualizer-$((Get-Content .version))\GlyphVisualizer.exe
+          Compress-Archive -Path GlyphVisualizer-$((Get-Content .version)) -DestinationPath GlyphVisualizer-$((Get-Content .version))_windows-x64-portable.zip
         if: matrix.os == 'windows-2022'
       
       # Calculate checksum + upload (Windows)
       - name: Calculate Checksum (Windows)
-        run: $(CertUtil -hashfile GlyphVisualizer_windows-x64.zip SHA256)[1] -replace ' ','' | tee GlyphVisualizer_windows-x64.zip.sha256.txt
+        run: $(CertUtil -hashfile GlyphVisualizer-$((Get-Content .version))_windows-x64-portable.zip SHA256)[1] -replace ' ','' | tee GlyphVisualizer-$((Get-Content .version))_windows-x64-portable.zip.sha256.txt
         if: matrix.os == 'windows-2022'
       - name: Upload artifacts (Windows)
         uses: actions/upload-artifact@v4
         if: matrix.os == 'windows-2022'
         with:
-          name: GlyphVisualizer_windows-x64
+          name: GlyphVisualizer_windows-x64-portable
           path: |
-            GlyphVisualizer_windows-x64.zip
-            GlyphVisualizer_windows-x64.zip.sha256.txt
+            GlyphVisualizer-$((Get-Content .version))_windows-x64-portable.zip
+            GlyphVisualizer-$((Get-Content .version))_windows-x64-portable.zip.sha256.txt
       
       # Package AppImage (Ubuntu)
       - name: Download linuxdeploy tools (Ubuntu)
@@ -91,12 +90,11 @@ jobs:
           sudo apt install -y libfuse2 libxcb-cursor0
         if: matrix.os == 'ubuntu-22.04'
       - name: Package AppImage (Ubuntu)
-        # TODO: Resulting file name with version number: GlyphVisualizer-v0.1.0_linux-ubuntu-x64.AppImage
-        run: LDAI_VERSION="$(cat .version)" LDAI_OUTPUT="GlyphVisualizer_linux-ubuntu-x64.AppImage" LDAI_UPDATE_INFORMATION="gh-releases-zsync|SebiAi|GlyphVisualizer|latest|GlyphVisualizer*_linux-ubuntu-x64.AppImage.zsync" ./linuxdeploy-x86_64.AppImage --executable "build/GlyphVisualizer" --desktop-file "deploy/linux/AppImage/com.sebiai.GlyphVisualizer.desktop" --icon-file "deploy/linux/AppImage/GlyphVisualizer.png" --plugin qt --appdir AppDir --output appimage
+        run: LDAI_VERSION="$(cat .version)" LDAI_OUTPUT="GlyphVisualizer-$(cat .version)_linux-ubuntu-x64.AppImage" LDAI_UPDATE_INFORMATION="gh-releases-zsync|SebiAi|GlyphVisualizer|latest|GlyphVisualizer*_linux-ubuntu-x64.AppImage.zsync" ./linuxdeploy-x86_64.AppImage --executable "build/GlyphVisualizer" --desktop-file "deploy/linux/AppImage/com.sebiai.GlyphVisualizer.desktop" --icon-file "deploy/linux/AppImage/GlyphVisualizer.png" --plugin qt --appdir AppDir --output appimage
         if: matrix.os == 'ubuntu-22.04'
       # Calculate checksum + upload (Ubuntu)
       - name: Calculate Checksum (Ubuntu)
-        run: sha256sum -b GlyphVisualizer_linux-ubuntu-x64.AppImage | tee GlyphVisualizer_linux-ubuntu-x64.AppImage.sha256
+        run: sha256sum -b GlyphVisualizer-$(cat .version)_linux-ubuntu-x64.AppImage | tee GlyphVisualizer-$(cat .version)_linux-ubuntu-x64.AppImage.sha256
         if: matrix.os == 'ubuntu-22.04'
       - name: Upload artifacts (Ubuntu)
         uses: actions/upload-artifact@v4
@@ -104,9 +102,9 @@ jobs:
         with:
           name: GlyphVisualizer_linux-ubuntu-x64
           path: |
-            GlyphVisualizer_linux-ubuntu-x64.AppImage
-            GlyphVisualizer_linux-ubuntu-x64.AppImage.zsync
-            GlyphVisualizer_linux-ubuntu-x64.AppImage.sha256
+            GlyphVisualizer-$(cat .version)_linux-ubuntu-x64.AppImage
+            GlyphVisualizer-$(cat .version)_linux-ubuntu-x64.AppImage.zsync
+            GlyphVisualizer-$(cat .version)_linux-ubuntu-x64.AppImage.sha256
     
       # Package with macdeployqt
       - name: Use macdeployqt (macOS)
@@ -115,10 +113,10 @@ jobs:
         if: matrix.os == 'macos-12'
       # Calculate checksum + upload (macOS)
       - name: Move and rename executable (macOS)
-        run: mv build/GlyphVisualizer.dmg GlyphVisualizer_macOS-12-x64.dmg
+        run: mv build/GlyphVisualizer.dmg GlyphVisualizer-$(cat .version)_macOS-12-x64.dmg
         if: matrix.os == 'macos-12'
       - name: Calculate Checksum (macOS)
-        run: shasum -a 256 -b GlyphVisualizer_macOS-12-x64.dmg | tee GlyphVisualizer_macOS-12-x64.dmg.sha256
+        run: shasum -a 256 -b GlyphVisualizer-$(cat .version)_macOS-12-x64.dmg | tee GlyphVisualizer-$(cat .version)_macOS-12-x64.dmg.sha256
         if: matrix.os == 'macos-12'
       - name: Upload artifacts (macOS)
         uses: actions/upload-artifact@v4
@@ -126,8 +124,8 @@ jobs:
         with:
           name: GlyphVisualizer_macOS-12-x64
           path: |
-            GlyphVisualizer_macOS-12-x64.dmg
-            GlyphVisualizer_macOS-12-x64.dmg.sha256
+            GlyphVisualizer-$(cat .version)_macOS-12-x64.dmg
+            GlyphVisualizer-$(cat .version)_macOS-12-x64.dmg.sha256
 
   create_release:
     name: Create Release
