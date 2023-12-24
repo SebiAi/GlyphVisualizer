@@ -13,7 +13,7 @@ def main() -> int:
     print(output, end="\n\n\n")
 
     # Extract the version from the output
-    result = re.search(r'The next release version is (\S+)', output)
+    result = re.search(r'he next release version is (\S+)', output)
     if result is None:
         print("Could not find version in semantic-release output => no version update")
     version = "v" + result.group(1) if result is not None else "VERSION_HERE"
