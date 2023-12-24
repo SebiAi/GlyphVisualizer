@@ -17,10 +17,13 @@ def main() -> int:
         print(output, end="\n\n\n")
 
     # Extract the version from the output
-    result = re.search(r'he next release version is (\S+)', output)
-    if result is None:
+    result = re.findall(r'^\[\d{2}:\d{2}:\d{2} (?:A|P)M\] \[semantic-release\] . .  (?:There is no previous release, t|T)he next release version is (\d+\.\d+\.\d+)$', output, re.MULTILINE)
+    if len(result) == 0:
         print("Could not find version in semantic-release output => no version update")
-    version = "v" + result.group(1) if result is not None else "VERSION_HERE"
+    if len(result) > 1:
+        print("Error: Found multiple versions in semantic-release output")
+        return 1
+    version = "v" + result[0] if result is not len(result) == 0 else "VERSION_HERE"
 
     # Write the version to a file
     with open(".version", 'w') as f:
