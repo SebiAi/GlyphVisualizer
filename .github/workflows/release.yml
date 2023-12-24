@@ -61,8 +61,8 @@ jobs:
       # TODO: Use NSIS to create an installer (Extract files, silently install vc_redist.x64.exe, create start menu entry, etc.)
       - name: Use windeployqt and zip (Windows)
         run: |
-          mkdir GlyphVisualizer-$((Get-Content .version)) && mv build\GlyphVisualizer.exe GlyphVisualizer-$((Get-Content .version)) && windeployqt --release GlyphVisualizer-$((Get-Content .version))\GlyphVisualizer.exe
-          Compress-Archive -Path GlyphVisualizer-$((Get-Content .version)) -DestinationPath GlyphVisualizer-$((Get-Content .version))_windows-x64-portable.zip
+          mkdir GlyphVisualizer-$((Get-Content .version))_windows-x64-portable && mv build\GlyphVisualizer.exe GlyphVisualizer-$((Get-Content .version))_windows-x64-portable && windeployqt --release GlyphVisualizer-$((Get-Content .version))_windows-x64-portable\GlyphVisualizer.exe
+          Compress-Archive -Path GlyphVisualizer-$((Get-Content .version))_windows-x64-portable -DestinationPath GlyphVisualizer-$((Get-Content .version))_windows-x64-portable.zip
         if: matrix.os == 'windows-2022'
       
       # Calculate checksum + upload (Windows)
