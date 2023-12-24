@@ -152,7 +152,7 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
-          name: GlyphVisualizer_*
+          merge-multiple: true
 
       # Create release
       - name: Create Release with semantic-release
