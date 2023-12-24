@@ -92,7 +92,7 @@ jobs:
         if: matrix.os == 'ubuntu-22.04'
       - name: Package AppImage (Ubuntu)
         # TODO: Resulting file name with version number: GlyphVisualizer-v0.1.0_linux-ubuntu-x64.AppImage
-        run: LDAI_VERSION="v0.1.0" LDAI_OUTPUT="GlyphVisualizer_linux-ubuntu-x64.AppImage" LDAI_UPDATE_INFORMATION="gh-releases-zsync|SebiAi|GlyphVisualizer|latest|GlyphVisualizer*_linux-ubuntu-x64.AppImage.zsync" ./linuxdeploy-x86_64.AppImage --executable "build/GlyphVisualizer" --desktop-file "deploy/linux/AppImage/com.sebiai.GlyphVisualizer.desktop" --icon-file "deploy/linux/AppImage/GlyphVisualizer.png" --plugin qt --appdir AppDir --output appimage
+        run: LDAI_VERSION="$(cat .version)" LDAI_OUTPUT="GlyphVisualizer_linux-ubuntu-x64.AppImage" LDAI_UPDATE_INFORMATION="gh-releases-zsync|SebiAi|GlyphVisualizer|latest|GlyphVisualizer*_linux-ubuntu-x64.AppImage.zsync" ./linuxdeploy-x86_64.AppImage --executable "build/GlyphVisualizer" --desktop-file "deploy/linux/AppImage/com.sebiai.GlyphVisualizer.desktop" --icon-file "deploy/linux/AppImage/GlyphVisualizer.png" --plugin qt --appdir AppDir --output appimage
         if: matrix.os == 'ubuntu-22.04'
       # Calculate checksum + upload (Ubuntu)
       - name: Calculate Checksum (Ubuntu)
