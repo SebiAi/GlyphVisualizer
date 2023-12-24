@@ -17,13 +17,13 @@ def main() -> int:
         print(output, end="\n\n\n")
 
     # Extract the version from the output
-    result = re.findall(r'^\[\d{2}:\d{2}:\d{2} (?:A|P)M\] \[semantic-release\] . .  (?:There is no previous release, t|T)he next release version is (\d+\.\d+\.\d+)$', output, re.MULTILINE)
+    result = re.findall(r'^\[\d{1,2}:\d{1,2}:\d{1,2} (?:A|P)M\] \[semantic-release\] . .  (?:There is no previous release, t|T)he next release version is (\d+\.\d+\.\d+)$', output, re.MULTILINE)
     if len(result) == 0:
         print("Could not find version in semantic-release output => no version update")
     if len(result) > 1:
         print("Error: Found multiple versions in semantic-release output")
         return 1
-    version = "v" + result[0] if result is not len(result) == 0 else "VERSION_HERE"
+    version = "v" + str(result[0]) if len(result) > 0 else "VERSION_HERE"
 
     # Write the version to a file
     with open(".version", 'w') as f:
