@@ -75,8 +75,8 @@ jobs:
         with:
           name: GlyphVisualizer_windows-x64-portable
           path: |
-            GlyphVisualizer-$((Get-Content .version))_windows-x64-portable.zip
-            GlyphVisualizer-$((Get-Content .version))_windows-x64-portable.zip.sha256.txt
+            GlyphVisualizer*_windows-x64-portable.zip
+            GlyphVisualizer*_windows-x64-portable.zip.sha256.txt
       
       # Package AppImage (Ubuntu)
       - name: Download linuxdeploy tools (Ubuntu)
@@ -102,9 +102,9 @@ jobs:
         with:
           name: GlyphVisualizer_linux-ubuntu-x64
           path: |
-            GlyphVisualizer-$(cat .version)_linux-ubuntu-x64.AppImage
-            GlyphVisualizer-$(cat .version)_linux-ubuntu-x64.AppImage.zsync
-            GlyphVisualizer-$(cat .version)_linux-ubuntu-x64.AppImage.sha256
+            GlyphVisualizer*_linux-ubuntu-x64.AppImage
+            GlyphVisualizer*_linux-ubuntu-x64.AppImage.zsync
+            GlyphVisualizer*_linux-ubuntu-x64.AppImage.sha256
     
       # Package with macdeployqt
       - name: Use macdeployqt (macOS)
@@ -124,8 +124,8 @@ jobs:
         with:
           name: GlyphVisualizer_macOS-12-x64
           path: |
-            GlyphVisualizer-$(cat .version)_macOS-12-x64.dmg
-            GlyphVisualizer-$(cat .version)_macOS-12-x64.dmg.sha256
+            GlyphVisualizer*_macOS-12-x64.dmg
+            GlyphVisualizer*_macOS-12-x64.dmg.sha256
 
   create_release:
     name: Create Release
