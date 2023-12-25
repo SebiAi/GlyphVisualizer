@@ -1,2 +1,183 @@
-# GlyphVisualizer
-A Glyph composition player written with the Qt6 framework in C++ which plays Glyph compositions from Nothing Phones.
+<div align="center">
+  <p>
+    <h1>GlyphVisualizer</h1>
+    <h6>
+    A Glyph composition player written with the Qt6 framework in C++ that plays Glyph compositions from Nothing Phones.
+    </h6>
+    <br>
+    <a href="https://github.com/SebiAi/GlyphVisualizer/releases/latest">
+      <img alt="GitHub release (with filter)" src="https://img.shields.io/github/v/release/SebiAi/GlyphVisualizer?label=Latest%20Stable%20Release">
+    </a>
+    <a href="https://github.com/SebiAi/GlyphVisualizer/blob/main/LICENSE">
+      <img alt="GitHub License" src="https://img.shields.io/github/license/SebiAi/GlyphVisualizer">
+    </a>
+    <video width="1280" height="720" controls>
+      <source src="docs/assets/GlyphVisualizer Demo.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </p>
+</div>
+
+***
+
+# :writing_hand: Table of contents
+<!-- TOC Generator settings -->
+<!-- Preset: GitHub -->
+<!-- indent characters: '-*+' -->
+<!-- algorithm used to generate anchors: DEFAULT -->
+<!-- Max indent level: 3 -->
+<!-- trim toc indent: True -->
+<!-- oneshot: False -->
+<!-- generate anchors: False -->
+<!-- anchors prefix: '' -->
+<!-- concat spaces: True -->
+<!-- comment style: HTML -->
+<!-- Is a bit buggy with generating the correct links to the headings - please double check -->
+<!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
+
+- [:grey_question: What is this? Why would I need that?](#grey_question-what-is-this-why-would-i-need-that)
+- [:pushpin: Disclaimer](#pushpin-disclaimer)
+- [:safety_vest: Need help?](#safety_vest-need-help)
+- [:page_with_curl: Roadmap](#page_with_curl-roadmap)
+- [:rocket: How to use](#rocket-how-to-use)
+- [:inbox_tray: Installation](#inbox_tray-installation)
+   * [<img src="https://www.vectorlogo.zone/logos/microsoft/microsoft-icon.svg" height="20"/> Windows portable](#windows-portable)
+   * [:penguin: Linux](#penguin-linux)
+      + [<img src="https://www.vectorlogo.zone/logos/ubuntu/ubuntu-icon.svg" height="20"/> Ubuntu and derivatives](#ubuntu-and-derivatives)
+   * [<img src="https://www.vectorlogo.zone/logos/apple/apple-tile.svg" height="20"/> MacOS](#macos)
+- [:construction: Compilation](#construction-compilation)
+   * [:nut_and_bolt: Build Dependencies](#nut_and_bolt-build-dependencies)
+   * [:hammer_and_pick: Build](#hammer_and_pick-build)
+   * [:package: Package up](#package-package-up)
+      + [<img src="https://www.vectorlogo.zone/logos/microsoft/microsoft-icon.svg" height="20"/> Windows portable](#windows-portable-1)
+      + [<img src="https://www.vectorlogo.zone/logos/ubuntu/ubuntu-icon.svg" height="20"/> Ubuntu and derivatives](#ubuntu-and-derivatives-1)
+      + [<img src="https://www.vectorlogo.zone/logos/apple/apple-tile.svg" height="20"/> MacOS](#macos-1)
+- [:interrobang: Troubleshooting](#interrobang-troubleshooting)
+
+<!-- TOC end -->
+
+***
+
+# :grey_question: What is this? Why would I need that?
+This is a tool that is meant to be used in combination with my [custom-nothing-glyph-tools](https://github.com/SebiAi/custom-nothing-glyph-tools/) scripts (*GlyphTranslator*, *GlyphModder*). When you create a custom ringtone or notification tone with these scripts, you want to test them as often as possible. You can use this tool to visualize your composition and rapidly iterate on it - no file transfer to your phone is needed.
+
+And apart from that, you can use it if you want to view the composition without having access to a Nothing Phone.
+
+***
+
+# :pushpin: Disclaimer
+> This software is provided as-is without any warranty. I and all other contributors are not responsible for any damage, misuse or other kind of physical or mental damage that results from the use of this software.
+This repo is in no way, shape or form affiliated with Nothing Technology Limited (NOTHING).
+
+***
+
+# :safety_vest: Need help?
+If you need help, look at the [Troubleshooting](#interrobang-troubleshooting) chapter. If this does not help either feel free to use the [Discussion feature on GitHub](https://github.com/SebiAi/GlyphVisualizer/discussions) or reach out to me on Discord: @sebiai
+
+***
+
+# :page_with_curl: Roadmap
+You can find the full roadmap [here](https://github.com/users/SebiAi/projects/5).
+
+***
+
+# :rocket: How to use
+For now, you need to use the [custom-nothing-glyph-tools](https://github.com/SebiAi/custom-nothing-glyph-tools/) to extract the light data (csv/glypha) from the audio file:
+1. Download and extract the custom-nothing-glyph-tools: [Download](https://github.com/SebiAi/custom-nothing-glyph-tools/archive/refs/heads/main.zip)
+2. Install the requirements for custom-nothing-glyph-tools: [Tutorial](https://github.com/SebiAi/custom-nothing-glyph-tools#memo-requirements)
+3. Use the *GlyphModder* script to extract the light data: [Tutorial](https://github.com/SebiAi/custom-nothing-glyph-tools#read-from-an-audio-file)
+
+Now pass the original composition audio and the extracted light data to the software and it will play it back.
+
+***
+
+# :inbox_tray: Installation
+## <img src="https://www.vectorlogo.zone/logos/microsoft/microsoft-icon.svg" height="20"/> Windows portable
+1. Download the latest portable version (`GlyphVisualizer-*_windows-x64-portable.zip`) from [the latest release](https://github.com/SebiAi/GlyphVisualizer/releases/latest).
+2. (Optional) Verify file integrity by executing this in PowerShell: `CertUtil -hashfile GlyphVisualizer_windows-x64.zip SHA256`. Compare that output with the `GlyphVisualizer-*_windows-x64-portable.zip.sha256.txt` sha256 hash file. If they match, you are good.
+3. Extract the zip file
+4. Install `vc_redist.x64.exe` which is inside the zip
+5. Run `GlyphVisualizer.exe`
+
+## :penguin: Linux
+### <img src="https://www.vectorlogo.zone/logos/ubuntu/ubuntu-icon.svg" height="20"/> Ubuntu and derivatives
+1. Download the latest version (`GlyphVisualizer-*_linux-ubuntu-x64.AppImage`) from [the latest release](https://github.com/SebiAi/GlyphVisualizer/releases/latest).
+2. (Optional) Verify file integrity by downloading `GlyphVisualizer-*_linux-ubuntu-x64.AppImage.sha256` to the same directory as the AppImage and running `shasum -a 256 -c ./GlyphVisualizer-*_linux-ubuntu-x64.AppImage.sha256`. If it outputs 'OK', you are good.
+3. Install dependencies for AppImages: `sudo apt install -y libfuse2*`
+4. Make the AppImage executable: `chmod +x ./GlyphVisualizer-*_linux-ubuntu-x64.AppImage`
+5. Run the AppImage - you can use [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher) to update and integrate the application into your dekstop environment.
+
+## <img src="https://www.vectorlogo.zone/logos/apple/apple-tile.svg" height="20"/> MacOS
+1. Download the latest version (`GlyphVisualizer-*_macOS-12-x64.dmg`) from [the latest release](https://github.com/SebiAi/GlyphVisualizer/releases/latest).
+2. (Optional) Verify file integrity by downloading `GlyphVisualizer-*_macOS-12-x64.dmg.sha256` to the same directory as the AppImage and running `shasum -a 256 -c ./GlyphVisualizer-*_macOS-12-x64.dmg.sha256`. If it outputs 'OK', you are good.
+3. Run the application
+
+***
+
+# :construction: Compilation
+## :nut_and_bolt: Build Dependencies
+You can use the Qt Online Installer to install all the build dependencies.
+* [Qt 6.6.0](https://www.qt.io/download)
+* [Ninja](https://ninja-build.org/)
+* [CMake](https://cmake.org/)
+* A compiler like g++ or MSVC depending on your OS
+
+## :hammer_and_pick: Build
+Clone the repo
+```bash
+git clone https://github.com/SebiAi/GlyphVisualizer.git
+cd GlyphVisualizer
+```
+Set `DCMAKE_PREFIX_PATH` to the Qt location and build the application
+```bash
+cmake -G Ninja "-DCMAKE_PREFIX_PATH=/path/to/qt" "-DCMAKE_BUILD_TYPE:STRING=Release" -S . -B build && cmake --build build --config Release
+```
+The built application is now in the `build` directory.
+
+## :package: Package up
+The application itself may not execute because it is not finding the linked libraries. Packaging guarantees that the application finds them and runs as expected.
+### <img src="https://www.vectorlogo.zone/logos/microsoft/microsoft-icon.svg" height="20"/> Windows portable
+Move the application to its own directory
+```batch
+mkdir GlyphVisualizer-main_windows-x64-portable
+move build/GlyphVisualizer GlyphVisualizer-main_windows-x64-portable
+```
+Use [windeployqt](https://doc.qt.io/qt-6/windows-deployment.html)
+```batch
+windeployqt --release GlyphVisualizer-main_windows-x64-portable\GlyphVisualizer.exe
+```
+The directory `GlyphVisualizer-main_windows-x64-portable` now contains the application and all its dynamic dependencies. Can be zip'ed up and transferred to other Windows machines.
+
+### <img src="https://www.vectorlogo.zone/logos/ubuntu/ubuntu-icon.svg" height="20"/> Ubuntu and derivatives
+Download dependencies (linuxdeploy, libfuse2, libxcb-cursor0)
+```bash
+wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
+wget https://github.com/linuxdeploy/linuxdeploy-plugin-appimage/releases/download/continuous/linuxdeploy-plugin-appimage-x86_64.AppImage
+chmod +x linuxdeploy-x86_64.AppImage
+chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
+chmod +x linuxdeploy-plugin-appimage-x86_64.AppImage
+sudo apt install -y libfuse2 libxcb-cursor0
+```
+Set `QMAKE` to the qt *qmake* executable and use linuxdeploy
+```bash
+QMAKE="/path/to/my/qmake" LDAI_VERSION="main" LDAI_OUTPUT="GlyphVisualizer-main_linux-ubuntu-x64.AppImage" ./linuxdeploy-x86_64.AppImage --executable "build/GlyphVisualizer" --desktop-file "deploy/linux/AppImage/com.sebiai.GlyphVisualizer.desktop" --icon-file "deploy/linux/AppImage/GlyphVisualizer.png" --plugin qt --appdir AppDir --output appimage
+```
+You now have `GlyphVisualizer-main_linux-ubuntu-x64.AppImage`, which can be transferred to other Ubuntu-based distributions.
+
+### <img src="https://www.vectorlogo.zone/logos/apple/apple-tile.svg" height="20"/> MacOS
+Navigate to the build folder
+```bash
+cd build
+```
+Use [macdeployqt](https://doc.qt.io/qt-6/macos-deployment.html#the-mac-deployment-tool)
+```bash
+macdeployqt GlyphVisualizer.app -dmg
+```
+Rename
+```bash
+mv GlyphVisualizer.dmg GlyphVisualizer-main_macOS-12-x64.dmg
+```
+You now have `GlyphVisualizer-main_macOS-12-x64.dmg`, which can be transferred to other MacOS machines.
+
+# :interrobang: Troubleshooting
