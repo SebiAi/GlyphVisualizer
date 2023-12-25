@@ -28,36 +28,37 @@
 <!-- Max indent level: 3 -->
 <!-- trim toc indent: True -->
 <!-- oneshot: False -->
-<!-- generate anchors: False -->
-<!-- anchors prefix: '' -->
+<!-- generate anchors: True -->
+<!-- anchors prefix: 'heading-' -->
 <!-- concat spaces: True -->
 <!-- comment style: HTML -->
 <!-- Is a bit buggy with generating the correct links to the headings - please double check -->
 <!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
 
-- [:grey_question: What is this? Why would I need that?](#grey_question-what-is-this-why-would-i-need-that)
-- [:pushpin: Disclaimer](#pushpin-disclaimer)
-- [:safety_vest: Need help?](#safety_vest-need-help)
-- [:page_with_curl: Roadmap](#page_with_curl-roadmap)
-- [:rocket: How to use](#rocket-how-to-use)
-- [:inbox_tray: Installation](#inbox_tray-installation)
-   * [<img src="https://www.vectorlogo.zone/logos/microsoft/microsoft-icon.svg" height="20"/> Windows portable](#windows-portable)
-   * [:penguin: Linux](#penguin-linux)
-      + [<img src="https://www.vectorlogo.zone/logos/ubuntu/ubuntu-icon.svg" height="20"/> Ubuntu and derivatives](#ubuntu-and-derivatives)
-   * [<img src="https://www.vectorlogo.zone/logos/apple/apple-tile.svg" height="20"/> MacOS](#macos)
-- [:construction: Compilation](#construction-compilation)
-   * [:nut_and_bolt: Build Dependencies](#nut_and_bolt-build-dependencies)
-   * [:hammer_and_pick: Build](#hammer_and_pick-build)
-   * [:package: Package up](#package-package-up)
-      + [<img src="https://www.vectorlogo.zone/logos/microsoft/microsoft-icon.svg" height="20"/> Windows portable](#windows-portable-1)
-      + [<img src="https://www.vectorlogo.zone/logos/ubuntu/ubuntu-icon.svg" height="20"/> Ubuntu and derivatives](#ubuntu-and-derivatives-1)
-      + [<img src="https://www.vectorlogo.zone/logos/apple/apple-tile.svg" height="20"/> MacOS](#macos-1)
-- [:interrobang: Troubleshooting](#interrobang-troubleshooting)
+- [:grey_question: What is this? Why would I need that?](#heading-grey_question-what-is-this-why-would-i-need-that)
+- [:pushpin: Disclaimer](#heading-pushpin-disclaimer)
+- [:safety_vest: Need help?](#heading-safety_vest-need-help)
+- [:page_with_curl: Roadmap](#heading-page_with_curl-roadmap)
+- [:rocket: How to use](#heading-rocket-how-to-use)
+- [:inbox_tray: Installation](#heading-inbox_tray-installation)
+   * [<img src="https://www.vectorlogo.zone/logos/microsoft/microsoft-icon.svg" height="20"/> Windows portable](#heading-windows-portable)
+   * [:penguin: Linux](#heading-penguin-linux)
+      + [<img src="https://www.vectorlogo.zone/logos/ubuntu/ubuntu-icon.svg" height="20"/> Ubuntu and derivatives](#heading-ubuntu-and-derivatives)
+   * [<img src="https://www.vectorlogo.zone/logos/apple/apple-tile.svg" height="20"/> MacOS](#heading-macos)
+- [:construction: Compilation](#heading-construction-compilation)
+   * [:nut_and_bolt: Build Dependencies](#heading-nut_and_bolt-build-dependencies)
+   * [:hammer_and_pick: Build](#heading-hammer_and_pick-build)
+   * [:package: Package up](#heading-package-package-up)
+      + [<img src="https://www.vectorlogo.zone/logos/microsoft/microsoft-icon.svg" height="20"/> Windows portable](#heading-windows-portable-1)
+      + [<img src="https://www.vectorlogo.zone/logos/ubuntu/ubuntu-icon.svg" height="20"/> Ubuntu and derivatives](#heading-ubuntu-and-derivatives-1)
+      + [<img src="https://www.vectorlogo.zone/logos/apple/apple-tile.svg" height="20"/> MacOS](#heading-macos-1)
+- [:interrobang: Troubleshooting](#heading-interrobang-troubleshooting)
 
 <!-- TOC end -->
 
 ***
 
+<!-- TOC --><a name="heading-grey_question-what-is-this-why-would-i-need-that"></a>
 # :grey_question: What is this? Why would I need that?
 This is a tool that is meant to be used in combination with my [custom-nothing-glyph-tools](https://github.com/SebiAi/custom-nothing-glyph-tools/) scripts (*GlyphTranslator*, *GlyphModder*). When you create a custom ringtone or notification tone with these scripts, you want to test them as often as possible. You can use this tool to visualize your composition and rapidly iterate on it - no file transfer to your phone is needed.
 
@@ -65,22 +66,26 @@ And apart from that, you can use it if you want to view the composition without 
 
 ***
 
+<!-- TOC --><a name="heading-pushpin-disclaimer"></a>
 # :pushpin: Disclaimer
 > This software is provided as-is without any warranty. I and all other contributors are not responsible for any damage, misuse or other kind of physical or mental damage that results from the use of this software.
 This repo is in no way, shape or form affiliated with Nothing Technology Limited (NOTHING).
 
 ***
 
+<!-- TOC --><a name="heading-safety_vest-need-help"></a>
 # :safety_vest: Need help?
 If you need help, look at the [Troubleshooting](#interrobang-troubleshooting) chapter. If this does not help either feel free to use the [Discussion feature on GitHub](https://github.com/SebiAi/GlyphVisualizer/discussions) or reach out to me on Discord: @sebiai
 
 ***
 
+<!-- TOC --><a name="heading-page_with_curl-roadmap"></a>
 # :page_with_curl: Roadmap
 You can find the full roadmap [here](https://github.com/users/SebiAi/projects/5).
 
 ***
 
+<!-- TOC --><a name="heading-rocket-how-to-use"></a>
 # :rocket: How to use
 For now, you need to use the [custom-nothing-glyph-tools](https://github.com/SebiAi/custom-nothing-glyph-tools/) to extract the light data (csv/glypha) from the audio file:
 1. Download and extract the custom-nothing-glyph-tools: [Download](https://github.com/SebiAi/custom-nothing-glyph-tools/archive/refs/heads/main.zip)
@@ -91,7 +96,9 @@ Now pass the original composition audio and the extracted light data to the soft
 
 ***
 
+<!-- TOC --><a name="heading-inbox_tray-installation"></a>
 # :inbox_tray: Installation
+<!-- TOC --><a name="heading-windows-portable"></a>
 ## <img src="https://www.vectorlogo.zone/logos/microsoft/microsoft-icon.svg" height="20"/> Windows portable
 1. Download the latest portable version (`GlyphVisualizer-*_windows-x64-portable.zip`) from [the latest release](https://github.com/SebiAi/GlyphVisualizer/releases/latest).
 2. (Optional) Verify file integrity by executing this in PowerShell: `CertUtil -hashfile GlyphVisualizer_windows-x64.zip SHA256`. Compare that output with the `GlyphVisualizer-*_windows-x64-portable.zip.sha256.txt` sha256 hash file. If they match, you are good.
@@ -99,7 +106,9 @@ Now pass the original composition audio and the extracted light data to the soft
 4. Install `vc_redist.x64.exe` which is inside the zip
 5. Run `GlyphVisualizer.exe`
 
+<!-- TOC --><a name="heading-penguin-linux"></a>
 ## :penguin: Linux
+<!-- TOC --><a name="heading-ubuntu-and-derivatives"></a>
 ### <img src="https://www.vectorlogo.zone/logos/ubuntu/ubuntu-icon.svg" height="20"/> Ubuntu and derivatives
 1. Download the latest version (`GlyphVisualizer-*_linux-ubuntu-x64.AppImage`) from [the latest release](https://github.com/SebiAi/GlyphVisualizer/releases/latest).
 2. (Optional) Verify file integrity by downloading `GlyphVisualizer-*_linux-ubuntu-x64.AppImage.sha256` to the same directory as the AppImage and running `shasum -a 256 -c ./GlyphVisualizer-*_linux-ubuntu-x64.AppImage.sha256`. If it outputs 'OK', you are good.
@@ -107,6 +116,7 @@ Now pass the original composition audio and the extracted light data to the soft
 4. Make the AppImage executable: `chmod +x ./GlyphVisualizer-*_linux-ubuntu-x64.AppImage`
 5. Run the AppImage - you can use [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher) to update and integrate the application into your dekstop environment.
 
+<!-- TOC --><a name="heading-macos"></a>
 ## <img src="https://www.vectorlogo.zone/logos/apple/apple-tile.svg" height="20"/> MacOS
 1. Download the latest version (`GlyphVisualizer-*_macOS-12-x64.dmg`) from [the latest release](https://github.com/SebiAi/GlyphVisualizer/releases/latest).
 2. (Optional) Verify file integrity by downloading `GlyphVisualizer-*_macOS-12-x64.dmg.sha256` to the same directory as the AppImage and running `shasum -a 256 -c ./GlyphVisualizer-*_macOS-12-x64.dmg.sha256`. If it outputs 'OK', you are good.
@@ -114,7 +124,9 @@ Now pass the original composition audio and the extracted light data to the soft
 
 ***
 
+<!-- TOC --><a name="heading-construction-compilation"></a>
 # :construction: Compilation
+<!-- TOC --><a name="heading-nut_and_bolt-build-dependencies"></a>
 ## :nut_and_bolt: Build Dependencies
 You can use the Qt Online Installer to install all the build dependencies.
 * [Qt 6.6.0](https://www.qt.io/download)
@@ -122,6 +134,7 @@ You can use the Qt Online Installer to install all the build dependencies.
 * [CMake](https://cmake.org/)
 * A compiler like g++ or MSVC depending on your OS
 
+<!-- TOC --><a name="heading-hammer_and_pick-build"></a>
 ## :hammer_and_pick: Build
 Clone the repo
 ```bash
@@ -134,8 +147,10 @@ cmake -G Ninja "-DCMAKE_PREFIX_PATH=/path/to/qt" "-DCMAKE_BUILD_TYPE:STRING=Rele
 ```
 The built application is now in the `build` directory.
 
+<!-- TOC --><a name="heading-package-package-up"></a>
 ## :package: Package up
 The application itself may not execute because it is not finding the linked libraries. Packaging guarantees that the application finds them and runs as expected.
+<!-- TOC --><a name="heading-windows-portable-1"></a>
 ### <img src="https://www.vectorlogo.zone/logos/microsoft/microsoft-icon.svg" height="20"/> Windows portable
 Move the application to its own directory
 ```batch
@@ -148,6 +163,7 @@ windeployqt --release GlyphVisualizer-main_windows-x64-portable\GlyphVisualizer.
 ```
 The directory `GlyphVisualizer-main_windows-x64-portable` now contains the application and all its dynamic dependencies. Can be zip'ed up and transferred to other Windows machines.
 
+<!-- TOC --><a name="heading-ubuntu-and-derivatives-1"></a>
 ### <img src="https://www.vectorlogo.zone/logos/ubuntu/ubuntu-icon.svg" height="20"/> Ubuntu and derivatives
 Download dependencies (linuxdeploy, libfuse2, libxcb-cursor0)
 ```bash
@@ -165,6 +181,7 @@ QMAKE="/path/to/my/qmake" LDAI_VERSION="main" LDAI_OUTPUT="GlyphVisualizer-main_
 ```
 You now have `GlyphVisualizer-main_linux-ubuntu-x64.AppImage`, which can be transferred to other Ubuntu-based distributions.
 
+<!-- TOC --><a name="heading-macos-1"></a>
 ### <img src="https://www.vectorlogo.zone/logos/apple/apple-tile.svg" height="20"/> MacOS
 Navigate to the build folder
 ```bash
@@ -180,4 +197,5 @@ mv GlyphVisualizer.dmg GlyphVisualizer-main_macOS-12-x64.dmg
 ```
 You now have `GlyphVisualizer-main_macOS-12-x64.dmg`, which can be transferred to other MacOS machines.
 
+<!-- TOC --><a name="heading-interrobang-troubleshooting"></a>
 # :interrobang: Troubleshooting
