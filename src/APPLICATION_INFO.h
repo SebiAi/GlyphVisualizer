@@ -1,0 +1,8 @@
+#ifndef APPLICATION_INFO_H
+#define APPLICATION_INFO_H
+
+#define APPLICATION_VERSION "VERSION_HERE"
+#define APPLICATION_GIT_COMMIT_HASH "GIT_COMMIT_HASH_HERE"
+#define APPLICATION_GITHUB_LATEST_RELEASE_API_URL "https://api.github.com/repos/SebiAi/GlyphVisualizer/releases/latest"
+
+#endif // APPLICATION_INFO_H

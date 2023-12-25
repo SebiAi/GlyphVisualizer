@@ -49,7 +49,7 @@ jobs:
       - name: Install semantic-release (All platforms)
         run: npm install
       - name: Update version (All platforms)
-        run: python deploy/update_version.py src/VERSION.h
+        run: python deploy/update_version.py src/APPLICATION_INFO.h
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Build

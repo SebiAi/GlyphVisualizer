@@ -12,7 +12,7 @@
 #include <QTextStream>
 #include <QShortcut>
 
-#include "VERSION.h"
+#include "APPLICATION_INFO.h"
 #include "glyph_widget.h"
 #include "open_composition_dialog.h"
 #include "seekbar_style.h"
