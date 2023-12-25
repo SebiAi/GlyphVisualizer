@@ -11,12 +11,10 @@
     <a href="https://github.com/SebiAi/GlyphVisualizer/blob/main/LICENSE">
       <img alt="GitHub License" src="https://img.shields.io/github/license/SebiAi/GlyphVisualizer">
     </a>
-    <video width="1280" height="720" controls>
-      <source src="docs/assets/GlyphVisualizer Demo.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
+    <video src="https://github.com/SebiAi/GlyphVisualizer/assets/41116921/c86e6f7a-e418-418c-8670-897158e792b1" controls></video>
   </p>
 </div>
+
 
 ***
 
