@@ -57,6 +57,8 @@
       + [<img src="https://www.vectorlogo.zone/logos/ubuntu/ubuntu-icon.svg" height="20"/> Ubuntu and derivatives](#heading-ubuntu-and-derivatives-1)
       + [<img src="https://www.vectorlogo.zone/logos/apple/apple-tile.svg" height="20"/> MacOS](#heading-macos-1)
 - [:interrobang: Troubleshooting](#heading-interrobang-troubleshooting)
+   * [<img src="https://www.vectorlogo.zone/logos/microsoft/microsoft-icon.svg" height="20"/> Windows portable](#heading-windows-portable-2)
+      + [Missing dlls](#heading-missing-dlls)
 
 <!-- TOC end -->
 
@@ -203,3 +205,17 @@ You now have `GlyphVisualizer-main_macOS-12-x64.dmg`, which can be transferred t
 
 <!-- TOC --><a name="heading-interrobang-troubleshooting"></a>
 # :interrobang: Troubleshooting
+<!-- TOC --><a name="heading-windows-portable-2"></a>
+## <img src="https://www.vectorlogo.zone/logos/microsoft/microsoft-icon.svg" height="20"/> Windows portable
+<!-- TOC --><a name="heading-missing-dlls"></a>
+### Missing dlls
+| ![Missing dll error popup](./docs/assets/troubleshooting_dll_not_found_error.png) | <blockquote>GlyphVisualizer.exe - System Error<br><br>The code execution cannot proceed because MSVCP140.dll was not found. Reinstalling the program may fix this problem.</blockquote> |
+|:---:|:---|
+
+If you get the error popup above, you need to install the *Microsoft Visual C++ Redistributable*, which is shipped alongside GlyphVisualizer. Please execute `vc_redist.x64.exe` to install it.
+
+> [!IMPORTANT]
+> This also applies if the missing dll is one of the following:
+> * MSVCP140.dll
+> * VCRUNTIME140_1.dll
+> * VCRUNTIME140.dll
