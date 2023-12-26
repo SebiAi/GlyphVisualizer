@@ -215,7 +215,7 @@ QString autoCompleteHelper(const QString& filePathSource, const QString& fileDia
     // Try to autocomplete row1
     QFileInfo fileInfoSource = QFileInfo(filePathSource);
     QFileInfo fileInfoDestination = QFileInfo(fileInfoSource.dir().filePath(fileInfoSource.completeBaseName().append('.').append(QFileInfo(fileDialogFilterDestination).suffix())));
-    qDebug() << "Autocomplete file:" << fileInfoDestination.filePath();
+    // qDebug() << "Autocomplete file:" << fileInfoDestination.filePath();
     if (!fileInfoDestination.exists() || !fileInfoDestination.isFile())
         return QString(); // Return empty string
 

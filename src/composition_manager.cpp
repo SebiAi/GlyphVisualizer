@@ -56,7 +56,7 @@ const QList<QColor>* const CompositionManager::getPhone1ColorValues(qint64 posit
     // TODO: REMOVE ME!
     qsizetype indexDelta = index - lastIndex - 1;
     if (indexDelta != 0)
-        qDebug().nospace() << "[WARNING] Skipped " << indexDelta << " indexes!";
+        // qDebug().nospace() << "[WARNING] Skipped " << indexDelta << " indexes!";
     lastIndex = index;
 
 
@@ -76,7 +76,7 @@ const QList<QColor>* const CompositionManager::getPhone2ColorValues(qint64 posit
     // TODO: REMOVE ME!
     qsizetype indexDelta = index - lastIndex - 1;
     if (indexDelta != 0)
-        qDebug().nospace() << "[WARNING] Skipped " << indexDelta << " indexes!";
+        // qDebug().nospace() << "[WARNING] Skipped " << indexDelta << " indexes!";
     lastIndex = index;
 
 
