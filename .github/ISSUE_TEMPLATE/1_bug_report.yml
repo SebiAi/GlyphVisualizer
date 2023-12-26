@@ -1,5 +1,5 @@
-name: Core bug report
-description: Report a bug unrelated to any particular site or extractor
+name: Report a bug
+description: Report a bug with GlyphVisualizer
 labels: [bug]
 body:
   - type: checkboxes
@@ -25,8 +25,7 @@ body:
     attributes:
       label: Provide a description that is worded well enough to be understood
       placeholder: |
-        Provide any additional information, any suggested solutions, and as much context and examples as possible
-        Keep in mind that uploading copyright protected songs is not a good idea.
+        Provide any additional information, any suggested solutions, and as much context and examples as possible. Keep in mind that uploading copyright protected songs is not a good idea.
     validations:
       required: true
   - type: checkboxes
