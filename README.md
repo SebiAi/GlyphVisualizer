@@ -1,20 +1,21 @@
 <div align="center">
   <p>
     <h1>GlyphVisualizer</h1>
-    <h6>
-    A Glyph composition player written with the Qt6 framework in C++ that plays Glyph compositions from Nothing Phones.
-    </h6>
-    <br>
+    <h6>A Glyph composition player written with the Qt6 framework in C++ that plays Glyph compositions from Nothing Phones.</h6>
+    ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+    <h3>Development will be paused until the 13th of January.</h3>
+    ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+    <br><br>
     <a href="https://github.com/SebiAi/GlyphVisualizer/releases/latest">
       <img alt="GitHub release (with filter)" src="https://img.shields.io/github/v/release/SebiAi/GlyphVisualizer?label=Latest%20Stable%20Release">
     </a>
     <a href="https://github.com/SebiAi/GlyphVisualizer/blob/main/LICENSE">
       <img alt="GitHub License" src="https://img.shields.io/github/license/SebiAi/GlyphVisualizer">
     </a>
+    <br><br>
     <video src="https://github.com/SebiAi/GlyphVisualizer/assets/41116921/c86e6f7a-e418-418c-8670-897158e792b1" controls></video>
   </p>
 </div>
-
 
 ***
 
