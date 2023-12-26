@@ -35,7 +35,7 @@ body:
       options:
         - label: Run GlyphVisualizer with **--verbose** flag added (`GlyphVisualizer --verbose`) - adjust name of the executable accordingly ([Open command prompt on windows](https://www.lifewire.com/open-command-prompt-in-a-folder-5185505))
           required: true
-        - label: Copy the WHOLE output (starting with `Main.Verbose: Verbose logging activated`) and insert it below
+        - label: "Copy the WHOLE output (starting with `Main.Verbose: Verbose logging activated`) and insert it below"
           required: true
   - type: textarea
     id: log
