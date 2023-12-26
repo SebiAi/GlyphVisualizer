@@ -4,6 +4,10 @@
 #include <QCommandLineParser>
 #include <QCommandLineParser>
 
+#ifdef Q_OS_WIN
+#include <Windows.h>
+#endif
+
 #include "APPLICATION_INFO.h"
 
 // Logging
@@ -15,6 +19,14 @@ Q_LOGGING_CATEGORY(mainFunctionVerbose, "Main.Verbose")
 
 int main(int argc, char *argv[])
 {
+// Windows workarround to output logs to the console if started from one
+#ifdef Q_OS_WIN
+    if (AttachConsole(ATTACH_PARENT_PROCESS)) {
+        freopen("CONOUT$", "w", stdout);
+        freopen("CONOUT$", "w", stderr);
+    }
+#endif
+
     // Set up application
     QApplication a(argc, argv);
     QCoreApplication::setOrganizationName("SebiAi");
@@ -57,5 +69,13 @@ int main(int argc, char *argv[])
     }
 
     // Execute main event loop
-    return a.exec();
+    int result = a.exec();
+
+// Free the console when we exit
+#ifdef Q_OS_WIN
+    FreeConsole();
+#endif
+
+    // Return result code
+    return result;
 }
