@@ -1,6 +1,11 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 
+// Logging
+Q_LOGGING_CATEGORY(mainWindow, "MainWindow")
+Q_LOGGING_CATEGORY(mainWindowVerbose, "MainWindow.Verbose")
+// TODO: Actually implement proper loggin in MainWindow
+
 // TODO: [END] Leak check with Valgrind: 'valgrind --leak-check=full ./GlyphVisualizer'
 // TODO: Set the application icon: https://doc.qt.io/qt-6/appicon.html
 
@@ -8,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    // Setup UI
     ui->setupUi(this);
 
     // Add style sheets (see here: https://doc.qt.io/qt-6/stylesheet-reference.html)
@@ -31,6 +37,10 @@ MainWindow::MainWindow(QWidget *parent)
     this->fileMenu->addAction(this->openFileAction);
     connect(this->openFileAction, SIGNAL(triggered(bool)), this, SLOT(openFileAction_onTriggered(bool)));
 
+    // Add 'Check for Updates...' action to helpMenu
+    this->checkForUpdateAction = new QAction("Check for Updates...", this->helpMenu);
+    this->helpMenu->addAction(this->checkForUpdateAction);
+    connect(this->checkForUpdateAction, SIGNAL(triggered(bool)), this, SLOT(checkForUpdateAction_onTriggered(bool)));
     // Add 'About GlyphVisualizer' action to helpMenu
     this->aboutAction = new QAction("About GlyphVisualizer", this->helpMenu);
     this->helpMenu->addAction(this->aboutAction);
@@ -98,6 +108,78 @@ MainWindow::MainWindow(QWidget *parent)
     connect(button, SIGNAL(clicked(bool)), this, SLOT(button_onClicked(bool)));
     ui->centralwidget->layout()->addWidget(button);
     ui->centralwidget->layout()->setAlignment(button, Qt::AlignHCenter);
+}
+
+void MainWindow::showEvent(QShowEvent *event)
+{
+    // Init config
+    bool clearConfig = false;
+    do
+    {
+        try
+        {
+            if (this->config)
+                delete this->config;
+
+            this->config = new Config("GlyphVisualizer.ini", this, clearConfig);
+            clearConfig = false;
+        }
+        catch (Config::ConfigVersionTooHighError e)
+        {
+            qCInfo(mainWindowVerbose) << "ConfigVersionTooHighError occurred";
+            QMessageBox mb = QMessageBox(QMessageBox::Icon::Critical,"Config Error",
+                                         QString("The configuration file in '").append(e.fileName)
+                                             .append("' is intended to be used with a higher version of this software.\n\nThis usually happens when you either downgrade your software or manually modify the config.\n\nDo you want to clear the config (Recommended) or exit the application?")
+                                         );
+            mb.setParent(this);
+            mb.addButton("Exit Software", QMessageBox::ButtonRole::AcceptRole);
+            mb.addButton("Clear Config (Recommended)", QMessageBox::ButtonRole::DestructiveRole);
+            int answer = mb.exec();
+
+            switch (answer)
+            {
+            case QDialog::DialogCode::Accepted: // Clear
+                qCInfo(mainWindowVerbose) << "ConfigVersionTooHighError - User decided to exit";
+                clearConfig = true;
+                break;
+            case QDialog::DialogCode::Rejected: // Exit
+                qCInfo(mainWindowVerbose) << "ConfigVersionTooHighError - User decided to exit";
+                this->earlyQuit = true;
+                return;
+                break;
+            default:
+                // This should never happen
+                throw std::logic_error(std::string("[Development Error] switch in function '").append(__FUNCTION__).append("' not updated!"));
+            }
+        }
+    } while (clearConfig);
+
+    // Init update checker
+    this->updateChecker = new UpdateChecker(this);
+    connect(this->updateChecker, &UpdateChecker::updateAvailable, this, &MainWindow::updateChecker_onUpdateAvailable);
+    connect(this->updateChecker, &UpdateChecker::updateCheckFailed, this, &MainWindow::updateChecker_onUpdateCheckFailed);
+    connect(this->updateChecker, &UpdateChecker::noUpdateAvailable, this, &MainWindow::updateChecker_noUpdateAvailable);
+
+    // Check for update
+    if (this->config->getBool(Config::Setting::UpdateChecker_AutoUpdateCheckEnabled_Bool))
+    {
+        QDateTime currentTime = QDateTime::currentDateTimeUtc();
+        if (currentTime > this->config->getQDateTime(Config::Setting::UpdateChecker_LastAutoUpdateCheck_QDateTime).addSecs(10 * 60))
+        {
+            // Set the currentTime
+            this->config->setValue(Config::Setting::UpdateChecker_LastAutoUpdateCheck_QDateTime, currentTime);
+
+            // Check for update
+            updateChecker->checkForUpdate(APPLICATION_VERSION, true);
+        }
+        else
+        {
+            qCInfo(mainWindow) << "Skipping automatic update check, last check was too recent";
+        }
+    }
+
+    // Execute original function
+    QWidget::showEvent(event);
 }
 
 /*
@@ -201,14 +283,25 @@ void MainWindow::openFileAction_onTriggered(bool checked)
     this->openCompositionDialog->open();
 }
 
+void MainWindow::checkForUpdateAction_onTriggered(bool checked)
+{
+    // Set the currentTime
+    this->config->setValue(Config::Setting::UpdateChecker_LastAutoUpdateCheck_QDateTime, QDateTime::currentDateTimeUtc());
+
+    // Check for updates
+    this->updateChecker->checkForUpdate(APPLICATION_VERSION);
+}
+
 void MainWindow::aboutAction_onTriggered(bool checked)
 {
-    // TODO: Make own about dialog with markdown supported label (see Audacity about window)
     // Display an about dialog
-    QMessageBox::about(this, QString("About GlyphVisualizer"),
-                       QString("An open source Glyph composition player written with the Qt6 framework in C++ which plays Glyph compositions from Nothing Phones.\n\nVersion: ").append(APPLICATION_VERSION)
-                           .append("\nCommit Hash: ").append(APPLICATION_GIT_COMMIT_HASH)
-                           .append("\n\nCreator: Sebastian Aigner aka. SebiAi\nGitHub: https://github.com/SebiAi/GlyphVisualizer"));
+    QMessageBox mb = QMessageBox(QMessageBox::Icon::NoIcon, "About GlyphVisualizer",
+                                 QString("# GlyphVisualizer\n**A Glyph composition player written with the Qt6 framework in C++ that plays Glyph compositions from Nothing Phones.**\n***\nVersion: *").append(APPLICATION_VERSION)
+                                     .append("*\n\nCommit Hash: ").append(QString("[*%1*](%2)").arg(APPLICATION_GIT_COMMIT_HASH, APPLICATION_GITHUB_COMMIT_URL))
+                                     .append("\n***\nCreator: *Sebastian Aigner aka. SebiAi*\n\nGitHub: ").append(QString("[*%1*](%2)").arg(APPLICATION_GITHUB_REPO_URL, APPLICATION_GITHUB_REPO_URL)),
+                                 QMessageBox::StandardButton::Ok, this);
+    mb.setTextFormat(Qt::TextFormat::MarkdownText);
+    mb.exec();
 }
 
 void MainWindow::openCompositionDialog_onFinished(int result)
@@ -295,6 +388,40 @@ void MainWindow::pausePlayButton_onClicked(bool checked)
     }
 }
 
+void MainWindow::updateChecker_onUpdateAvailable(const QString &newVersion)
+{
+    // Display info dialog
+    QMessageBox mb = QMessageBox(QMessageBox::Icon::NoIcon, "New version available!",
+                                 QString("## ").append(newVersion).append(" now available!")
+                                     .append("\n***\nHeyo, just chipping in to tell you that a new version is available!")
+                                     .append("\n\n**You can download it here:** [**Download**]").append(QString("(%1)").arg(APPLICATION_RELEASE_URL.arg(newVersion))),
+                                 QMessageBox::StandardButton::Ok, this);
+    mb.setTextFormat(Qt::TextFormat::MarkdownText);
+    mb.exec();
+}
+
+void MainWindow::updateChecker_onUpdateCheckFailed(const QString &errorMessage)
+{
+    // Display error dialog
+    QMessageBox mb = QMessageBox(QMessageBox::Icon::Warning,
+                                 "Error checking for updates",
+                                 QString("**An error occurred during the update check:**\n\n*%1*\n\n").arg(errorMessage),
+                                 QMessageBox::StandardButton::Ok, this);
+    mb.setTextFormat(Qt::TextFormat::MarkdownText);
+    mb.exec();
+}
+
+void MainWindow::updateChecker_noUpdateAvailable()
+{
+    // Display info dialog
+    QMessageBox mb = QMessageBox(QMessageBox::Icon::Information,
+                                 "Check for Updates",
+                                 QString("## No update available\n\n**You are on the latest version of this software!**"),
+                                 QMessageBox::StandardButton::Ok, this);
+    mb.setTextFormat(Qt::TextFormat::MarkdownText);
+    mb.exec();
+}
+
 /*
  * ==================================
  *           Deconstructor
@@ -313,6 +440,7 @@ MainWindow::~MainWindow()
 
     delete this->aboutAction;
     delete this->helpMenu;
+    delete this->checkForUpdateAction;
 
     delete this->openCompositionDialog;
 }

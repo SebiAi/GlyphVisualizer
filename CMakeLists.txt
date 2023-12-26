@@ -33,6 +33,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/open_composition_dialog.h src/open_composition_dialog.cpp
         src/seekbar_style.h
         src/APPLICATION_INFO.h
+        src/update_checker.h src/update_checker.cpp
+        src/config.h src/config.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET GlyphVisualizer APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

@@ -11,11 +11,21 @@
 #include <QSlider>
 #include <QTextStream>
 #include <QShortcut>
+#include <QSettings>
+#include <QDateTime>
+#include <QShowEvent>
 
 #include "APPLICATION_INFO.h"
 #include "glyph_widget.h"
 #include "open_composition_dialog.h"
 #include "seekbar_style.h"
+#include "config.h"
+#include "update_checker.h"
+
+// Logging
+#include <QLoggingCategory>
+Q_DECLARE_LOGGING_CATEGORY(mainWindow)
+Q_DECLARE_LOGGING_CATEGORY(mainWindowVerbose)
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -29,6 +39,13 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void showEvent(QShowEvent *event) override;
+
+    /**
+     * @brief Indicates that we do not want to enter the Main Event Loop and quit before that.
+     */
+    bool earlyQuit = false;
+
 private:
     Ui::MainWindow *ui;
 
@@ -39,6 +56,7 @@ private:
     QAction *openFileAction;
     QMenu *helpMenu;
     QAction *aboutAction;
+    QAction *checkForUpdateAction;
 
     OpenCompositionDialog *openCompositionDialog;
 
@@ -47,6 +65,10 @@ private:
     QLabel *currentTimeLabel;
     QSlider *seekBar;
     QLabel *lengthTimeLabel;
+
+    Config *config = nullptr;
+
+    UpdateChecker *updateChecker;
 
     /**
      * @brief Loads the composition with the glyphWidget. Will be executed after the OpenCompositionDialog closes with the Accept return value.
@@ -74,6 +96,11 @@ public slots:
      * @param checked If the action is checked.
      */
     void openFileAction_onTriggered(bool checked);
+    /**
+     * @brief Will be called by the void QAction::triggered(bool checked) signal.
+     * @param checked If the action is checked.
+     */
+    void checkForUpdateAction_onTriggered(bool checked);
     /**
      * @brief Will be called by the void QAction::triggered(bool checked) signal.
      * @param checked If the action is checked.
@@ -113,5 +140,19 @@ public slots:
      * @param checked If the action is checked.
      */
     void pausePlayButton_onClicked(bool checked);
+    /**
+     * @brief Will be called by the void UpdateChecker::updateAvailable(const QString &newVersion) signal.
+     * @param newVersion The new version.
+     */
+    void updateChecker_onUpdateAvailable(const QString &newVersion);
+    /**
+     * @brief Will be called by the void UpdateChecker::updateCheckFailed(const QString &errorMessage) signal.
+     * @param errorMessage The error message.
+     */
+    void updateChecker_onUpdateCheckFailed(const QString &errorMessage);
+    /**
+     * @brief Will be called by the void UpdateChecker::noUpdateAvailable() signal.
+     */
+    void updateChecker_noUpdateAvailable();
 };
 #endif // MAINWINDOW_H
