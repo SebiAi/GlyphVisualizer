@@ -14,6 +14,11 @@
     </a>
     <br><br>
     <video src="https://github.com/SebiAi/GlyphVisualizer/assets/41116921/c86e6f7a-e418-418c-8670-897158e792b1" controls></video>
+    <h6>
+      Credit: First composition by
+      <a href="https://x.com/MrSteel_X/status/1701143539806019611" target="_blank" rel="noopener noreferrer">Mr Steel</a>, Second composition by
+      <a href="https://www.reddit.com/r/NothingTech/comments/165nu0w/glyph_synchronized_ringtone_showcase/" target="_blank" rel="noopener noreferrer">ImSteazyy</a>
+    </h6>
   </p>
 </div>
 
