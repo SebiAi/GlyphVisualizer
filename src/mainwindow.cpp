@@ -439,8 +439,8 @@ MainWindow::~MainWindow()
     delete this->fileMenu;
 
     delete this->aboutAction;
-    delete this->helpMenu;
     delete this->checkForUpdateAction;
+    delete this->helpMenu;
 
     delete this->openCompositionDialog;
 }
