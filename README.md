@@ -2,10 +2,6 @@
   <p>
     <h1>GlyphVisualizer</h1>
     <h6>A Glyph composition player written with the Qt6 framework in C++ that plays Glyph compositions from Nothing Phones.</h6>
-    ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
-    <h3>Development is paused until the 13th of January.</h3>
-    ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
-    <br><br>
     <a href="https://github.com/SebiAi/GlyphVisualizer/releases/latest">
       <img alt="GitHub release (with filter)" src="https://img.shields.io/github/v/release/SebiAi/GlyphVisualizer?label=Latest%20Stable%20Release">
     </a>
