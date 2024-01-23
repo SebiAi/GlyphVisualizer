@@ -217,17 +217,19 @@ void MainWindow::processOpenCompositionDialogAccepted(const OpenCompositionDialo
     catch (const std::invalid_argument& e)
     {
         // Display the error
-        QMessageBox msg(QMessageBox::Critical, "Critical Error", e.what(), QMessageBox::StandardButton::Ok, this->window());
-        msg.exec();
+        QMessageBox* msg = new QMessageBox(QMessageBox::Critical, "Critical Error", e.what(), QMessageBox::StandardButton::Ok, this->window());
+        connect(msg, &QMessageBox::finished, msg, [=](){
+            // Reopen the OpenCompositionDialog
+            emit this->openFileAction->triggered();
+        });
+        msg->open();
 
-        // Reopen the OpenCompositionDialog
-        emit this->openFileAction->triggered();
         return;
     }
     catch (const CompositionManager::InvalidLightDataContentException& e)
     {
-        QMessageBox msg(QMessageBox::Critical, "Critical Error", e.what(), QMessageBox::StandardButton::Ok, this->window());
-        msg.exec();
+        QMessageBox* msg = new QMessageBox(QMessageBox::Critical, "Critical Error", e.what(), QMessageBox::StandardButton::Ok, this->window());
+        msg->open();
 
         return;
     }
@@ -295,13 +297,13 @@ void MainWindow::checkForUpdateAction_onTriggered(bool checked)
 void MainWindow::aboutAction_onTriggered(bool checked)
 {
     // Display an about dialog
-    QMessageBox mb = QMessageBox(QMessageBox::Icon::NoIcon, "About GlyphVisualizer",
+    QMessageBox* mb = new QMessageBox(QMessageBox::Icon::NoIcon, "About GlyphVisualizer",
                                  QString("# GlyphVisualizer\n**A Glyph composition player written with the Qt6 framework in C++ that plays Glyph compositions from Nothing Phones.**\n***\nVersion: *").append(APPLICATION_VERSION)
                                      .append("*\n\nCommit Hash: ").append(QString("[*%1*](%2)").arg(APPLICATION_GIT_COMMIT_HASH, APPLICATION_GITHUB_COMMIT_URL))
                                      .append("\n***\nCreator: *Sebastian Aigner aka. SebiAi*\n\nGitHub: ").append(QString("[*%1*](%2)").arg(APPLICATION_GITHUB_REPO_URL, APPLICATION_GITHUB_REPO_URL)),
                                  QMessageBox::StandardButton::Ok, this);
-    mb.setTextFormat(Qt::TextFormat::MarkdownText);
-    mb.exec();
+    mb->setTextFormat(Qt::TextFormat::MarkdownText);
+    mb->open();
 }
 
 void MainWindow::openCompositionDialog_onFinished(int result)
@@ -391,35 +393,35 @@ void MainWindow::pausePlayButton_onClicked(bool checked)
 void MainWindow::updateChecker_onUpdateAvailable(const QString &newVersion)
 {
     // Display info dialog
-    QMessageBox mb = QMessageBox(QMessageBox::Icon::NoIcon, "New version available!",
+    QMessageBox* mb = new QMessageBox(QMessageBox::Icon::NoIcon, "New version available!",
                                  QString("## ").append(newVersion).append(" now available!")
                                      .append("\n***\nHeyo, just chipping in to tell you that a new version is available!")
                                      .append("\n\n**You can download it here:** [**Download**]").append(QString("(%1)").arg(APPLICATION_RELEASE_URL.arg(newVersion))),
                                  QMessageBox::StandardButton::Ok, this);
-    mb.setTextFormat(Qt::TextFormat::MarkdownText);
-    mb.exec();
+    mb->setTextFormat(Qt::TextFormat::MarkdownText);
+    mb->open();
 }
 
 void MainWindow::updateChecker_onUpdateCheckFailed(const QString &errorMessage)
 {
     // Display error dialog
-    QMessageBox mb = QMessageBox(QMessageBox::Icon::Warning,
+    QMessageBox* mb = new QMessageBox(QMessageBox::Icon::Warning,
                                  "Error checking for updates",
                                  QString("**An error occurred during the update check:**\n\n*%1*\n\n").arg(errorMessage),
                                  QMessageBox::StandardButton::Ok, this);
-    mb.setTextFormat(Qt::TextFormat::MarkdownText);
-    mb.exec();
+    mb->setTextFormat(Qt::TextFormat::MarkdownText);
+    mb->open();
 }
 
 void MainWindow::updateChecker_noUpdateAvailable()
 {
     // Display info dialog
-    QMessageBox mb = QMessageBox(QMessageBox::Icon::Information,
+    QMessageBox* mb = new QMessageBox(QMessageBox::Icon::Information,
                                  "Check for Updates",
                                  QString("## No update available\n\n**You are on the latest version of this software!**"),
                                  QMessageBox::StandardButton::Ok, this);
-    mb.setTextFormat(Qt::TextFormat::MarkdownText);
-    mb.exec();
+    mb->setTextFormat(Qt::TextFormat::MarkdownText);
+    mb->open();
 }
 
 /*

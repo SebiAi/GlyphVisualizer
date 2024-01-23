@@ -140,8 +140,8 @@ void OpenCompositionDialog::buttonBox_onAccepted()
         )
     {
         // Display error dialog and return
-        QMessageBox msg(QMessageBox::Icon::Information, "Empty fields", "Please fill out all the required fields.", QMessageBox::StandardButton::Ok, this->window());
-        msg.exec();
+        QMessageBox* msg = new QMessageBox(QMessageBox::Icon::Information, "Empty fields", "Please fill out all the required fields.", QMessageBox::StandardButton::Ok, this->window());
+        msg->open();
         return;
     }
 
