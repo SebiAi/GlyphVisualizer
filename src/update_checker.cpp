@@ -69,7 +69,7 @@ void UpdateChecker::checkForUpdate(const QString &version, bool silent)
         if (versionAbiggerThanVersionB(newVersion, version))
         {
             qCInfo(updateChecker) << "New version found:" << newVersion;
-            if (!silent) emit updateAvailable(newVersion);
+            emit updateAvailable(newVersion);
             return;
         }
 
