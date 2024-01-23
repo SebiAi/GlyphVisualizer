@@ -11,6 +11,7 @@
 #include <QElapsedTimer>
 #include <QTimer>
 #include <QColor>
+#include <QList>
 #include "helper.h"
 
 // TODO: [Next] Use QTimer to create a signal at 15ms and call GlyphWidget::update() with that
@@ -35,6 +36,10 @@ public:
         Compatibility = 0,  // Compatibility mode => Phone (1) and Phone (2) compatible
         Phone2 = 1          // Phone2 mode => ONLY Phone (2) compatible
     };
+    /**
+     * @brief Enum definition for the phones. Must be kept in sync with the phoneModelStrings QList.
+     */
+    enum class PhoneModel { None = -1, Phone1 = 0, Phone2 = 1 };
 
     /**
      * @brief Exception for when the light data is illformed.
@@ -78,17 +83,21 @@ public:
      */
     const GlyphMode& getGlyphMode() const { return currentGlyphMode; }
     /**
-     * @brief Get the calculated color values for each of the Phone (1) Glyphs for the position.
+     * @brief Get the calculated color values for each of the Phone Glyphs for the position.
      * @param position The audio time in milliseconds.
-     * @return A list with numberOfZones[(int)GlyphMode::Compatibility] elements, each corresponding to one Zone on Phone (1).
+     * @param phone For which phone.
+     * @return A list with numberOfZones[(int)GlyphMode::Compatibility] elements, each corresponding to one Zone of the requested phone.
      */
-    const QList<QColor>* const getPhone1ColorValues(qint64 position) const;
+    const QList<QColor>* const getPhoneColorValues(const qint64& position, const CompositionManager::PhoneModel& phone) const;
     /**
      * @brief Get the calculated color values for each of the Phone (2) Glyphs for the position.
      * @param position The audio time in milliseconds.
-     * @return A list with numberOfZones[(int)GlyphMode::Phone2] elements, each corresponding to one Zone on Phone (2).
+    /**
+     * @brief Get the string representation of the phone.
+     * @param phone For which phone
+     * @return A string representation of the PhoneModel enum.
      */
-    const QList<QColor>* const getPhone2ColorValues(qint64 position) const;
+    static QString getPhoneModelString(const CompositionManager::PhoneModel& phone);
 
 
     /**
@@ -132,6 +141,11 @@ public slots:
     void player_onMediaStatusChanged(QMediaPlayer::MediaStatus status);
 
 private:
+    /**
+     * @brief Holds the string representation of the PhoneModel enum. Must be kept in sync with the enum.
+     */
+    static const QList<QString> phoneModelStrings;
+
     /**
      * @brief Number of Zones for the Phone (1) and Phone (2). MUST be kept in sync with the GlyphMode enum!
      */

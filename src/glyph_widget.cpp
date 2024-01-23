@@ -59,10 +59,10 @@ GlyphWidget::GlyphWidget(QWidget *parent)
  * ==================================
  */
 
-void GlyphWidget::setVisual(Visual v)
+void GlyphWidget::setVisual(CompositionManager::PhoneModel v)
 {
     // Check if the Visual is compatible with the currently loaded composition.
-    if (this->compositionManager->getGlyphMode() == CompositionManager::GlyphMode::Phone2 && v == Visual::Phone1)
+    if (this->compositionManager->getGlyphMode() == CompositionManager::GlyphMode::Phone2 && v == CompositionManager::PhoneModel::Phone1)
         throw std::invalid_argument("Can't switch to the Phone (1) visualisation because the currently loaded Composition only supports Phone (2)");
 
     this->currentVisual = v;
@@ -119,12 +119,15 @@ void GlyphWidget::resizeEvent(QResizeEvent* event)
 
     switch (this->currentVisual)
     {
-    case Visual::Phone1:
+    case CompositionManager::PhoneModel::Phone1:
         calcPhone1Glyphs();
         break;
-    case Visual::Phone2:
+    case CompositionManager::PhoneModel::Phone2:
         calcPhone2Glyphs();
         break;
+    case CompositionManager::PhoneModel::None:
+        // This should never happen
+        throw std::logic_error(std::string("[Development Error] Phone model None in function '").append(__FUNCTION__).append("' - can't be None!"));
     default:
         // This should never happen
         throw std::logic_error(std::string("[Development Error] switch in function '").append(__FUNCTION__).append("' not updated!"));
@@ -150,17 +153,17 @@ void GlyphWidget::paintEvent(QPaintEvent *event)
 
     // Get pointers to the Phone (1) or Phone (2) versions of each list/function
     QList<Glyph*> *glyphs = NULL;
-    const QList<QColor>* const (CompositionManager::*colorValuesFunction)(qint64) const;
     switch (this->currentVisual)
     {
-    case Visual::Phone1:
+    case CompositionManager::PhoneModel::Phone1:
         glyphs = &glyphsPhone1;
-        colorValuesFunction = &CompositionManager::getPhone1ColorValues;
         break;
-    case Visual::Phone2:
+    case CompositionManager::PhoneModel::Phone2:
         glyphs = &glyphsPhone2;
-        colorValuesFunction = &CompositionManager::getPhone2ColorValues;
         break;
+    case CompositionManager::PhoneModel::None:
+        // This should never happen
+        throw std::logic_error(std::string("[Development Error] Phone model None in function '").append(__FUNCTION__).append("' - can't be None!"));
     default:
         // This should never happen
         throw std::logic_error(std::string("[Development Error] switch in function '").append(__FUNCTION__).append("' not updated!"));
@@ -168,16 +171,19 @@ void GlyphWidget::paintEvent(QPaintEvent *event)
     }
 
     // Paint Glyphs
-    const QList<QColor> *const colorValues = (compositionManager->*colorValuesFunction)(compositionManager->player->position());
+    const QList<QColor> *const colorValues = this->compositionManager->getPhoneColorValues(this->compositionManager->player->position(), this->currentVisual);
     for (qsizetype i = 0; i < glyphs->length(); i++)
     {
         // Render this Glyph with the appropriate color
         switch (this->currentVisual)
         {
-        case Visual::Phone1:
-        case Visual::Phone2:
+        case CompositionManager::PhoneModel::Phone1:
+        case CompositionManager::PhoneModel::Phone2:
             glyphs->at(i)->render(&painter, colorValues->at(i));
             break;
+        case CompositionManager::PhoneModel::None:
+            // This should never happen
+            throw std::logic_error(std::string("[Development Error] Phone model None in function '").append(__FUNCTION__).append("' - can't be None!"));
         default:
             // This should never happen
             throw std::logic_error(std::string("[Development Error] switch in function '").append(__FUNCTION__).append("' not updated!"));

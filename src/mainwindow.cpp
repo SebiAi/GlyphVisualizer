@@ -236,8 +236,8 @@ void MainWindow::processOpenCompositionDialogAccepted(const OpenCompositionDialo
 
     // TODO: Maybe move this into the GlyphWidget class?
     // Set the proper visual depending on the loaded light data
-    if (this->glyphWidget->compositionManager->getGlyphMode() == CompositionManager::GlyphMode::Phone2 && this->glyphWidget->getVisualMode() == GlyphWidget::Visual::Phone1)
-        this->glyphWidget->setVisual(GlyphWidget::Visual::Phone2);
+    if (this->glyphWidget->compositionManager->getGlyphMode() == CompositionManager::GlyphMode::Phone2 && this->glyphWidget->getVisualMode() == CompositionManager::PhoneModel::Phone1)
+        this->glyphWidget->setVisual(CompositionManager::PhoneModel::Phone2);
 
     // Play the composition
     this->glyphWidget->compositionManager->player->setPosition(0);
@@ -265,14 +265,21 @@ void MainWindow::button_onClicked(bool checked)
 {
     switch (glyphWidget->getVisualMode())
     {
-    case GlyphWidget::Visual::Phone1:
-        glyphWidget->setVisual(GlyphWidget::Visual::Phone2);
+    case CompositionManager::PhoneModel::Phone1:
+        glyphWidget->setVisual(CompositionManager::PhoneModel::Phone2);
         break;
-    case GlyphWidget::Visual::Phone2:
+    case CompositionManager::PhoneModel::Phone2:
         // Only switch to Phone (1) visual if the currently loaded light data is compatible with it.
         if (glyphWidget->compositionManager->getGlyphMode() != CompositionManager::GlyphMode::Phone2)
-            glyphWidget->setVisual(GlyphWidget::Visual::Phone1);
+            glyphWidget->setVisual(CompositionManager::PhoneModel::Phone1);
         break;
+    case CompositionManager::PhoneModel::None:
+        // This should never happen
+        throw std::logic_error(std::string("[Development Error] Phone model None in function '").append(__FUNCTION__).append("' - can't be None!"));
+    default:
+        // This should never happen
+        throw std::logic_error(std::string("[Development Error] switch in function '").append(__FUNCTION__).append("' not updated!"));
+        return;
     }
 }
 

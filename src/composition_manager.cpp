@@ -1,5 +1,10 @@
 #include "composition_manager.h"
 
+const QList<QString> CompositionManager::phoneModelStrings = {
+    "Phone1",
+    "Phone2"
+};
+
 inline void CompositionManager::init()
 {
     // Check glyphOffValue
@@ -47,46 +52,70 @@ CompositionManager::CompositionManager(const QColor& glyphOnColor, const qreal& 
  * ==================================
  */
 
+/**
+ * @brief Calcualtes the index from the current audio possition.
+ * @param position Audio position in ms.
+ * @return The index for the value lists.
+ */
+const qsizetype getIndexFromPosition(const qint64& position) { return position / COMPOSITION_MANAGER_MS_PER_LINE; }
 qsizetype lastIndex = 0;
-const QList<QColor>* const CompositionManager::getPhone1ColorValues(qint64 position) const
+const QList<QColor>* const CompositionManager::getPhoneColorValues(const qint64& position, const CompositionManager::PhoneModel& phone) const
 {
-    qsizetype index = position / COMPOSITION_MANAGER_MS_PER_LINE;
+    const qsizetype index = getIndexFromPosition(position);
 
 
     // TODO: REMOVE ME!
     qsizetype indexDelta = index - lastIndex - 1;
     if (indexDelta != 0)
         // qDebug().nospace() << "[WARNING] Skipped " << indexDelta << " indexes!";
-    lastIndex = index;
+        lastIndex = index;
 
-
-    if (index >= colorValuesPhone1->length())
+    QList<QList<QColor>>* colorValues = nullptr;
+    QList<QColor>* colorOffValues = nullptr;
+    switch (phone)
     {
-        // Overrun => just return off state
-        return colorOffValuesPhone1;
+    case CompositionManager::PhoneModel::Phone1:
+        colorValues = this->colorValuesPhone1;
+        colorOffValues = this->colorOffValuesPhone1;
+        break;
+    case CompositionManager::PhoneModel::Phone2:
+        colorValues = this->colorValuesPhone2;
+        colorOffValues = this->colorOffValuesPhone2;
+        break;
+    case CompositionManager::PhoneModel::None:
+        // This should never happen
+        throw std::logic_error(std::string("[Development Error] Phone model None in function '").append(__FUNCTION__).append("' - can't be None!"));
+    default:
+        // This should never happen
+        throw std::logic_error(std::string("[Development Error] switch in function '").append(__FUNCTION__).append("' not updated!"));
+        //return;
     }
 
-    return &colorValuesPhone1->at(index);
+    if (index >= colorValues->length())
+    {
+        // Overrun => just return off state
+        return colorOffValues;
+    }
+
+    return &colorValues->at(index);
 }
-const QList<QColor>* const CompositionManager::getPhone2ColorValues(qint64 position) const
+
+QString CompositionManager::getPhoneModelString(const CompositionManager::PhoneModel& phone)
 {
-    qsizetype index = position / COMPOSITION_MANAGER_MS_PER_LINE;
-
-
-    // TODO: REMOVE ME!
-    qsizetype indexDelta = index - lastIndex - 1;
-    if (indexDelta != 0)
-        // qDebug().nospace() << "[WARNING] Skipped " << indexDelta << " indexes!";
-    lastIndex = index;
-
-
-    if (index >= colorValuesPhone2->length())
+    switch (phone)
     {
-        // Overrun => just return off state
-        return colorOffValuesPhone2;
+    case CompositionManager::PhoneModel::Phone1:
+    case CompositionManager::PhoneModel::Phone2:
+        return CompositionManager::phoneModelStrings.at((qsizetype)phone);
+        break;
+    case CompositionManager::PhoneModel::None:
+        return "INVALID";
+        break;
+    default:
+        // This should never happen
+        throw std::logic_error(std::string("[Development Error] switch in function '").append(__FUNCTION__).append("' not updated!"));
+        //return;
     }
-
-    return &colorValuesPhone2->at(index);
 }
 
 /*
@@ -200,11 +229,14 @@ void CompositionManager::parseLightData(const QString &filepathLightData)
         bool conversionSuccess;
         for (const QString& s: line.split(','))
         {
-            // Calculate color
-            colorValues.append(this->getGlyphColor(std::min(s.toUInt(&conversionSuccess), (uint)COMPOSITION_MANAGER_MAX_LIGHT_VALUE) / (qreal)COMPOSITION_MANAGER_MAX_LIGHT_VALUE));
+            // Convert number to string
+            uint number = s.toUInt(&conversionSuccess);
             // Check if the conversion was successfull
             if (!conversionSuccess)
                 throw InvalidLightDataContentException(std::string("Malformed light data! Could not convert '").append(s.toStdString()).append("' to an unsigned integer in line ").append(std::to_string(lineN)).append("."));
+
+            // Calculate color
+            colorValues.append(this->getGlyphColor(std::min(number, (uint)COMPOSITION_MANAGER_MAX_LIGHT_VALUE) / (qreal)COMPOSITION_MANAGER_MAX_LIGHT_VALUE));
         }
         // Check the number of columns in the light data
         if (colorValues.length() != numberOfZones[(int)currentGlyphMode])
@@ -216,12 +248,14 @@ void CompositionManager::parseLightData(const QString &filepathLightData)
         if (currentGlyphMode == GlyphMode::Compatibility)
         {
             // Convert the Phone (1) light data to Phone (2) light data
-            QList<QColor> tmp(numberOfZones[(int)GlyphMode::Phone2]);
+            QList<QColor> tmpColor(numberOfZones[(int)GlyphMode::Phone2]);
             for (qsizetype i = 0; i < numberOfZones[(int)GlyphMode::Phone2]; i++)
-                tmp[i] = colorValues.at(zone5To33LookupTable[i]);
+            {
+                tmpColor[i] = colorValues.at(zone5To33LookupTable[i]);
+            }
 
             // Add current line to the data
-            colorValuesPhone2->append(tmp);
+            colorValuesPhone2->append(tmpColor);
         }
 
         lineN++;

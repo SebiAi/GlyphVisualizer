@@ -17,23 +17,18 @@ public:
     ~GlyphWidget();
 
     /**
-     * @brief Enum definition for the visual modes.
-     */
-    enum class Visual { Phone1 = 0, Phone2 = 1 };
-
-    /**
      * @brief Tries to set the visual depending on if the currently loaded composition allows it. If it is not possible an exception is thrown.
      * @param v Which visual to set.
      *
      * @throws std::invalid_argument When trying to set the visual mode to Phone (1) and the currently loaded composition is only compatible with Phone (2)
      */
-    void setVisual(Visual v);
+    void setVisual(CompositionManager::PhoneModel v);
 
     /**
      * @brief Get the current visual mode.
      * @return The current visual mode.
      */
-    const Visual& getVisualMode()
+    const CompositionManager::PhoneModel& getVisualMode()
     {
         return this->currentVisual;
     }
@@ -63,7 +58,7 @@ private:
     /**
      * @brief Holds the current visual mode.
      */
-    Visual currentVisual = Visual::Phone1;
+    CompositionManager::PhoneModel currentVisual = CompositionManager::PhoneModel::Phone1;
 
     /**
      * @brief Size for the Phone (1) and Phone (2) - pulled from the Glyph Composer Android app and under consideration of the size difference in the ringtone settings graphics.
