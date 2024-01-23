@@ -164,7 +164,7 @@ void MainWindow::showEvent(QShowEvent *event)
     if (this->config->getBool(Config::Setting::UpdateChecker_AutoUpdateCheckEnabled_Bool))
     {
         QDateTime currentTime = QDateTime::currentDateTimeUtc();
-        if (currentTime > this->config->getQDateTime(Config::Setting::UpdateChecker_LastAutoUpdateCheck_QDateTime).addSecs(10 * 60))
+        if (currentTime > this->config->getQDateTime(Config::Setting::UpdateChecker_LastAutoUpdateCheck_QDateTime).addSecs(6 * 60 * 60))
         {
             // Set the currentTime
             this->config->setValue(Config::Setting::UpdateChecker_LastAutoUpdateCheck_QDateTime, currentTime);
