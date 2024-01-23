@@ -90,9 +90,6 @@ public:
      */
     const QList<QColor>* const getPhoneColorValues(const qint64& position, const CompositionManager::PhoneModel& phone) const;
     /**
-     * @brief Get the calculated color values for each of the Phone (2) Glyphs for the position.
-     * @param position The audio time in milliseconds.
-    /**
      * @brief Get the string representation of the phone.
      * @param phone For which phone
      * @return A string representation of the PhoneModel enum.
