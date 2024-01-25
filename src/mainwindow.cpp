@@ -169,7 +169,7 @@ void MainWindow::showEvent(QShowEvent *event)
     this->updateChecker = new UpdateChecker(this);
     connect(this->updateChecker, &UpdateChecker::updateAvailable, this, &MainWindow::updateChecker_onUpdateAvailable);
     connect(this->updateChecker, &UpdateChecker::updateCheckFailed, this, &MainWindow::updateChecker_onUpdateCheckFailed);
-    connect(this->updateChecker, &UpdateChecker::noUpdateAvailable, this, &MainWindow::updateChecker_noUpdateAvailable);
+    connect(this->updateChecker, &UpdateChecker::noUpdateAvailable, this, &MainWindow::updateChecker_onNoUpdateAvailable);
 
     // Check for update
     if (this->config->getBool(Config::Setting::UpdateChecker_AutoUpdateCheckEnabled_Bool))
@@ -440,7 +440,7 @@ void MainWindow::updateChecker_onUpdateCheckFailed(const QString &errorMessage)
     mb->open();
 }
 
-void MainWindow::updateChecker_noUpdateAvailable()
+void MainWindow::updateChecker_onNoUpdateAvailable()
 {
     // Display info dialog
     QMessageBox* mb = new QMessageBox(QMessageBox::Icon::Information,

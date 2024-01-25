@@ -155,6 +155,6 @@ public slots:
     /**
      * @brief Will be called by the void UpdateChecker::noUpdateAvailable() signal.
      */
-    void updateChecker_noUpdateAvailable();
+    void updateChecker_onNoUpdateAvailable();
 };
 #endif // MAINWINDOW_H
