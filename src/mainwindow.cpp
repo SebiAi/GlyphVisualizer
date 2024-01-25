@@ -222,6 +222,7 @@ void MainWindow::processOpenCompositionDialogAccepted(const OpenCompositionDialo
             // Reopen the OpenCompositionDialog
             emit this->openFileAction->triggered();
         });
+        connect(msg, &QDialog::finished, msg, &QWidget::deleteLater); // Delete the dialog after it finished
         msg->open();
 
         return;
@@ -229,6 +230,7 @@ void MainWindow::processOpenCompositionDialogAccepted(const OpenCompositionDialo
     catch (const CompositionManager::InvalidLightDataContentException& e)
     {
         QMessageBox* msg = new QMessageBox(QMessageBox::Critical, "Critical Error", e.what(), QMessageBox::StandardButton::Ok, this->window());
+        connect(msg, &QDialog::finished, msg, &QWidget::deleteLater); // Delete the dialog after it finished
         msg->open();
 
         return;
@@ -310,6 +312,7 @@ void MainWindow::aboutAction_onTriggered(bool checked)
                                      .append("\n***\nCreator: *Sebastian Aigner aka. SebiAi*\n\nGitHub: ").append(QString("[*%1*](%2)").arg(APPLICATION_GITHUB_REPO_URL, APPLICATION_GITHUB_REPO_URL)),
                                  QMessageBox::StandardButton::Ok, this);
     mb->setTextFormat(Qt::TextFormat::MarkdownText);
+    connect(mb, &QDialog::finished, mb, &QWidget::deleteLater); // Delete the dialog after it finished
     mb->open();
 }
 
@@ -406,6 +409,7 @@ void MainWindow::updateChecker_onUpdateAvailable(const QString &newVersion)
                                      .append("\n\n**You can download it here:** [**Download**]").append(QString("(%1)").arg(APPLICATION_RELEASE_URL.arg(newVersion))),
                                  QMessageBox::StandardButton::Ok, this);
     mb->setTextFormat(Qt::TextFormat::MarkdownText);
+    connect(mb, &QDialog::finished, mb, &QWidget::deleteLater); // Delete the dialog after it finished
     mb->open();
 }
 
@@ -417,6 +421,7 @@ void MainWindow::updateChecker_onUpdateCheckFailed(const QString &errorMessage)
                                  QString("**An error occurred during the update check:**\n\n*%1*\n\n").arg(errorMessage),
                                  QMessageBox::StandardButton::Ok, this);
     mb->setTextFormat(Qt::TextFormat::MarkdownText);
+    connect(mb, &QDialog::finished, mb, &QWidget::deleteLater); // Delete the dialog after it finished
     mb->open();
 }
 
@@ -428,6 +433,7 @@ void MainWindow::updateChecker_noUpdateAvailable()
                                  QString("## No update available\n\n**You are on the latest version of this software!**"),
                                  QMessageBox::StandardButton::Ok, this);
     mb->setTextFormat(Qt::TextFormat::MarkdownText);
+    connect(mb, &QDialog::finished, mb, &QWidget::deleteLater); // Delete the dialog after it finished
     mb->open();
 }
 

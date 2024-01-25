@@ -145,6 +145,7 @@ void OpenCompositionDialog::buttonBox_onAccepted()
     {
         // Display error dialog and return
         QMessageBox* msg = new QMessageBox(QMessageBox::Icon::Information, "Empty fields", "Please fill out all the required fields.", QMessageBox::StandardButton::Ok, this->window());
+        connect(msg, &QDialog::finished, msg, &QWidget::deleteLater); // Delete the dialog after it finished
         msg->open();
         return;
     }
