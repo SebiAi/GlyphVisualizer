@@ -76,6 +76,7 @@ public:
         AUDIO_LIGHT_DATA = 1,
         AUDIO_AUDACITY_LABELS = 2
     };
+    Q_ENUM(CompositionOpenModeResult)
     /**
      * @brief Holds the composition mode after the user confirmed this selection.
      */

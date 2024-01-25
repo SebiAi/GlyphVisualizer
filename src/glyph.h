@@ -10,6 +10,7 @@
 
 class Glyph : private QSvgRenderer
 {
+    Q_OBJECT
 public:
     /**
      * @brief Which side is referenced.
@@ -26,6 +27,7 @@ public:
         CenteredVLeft,
         CenteredVRight
     };
+    Q_ENUM(Reference)
 
     /**
      * @brief Constructor for a Glyph object.

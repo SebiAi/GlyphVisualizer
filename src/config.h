@@ -46,6 +46,7 @@ public:
         UpdateChecker_AutoUpdateCheckEnabled_Bool = 1,
         UpdateChecker_LastAutoUpdateCheck_QDateTime = 2
     };
+    Q_ENUM(Setting)
 
     /**
      * @brief Get the settings key for the setting.

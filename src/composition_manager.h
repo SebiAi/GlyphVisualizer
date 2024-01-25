@@ -36,10 +36,12 @@ public:
         Compatibility = 0,  // Compatibility mode => Phone (1) and Phone (2) compatible
         Phone2 = 1          // Phone2 mode => ONLY Phone (2) compatible
     };
+    Q_ENUM(GlyphMode)
     /**
      * @brief Enum definition for the phones. Must be kept in sync with the phoneModelStrings QList.
      */
     enum class PhoneModel { None = -1, Phone1 = 0, Phone2 = 1 };
+    Q_ENUM(PhoneModel)
 
     /**
      * @brief Exception for when the light data is illformed.
