@@ -79,7 +79,7 @@ private:
     /**
      * @brief Holds the regex needed to change the color of an svg.
      */
-    const QRegularExpression svgFillColorRegex = QRegularExpression("(?<=fill=\")[^\"]+(?=\")", QRegularExpression::PatternOption::MultilineOption);
+    static const QRegularExpression svgFillColorRegex;
 };
 
 #endif // GLYPH_H

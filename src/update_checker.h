@@ -31,12 +31,12 @@ public:
     void checkForUpdate(const QString &version, bool silent = false);
 
 private:
-    const QNetworkRequest request = QNetworkRequest(QUrl(APPLICATION_GITHUB_LATEST_RELEASE_API_URL));
+    static const QNetworkRequest request;
 
     /**
      * @brief Every version should match this regex: "/^v?(\d+)\.(\d+)\.(\d+)$/g"
      */
-    const QRegularExpression versionRegex = QRegularExpression("^v?(\\d+)\\.(\\d+)\\.(\\d+)$");
+    static const QRegularExpression versionRegex;
 
     /**
      * @brief Takes in two semantic versions and compares them.

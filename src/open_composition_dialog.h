@@ -117,11 +117,7 @@ public slots:
     void browseRow1FileButton_onClicked(bool checked);
 
 private:
-    const QList<CompositionOpenMode> openModes = {
-        CompositionOpenMode("Audio file (ogg)", "Audio file:", QString(), "Select Audio (ogg)", "", "*.ogg", "", false, false),
-        CompositionOpenMode("Audio file (ogg) + Light data file (glypha)", "Audio file:", "Light data file:", "Select Audio (ogg)", "Select Light data (glypha)", "*.ogg", "*.glypha", true, true),
-        CompositionOpenMode("Audio file (ogg) + Audacity Labels file (txt)", "Audio file:", "Audacity Labels file:", "Select Audio (ogg)", "Select Audacity Labels (txt)", "*.ogg", "*.txt", true, false)
-    };
+    static const QList<CompositionOpenMode> openModes;
 
     QDialogButtonBox *buttonBox;
     QComboBox *comboBox_openMode;

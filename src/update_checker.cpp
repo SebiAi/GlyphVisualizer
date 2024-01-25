@@ -4,6 +4,9 @@
 Q_LOGGING_CATEGORY(updateChecker, "UpdateChecker")
 Q_LOGGING_CATEGORY(updateCheckerVerbose, "UpdateChecker.Verbose")
 
+const QNetworkRequest UpdateChecker::request = QNetworkRequest(QUrl(APPLICATION_GITHUB_LATEST_RELEASE_API_URL));
+const QRegularExpression UpdateChecker::versionRegex = QRegularExpression("^v?(\\d+)\\.(\\d+)\\.(\\d+)$");
+
 UpdateChecker::UpdateChecker(QObject *parent) :
     QObject{parent}
 {

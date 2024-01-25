@@ -1,5 +1,7 @@
 #include "glyph.h"
 
+const QRegularExpression Glyph::svgFillColorRegex = QRegularExpression("(?<=fill=\")[^\"]+(?=\")", QRegularExpression::PatternOption::MultilineOption);
+
 Glyph::Glyph(const QString &filename, const Glyph::Reference& reference, const QPointF& referenceOffset, const QString& id)
     : QSvgRenderer{filename}, filename{filename}, reference{reference}, referenceOffset{referenceOffset}, id{id}
 {

@@ -2,6 +2,12 @@
 
 // TODO: [NOW + 2] Remove redundant delete commands and trust Qt to delete them if they have a parrent.
 
+const QList<OpenCompositionDialog::CompositionOpenMode> OpenCompositionDialog::openModes = {
+    CompositionOpenMode("Audio file (ogg)", "Audio file:", QString(), "Select Audio (ogg)", "", "*.ogg", "", false, false),
+    CompositionOpenMode("Audio file (ogg) + Light data file (glypha)", "Audio file:", "Light data file:", "Select Audio (ogg)", "Select Light data (glypha)", "*.ogg", "*.glypha", true, true),
+    CompositionOpenMode("Audio file (ogg) + Audacity Labels file (txt)", "Audio file:", "Audacity Labels file:", "Select Audio (ogg)", "Select Audacity Labels (txt)", "*.ogg", "*.txt", true, false)
+};
+
 OpenCompositionDialog::OpenCompositionDialog(QWidget *parent)
     : QDialog{parent, Qt::Dialog}
 {
