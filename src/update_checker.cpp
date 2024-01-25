@@ -24,7 +24,7 @@ void UpdateChecker::checkForUpdate(const QString &version, bool silent)
     if (silent) qCInfo(updateChecker) << "Checking for update (silent)...";
     else qCInfo(updateChecker) << "Checking for update...";
 
-    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+    QNetworkAccessManager *manager = new QNetworkAccessManager(this); // There should only be one QNetworkAccessManager in the application!
     connect(manager, &QNetworkAccessManager::finished, this, [=](QNetworkReply *reply){
         if (reply->error())
         {
