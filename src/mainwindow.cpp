@@ -4,7 +4,6 @@
 // Logging
 Q_LOGGING_CATEGORY(mainWindow, "MainWindow")
 Q_LOGGING_CATEGORY(mainWindowVerbose, "MainWindow.Verbose")
-// TODO: Actually implement proper loggin in MainWindow
 
 // TODO: Set the application icon: https://doc.qt.io/qt-6/appicon.html
 
@@ -137,7 +136,7 @@ void MainWindow::showEvent(QShowEvent *event)
         }
         catch (Config::ConfigVersionTooHighError e)
         {
-            qCInfo(mainWindowVerbose) << "ConfigVersionTooHighError occurred";
+            qCCritical(mainWindow) << "ConfigVersionTooHighError occurred";
             QMessageBox mb = QMessageBox(QMessageBox::Icon::Critical,"Config Error",
                                          QString("The configuration file in '").append(e.fileName)
                                              .append("' is intended to be used with a higher version of this software.\n\nThis usually happens when you either downgrade your software or manually modify the config.\n\nDo you want to clear the config (Recommended) or exit the application?")
@@ -150,11 +149,11 @@ void MainWindow::showEvent(QShowEvent *event)
             switch (answer)
             {
             case QDialog::DialogCode::Accepted: // Clear
-                qCInfo(mainWindowVerbose) << "ConfigVersionTooHighError - User decided to exit";
+                qCWarning(mainWindow) << "ConfigVersionTooHighError - User decided to clear";
                 clearConfig = true;
                 break;
             case QDialog::DialogCode::Rejected: // Exit
-                qCInfo(mainWindowVerbose) << "ConfigVersionTooHighError - User decided to exit";
+                qCWarning(mainWindow) << "ConfigVersionTooHighError - User decided to exit";
                 this->earlyQuit = true;
                 return;
                 break;
@@ -201,6 +200,10 @@ void MainWindow::showEvent(QShowEvent *event)
 
 void MainWindow::processOpenCompositionDialogAccepted(const OpenCompositionDialog::CompositionOpenModeResult& openMode, const QString& str0, const QString& str1)
 {
+    qCInfo(mainWindowVerbose).nospace() << "OpenCompositionDialog accepted with openMode: " << openMode
+                                        << ", str0: " << str0
+                                        << ", str1: " << str1;
+
     // Load the composition
     try
     {
@@ -208,12 +211,15 @@ void MainWindow::processOpenCompositionDialogAccepted(const OpenCompositionDialo
         switch (openMode)
         {
         case OpenCompositionDialog::CompositionOpenModeResult::AUDIO_ONLY:
+            qCInfo(mainWindow) << "Loading composition (Audio Only)";
             throw std::logic_error(std::string("[Development Error] Audio only not implemented yet: '").append(__FUNCTION__).append("'!"));
             break;
         case OpenCompositionDialog::CompositionOpenModeResult::AUDIO_LIGHT_DATA:
+            qCInfo(mainWindow) << "Loading composition (Audio + Light data)";
             this->glyphWidget->compositionManager->loadComposition(str0, str1);
             break;
         case OpenCompositionDialog::CompositionOpenModeResult::AUDIO_AUDACITY_LABELS:
+            qCInfo(mainWindow) << "Loading composition (Audio + Audacity Labels)";
             throw std::logic_error(std::string("[Development Error] Audio only not implemented yet: '").append(__FUNCTION__).append("'!"));
             break;
         case OpenCompositionDialog::CompositionOpenModeResult::None:
@@ -227,6 +233,8 @@ void MainWindow::processOpenCompositionDialogAccepted(const OpenCompositionDialo
     }
     catch (const std::invalid_argument& e)
     {
+        qCWarning(mainWindow) << "Critical Error:" << e.what();
+
         // Display the error
         QMessageBox* msg = new QMessageBox(QMessageBox::Critical, "Critical Error", e.what(), QMessageBox::StandardButton::Ok, this->window());
         connect(msg, &QMessageBox::finished, msg, [=](){
@@ -240,6 +248,8 @@ void MainWindow::processOpenCompositionDialogAccepted(const OpenCompositionDialo
     }
     catch (const CompositionManager::InvalidLightDataContentException& e)
     {
+        qCWarning(mainWindow) << "InvalidLightDataContentException:" << e.what();
+
         QMessageBox* msg = new QMessageBox(QMessageBox::Critical, "Critical Error", e.what(), QMessageBox::StandardButton::Ok, this->window());
         connect(msg, &QDialog::finished, msg, &QWidget::deleteLater); // Delete the dialog after it finished
         msg->open();
@@ -250,7 +260,11 @@ void MainWindow::processOpenCompositionDialogAccepted(const OpenCompositionDialo
     // TODO: Maybe move this into the GlyphWidget class?
     // Set the proper visual depending on the loaded light data
     if (this->glyphWidget->compositionManager->getGlyphMode() == CompositionManager::GlyphMode::Phone2 && this->glyphWidget->getVisualMode() == CompositionManager::PhoneModel::Phone1)
+    {
+        qCInfo(mainWindowVerbose) << "Force changing visual to"
+                                  << CompositionManager::getPhoneModelString(CompositionManager::PhoneModel::Phone2);
         this->glyphWidget->setVisual(CompositionManager::PhoneModel::Phone2);
+    }
 
     // Play the composition
     this->glyphWidget->compositionManager->player->setPosition(0);
@@ -279,12 +293,18 @@ void MainWindow::button_onClicked(bool checked)
     switch (glyphWidget->getVisualMode())
     {
     case CompositionManager::PhoneModel::Phone1:
+        qCInfo(mainWindowVerbose) << "Changing visual to"
+                                  << CompositionManager::getPhoneModelString(CompositionManager::PhoneModel::Phone2);
         glyphWidget->setVisual(CompositionManager::PhoneModel::Phone2);
         break;
     case CompositionManager::PhoneModel::Phone2:
         // Only switch to Phone (1) visual if the currently loaded light data is compatible with it.
         if (glyphWidget->compositionManager->getGlyphMode() != CompositionManager::GlyphMode::Phone2)
+        {
+            qCInfo(mainWindowVerbose) << "Changing visual to"
+                                      << CompositionManager::getPhoneModelString(CompositionManager::PhoneModel::Phone1);
             glyphWidget->setVisual(CompositionManager::PhoneModel::Phone1);
+        }
         break;
     case CompositionManager::PhoneModel::None:
         // This should never happen
@@ -298,6 +318,8 @@ void MainWindow::button_onClicked(bool checked)
 
 void MainWindow::openFileAction_onTriggered(bool checked)
 {
+    qCInfo(mainWindowVerbose) << "Opening the OpenCompositionDialog";
+
     // Save the playing state
     this->playerWasPlayingBefore = this->glyphWidget->compositionManager->player->isPlaying();
 
@@ -310,6 +332,8 @@ void MainWindow::openFileAction_onTriggered(bool checked)
 
 void MainWindow::checkForUpdateAction_onTriggered(bool checked)
 {
+    qCInfo(mainWindowVerbose) << "Manual update check triggered";
+
     // Set the currentTime
     this->config->setValue(Config::Setting::UpdateChecker_LastAutoUpdateCheck_QDateTime, QDateTime::currentDateTimeUtc());
 
@@ -319,6 +343,8 @@ void MainWindow::checkForUpdateAction_onTriggered(bool checked)
 
 void MainWindow::aboutAction_onTriggered(bool checked)
 {
+    qCInfo(mainWindowVerbose) << "Opening the about dialog";
+
     // Display an about dialog
     QMessageBox* mb = new QMessageBox(QMessageBox::Icon::NoIcon, "About GlyphVisualizer",
                                  QString("# GlyphVisualizer\n**A Glyph composition player written with the Qt6 framework in C++ that plays Glyph compositions from Nothing Phones.**\n***\nVersion: *").append(APPLICATION_VERSION)
@@ -332,6 +358,8 @@ void MainWindow::aboutAction_onTriggered(bool checked)
 
 void MainWindow::openCompositionDialog_onFinished(int result)
 {
+    qCInfo(mainWindowVerbose) << "OpenCompositionDialog finished with result code:" << result;
+
     // Respond to result code
     switch (result)
     {
@@ -341,7 +369,10 @@ void MainWindow::openCompositionDialog_onFinished(int result)
     case QDialog::DialogCode::Rejected: // == 1
         // Resume playing the composition if it was playing before
         if (this->playerWasPlayingBefore)
+        {
+            qCInfo(mainWindowVerbose) << "Resuming playback of composition because it was playing before opening the OpenCompositionDialog";
             this->glyphWidget->compositionManager->player->play();
+        }
         break;
     default:
         // This should never happen
@@ -352,6 +383,8 @@ void MainWindow::openCompositionDialog_onFinished(int result)
 
 void MainWindow::glyphWidget_onDurationChanged(qint64 duration)
 {
+    qCInfo(mainWindowVerbose) << "Duration changed:" << duration << "ms";
+
     // Set the lengthTimeLabel
     this->lengthTimeLabel->setText(millisecondsToTimeRepresentation(duration));
 
@@ -365,7 +398,7 @@ void MainWindow::seekBar_onValueChanged(int value)
     // Update currentTimeLabel
     this->currentTimeLabel->setText(millisecondsToTimeRepresentation(value));
 
-    // Set player position if we have a position missmatch (the user moved the slider)
+    // Set player position if we have a position mismatch (the user moved the slider)
     if (value != this->glyphWidget->compositionManager->player->position())
         this->glyphWidget->compositionManager->player->setPosition(this->seekBar->value());
 }
@@ -385,6 +418,8 @@ void MainWindow::seekBar_onSliderReleased()
 
 void MainWindow::glyphWidget_onPlaybackStateChanged(QMediaPlayer::PlaybackState newState)
 {
+    qCInfo(mainWindowVerbose) << "Playback state changed to:" << newState;
+
     // Set the icon depending on the playback state
     switch (newState)
     {
@@ -406,10 +441,12 @@ void MainWindow::pausePlayButton_onClicked(bool checked)
     switch (this->glyphWidget->compositionManager->player->playbackState())
     {
     case QMediaPlayer::PlaybackState::PlayingState:
+        qCInfo(mainWindowVerbose) << "Pausing playback";
         this->glyphWidget->compositionManager->player->pause();
         break;
     case QMediaPlayer::PlaybackState::StoppedState:
     case QMediaPlayer::PlaybackState::PausedState:
+        qCInfo(mainWindowVerbose) << "Resuming/Starting playback";
         this->glyphWidget->compositionManager->player->play();
         break;
     }
@@ -460,6 +497,8 @@ void MainWindow::updateChecker_onNoUpdateAvailable()
 
 MainWindow::~MainWindow()
 {
+    qCInfo(mainWindow) << "Bye, bye!";
+
     delete this->ui;
 
     //delete this->seekBarStyle; // TODO: This delete causes invalid reads??? See valgrind memcheck.

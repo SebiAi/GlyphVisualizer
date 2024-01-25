@@ -1,5 +1,9 @@
 #include "glyph.h"
 
+// Logging
+Q_LOGGING_CATEGORY(glyph, "Glyph")
+Q_LOGGING_CATEGORY(glyphVerbose, "Glyph.Verbose")
+
 const QRegularExpression Glyph::svgFillColorRegex = QRegularExpression("(?<=fill=\")[^\"]+(?=\")", QRegularExpression::PatternOption::MultilineOption);
 
 Glyph::Glyph(const QString &filename, const Glyph::Reference& reference, const QPointF& referenceOffset, const QString& id, QObject *parent)

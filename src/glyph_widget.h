@@ -9,6 +9,11 @@
 #include "glyph.h"
 #include "composition_manager.h"
 
+// Logging
+#include <QLoggingCategory>
+Q_DECLARE_LOGGING_CATEGORY(glyphWidget)
+Q_DECLARE_LOGGING_CATEGORY(glyphWidgetVerbose)
+
 class GlyphWidget : public QWidget
 {
     Q_OBJECT

@@ -1,5 +1,9 @@
 #include "glyph_widget.h"
 
+// Logging
+Q_LOGGING_CATEGORY(glyphWidget, "GlyphWidget")
+Q_LOGGING_CATEGORY(glyphWidgetVerbose, "GlyphWidget.Verbose")
+
 GlyphWidget::GlyphWidget(QWidget *parent)
     : QWidget{parent}
 {

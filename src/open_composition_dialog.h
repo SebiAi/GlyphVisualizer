@@ -16,6 +16,11 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
+// Logging
+#include <QLoggingCategory>
+Q_DECLARE_LOGGING_CATEGORY(openCompositionDialog)
+Q_DECLARE_LOGGING_CATEGORY(openCompositionDialogVerbose)
+
 class OpenCompositionDialog : public QDialog
 {
     Q_OBJECT

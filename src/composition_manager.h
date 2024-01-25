@@ -14,6 +14,11 @@
 #include <QList>
 #include "helper.h"
 
+// Logging
+#include <QLoggingCategory>
+Q_DECLARE_LOGGING_CATEGORY(compositionManager)
+Q_DECLARE_LOGGING_CATEGORY(compositionManagerVerbose)
+
 // TODO: [Next] Use QTimer to create a signal at 15ms and call GlyphWidget::update() with that
 // TODO: To fix the low "refresh" issue: Make per Glyph glyphdata + spawn a thread for each glyph which waits and then changes the glyph/start a timer for each glyph
 

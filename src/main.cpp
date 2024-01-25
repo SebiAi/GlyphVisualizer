@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QCommandLineParser>
+#include <QSysInfo>
 
 #ifdef Q_OS_WIN
 #include <Windows.h>
@@ -54,8 +55,15 @@ int main(int argc, char *argv[])
     }
     else QLoggingCategory::setFilterRules("*.Verbose=false");
 
+    qCInfo(mainFunctionVerbose) << "#### Software Information #####";
     qCInfo(mainFunctionVerbose) << "Current software version:" << APPLICATION_VERSION;
     qCInfo(mainFunctionVerbose) << "Current software git hash:" << APPLICATION_GIT_COMMIT_HASH;
+
+    qCInfo(mainFunctionVerbose) << "#### System Information #####";
+    qCInfo(mainFunctionVerbose) << "Product name and version:" << QSysInfo::prettyProductName();
+    qCInfo(mainFunctionVerbose) << "Kernel type and version:" << QSysInfo::kernelType() << QSysInfo::kernelVersion();
+
+    qCInfo(mainFunctionVerbose) << "#### Logging Start #####";
 
     // Set up MainWindow
     MainWindow w;

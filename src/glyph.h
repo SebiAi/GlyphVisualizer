@@ -8,6 +8,11 @@
 #include <QFile>
 #include <QRegularExpression>
 
+// Logging
+#include <QLoggingCategory>
+Q_DECLARE_LOGGING_CATEGORY(glyph)
+Q_DECLARE_LOGGING_CATEGORY(glyphVerbose)
+
 class Glyph : private QSvgRenderer
 {
     Q_OBJECT

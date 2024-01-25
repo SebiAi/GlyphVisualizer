@@ -49,12 +49,15 @@ Config::Config(const QString &fileName, QObject *parent, bool clearConfig)
 
     // Get config version
     int configVersion = getInt(Config::Setting::ConfigVersion_Int);
+    qCInfo(configVerbose) << "Supported config version:" << getDefaultValue(Config::Setting::ConfigVersion_Int).toInt();
+    qCInfo(configVerbose) << "Read config version:" << configVersion;
 
     // Check if the config version is below minimum
     if (configVersion < minConfigVersion)
     {
         // We don't know what config this is so we set it to the minConfigVersion
         // This should cause an upgrade - see below
+        qCInfo(configVerbose) << "The config version is below minimum, setting to minimum";
         configVersion = minConfigVersion;
         settings->setValue(getKey(Config::Setting::ConfigVersion_Int), configVersion);
     }
@@ -69,6 +72,7 @@ Config::Config(const QString &fileName, QObject *parent, bool clearConfig)
     // Upgrade the config if the config version is lower than the current default value
     if (configVersion < getDefaultValue(Config::Setting::ConfigVersion_Int).toInt())
     {
+        qCInfo(config) << "The config version is lower than the currently supported version => upgrading config";
         upgradeConfig(configVersion, getDefaultValue(Config::Setting::ConfigVersion_Int).toInt());
     }
 }
@@ -152,6 +156,7 @@ void Config::backupConfig() const
         fileDifferentiator++;
     }
 
+    qCInfo(config) << "Creating backup of the config to:" << backupFileName;
     if (!QFile::copy(this->settings->fileName(), backupFileName))
     {
         qCFatal(config) << "Backup of config failed! Copy from" << this->settings->fileName() << "to" << backupFileName;
@@ -175,5 +180,5 @@ void Config::upgradeConfig(int oldVersion, int newVersion)
 //    }
 
     if (oldVersion < newVersion)
-        qCWarning(config) << "[Development Error] Config upgrade step(s) from" << oldVersion << "to" << newVersion << "is/are missing!";
+        qCFatal(config) << "[Development Error] Config upgrade step(s) from" << oldVersion << "to" << newVersion << "is/are missing!";
 }

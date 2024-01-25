@@ -1,5 +1,9 @@
 #include "composition_manager.h"
 
+// Logging
+Q_LOGGING_CATEGORY(compositionManager, "CompositionManager")
+Q_LOGGING_CATEGORY(compositionManagerVerbose, "CompositionManager.Verbose")
+
 const QList<QString> CompositionManager::phoneModelStrings = {
     "Phone1",
     "Phone2"
@@ -139,9 +143,15 @@ void CompositionManager::loadComposition(const QString &filepathAudio, const QSt
     QFileInfo audioFileInfo = QFileInfo(filepathAudio);
     QFileInfo lightDataFileInfo = QFileInfo(filepathLightData);
     if (!audioFileInfo.exists() || !audioFileInfo.isFile())
-        throw std::invalid_argument(std::string("The audio file '").append(filepathAudio.toStdString()).append("' could not be found!"));
+    {
+        qCWarning(compositionManager) << "The file" << filepathAudio << "could not be found";
+        throw std::invalid_argument(std::string("The file '").append(filepathAudio.toStdString()).append("' could not be found!"));
+    }
     if (!lightDataFileInfo.exists() || !lightDataFileInfo.isFile())
+    {
+        qCWarning(compositionManager) << "The file" << lightDataFileInfo << "could not be found";
         throw std::invalid_argument(std::string("The light data file '").append(filepathLightData.toStdString()).append("' could not be found!"));
+    }
 
     // Parse light data
     parseLightData(filepathLightData);
@@ -165,6 +175,8 @@ void CompositionManager::skipToPercentage(const qreal& percentage)
 
 void CompositionManager::playerInit(const QString &filepathAudio)
 {
+    qCInfo(compositionManagerVerbose) << "Setting up the player";
+
 //    connect(this->player, SIGNAL(metaDataChanged()), this, SLOT(player_onMetaDataChanged()), Qt::UniqueConnection);
     connect(this->player, SIGNAL(positionChanged(qint64)), this, SLOT(player_onPositionChanged(qint64)), Qt::UniqueConnection);
     connect(this->player, SIGNAL(playingChanged(bool)), this, SLOT(player_onPlayingChanged(bool)), Qt::UniqueConnection);
@@ -244,6 +256,8 @@ void CompositionManager::parseLightData(const QString &filepathLightData)
                 return;
             }
 
+            qCInfo(compositionManagerVerbose) << "Detected" << currentGlyphMode << "mode";
+
             firstLine = false;
         }
 
@@ -309,7 +323,6 @@ void CompositionManager::player_onPlayingChanged(bool playing)
 
 void CompositionManager::player_onMediaStatusChanged(QMediaPlayer::MediaStatus status)
 {
-    qDebug().nospace() << "State: " << status;
     switch (status)
     {
     case QMediaPlayer::StalledMedia:

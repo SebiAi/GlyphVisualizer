@@ -1,5 +1,9 @@
 #include "open_composition_dialog.h"
 
+// Logging
+Q_LOGGING_CATEGORY(openCompositionDialog, "OpenCompositionDialog")
+Q_LOGGING_CATEGORY(openCompositionDialogVerbose, "OpenCompositionDialog.Verbose")
+
 const QList<OpenCompositionDialog::CompositionOpenMode> OpenCompositionDialog::openModes = {
     CompositionOpenMode("Audio file (ogg)", "Audio file:", QString(), "Select Audio (ogg)", "", "*.ogg", "", false, false),
     CompositionOpenMode("Audio file (ogg) + Light data file (glypha)", "Audio file:", "Light data file:", "Select Audio (ogg)", "Select Light data (glypha)", "*.ogg", "*.glypha", true, true),
@@ -130,6 +134,8 @@ void OpenCompositionDialog::setRow1Enabled(bool enabled)
 
 void OpenCompositionDialog::buttonBox_onAccepted()
 {
+    qCInfo(openCompositionDialogVerbose) << "Pressed the accept button";
+
     // Get the QLineEdits
     QLineEdit *row0LineEdit = qobject_cast<QLineEdit*>(this->row0Container[1]);
     Q_ASSERT(row0LineEdit);
@@ -144,6 +150,7 @@ void OpenCompositionDialog::buttonBox_onAccepted()
         )
     {
         // Display error dialog and return
+        qCWarning(openCompositionDialog) << "Not all the required fields are filled out";
         QMessageBox* msg = new QMessageBox(QMessageBox::Icon::Information, "Empty fields", "Please fill out all the required fields.", QMessageBox::StandardButton::Ok, this->window());
         connect(msg, &QDialog::finished, msg, &QWidget::deleteLater); // Delete the dialog after it finished
         msg->open();
@@ -163,15 +170,21 @@ void OpenCompositionDialog::buttonBox_onAccepted()
 
 void OpenCompositionDialog::buttonBox_onRejected()
 {
+    qCInfo(openCompositionDialogVerbose) << "Pressed the reject button";
+
     // Close Dialog with reject status
     this->reject();
 }
 
 void OpenCompositionDialog::comboBox_openMode_onCurrentIndexChanged(int index)
 {
+    Q_ASSERT(index < this->openModes.count());
+    qCInfo(openCompositionDialogVerbose).noquote() << "Current index of the ComboBox changed to" << (CompositionOpenModeResult)index << QString("(%1)").arg(index);
+
     // Disable all
     if (index == -1)
     {
+        qCInfo(openCompositionDialogVerbose) << "ComboBox is empty => disable accept button and rows";
         this->buttonBox->button(QDialogButtonBox::Open)->setEnabled(false);
         setRow0Enabled(false);
         setRow1Enabled(false);
@@ -214,17 +227,21 @@ QString autoCompleteHelper(const QString& filePathSource, const QString& fileDia
     // Check if filePathSource is empty
     if (filePathSource.isEmpty())
     {
+        qCInfo(openCompositionDialogVerbose) << "Autocomplete - Row0 is empty => nothing to autocomplete";
         return QString(); // Return empty string
     }
 
     // Try to autocomplete row1
     QFileInfo fileInfoSource = QFileInfo(filePathSource);
     QFileInfo fileInfoDestination = QFileInfo(fileInfoSource.dir().filePath(fileInfoSource.completeBaseName().append('.').append(QFileInfo(fileDialogFilterDestination).suffix())));
-    // qDebug() << "Autocomplete file:" << fileInfoDestination.filePath();
     if (!fileInfoDestination.exists() || !fileInfoDestination.isFile())
+    {
+        qCInfo(openCompositionDialogVerbose) << "Autocomplete - Autocompleted file" << fileInfoDestination.filePath() << "does not exist => nothing to autocomplete";
         return QString(); // Return empty string
+    }
 
     // Found a matching file
+    qCInfo(openCompositionDialogVerbose) << "Autocomplete - Found autocompleted file:" << fileInfoDestination.filePath();
     lineEdit->setText(fileInfoDestination.filePath());
 
     return fileInfoDestination.filePath();
@@ -242,7 +259,12 @@ QString browseButtonHelper(QWidget *lineEdit, const OpenCompositionDialog::Compo
 
     // Return if no file was selected
     if (file.isEmpty())
+    {
+        qCInfo(openCompositionDialogVerbose) << "Browse button - no file selected";
         return file;
+    }
+
+    qCInfo(openCompositionDialogVerbose) << "Browse button - selected file:" << file;
 
     // Set the text of QLineEdit
     if (lineEdit)
