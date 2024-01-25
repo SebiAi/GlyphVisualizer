@@ -118,6 +118,15 @@ QString CompositionManager::getPhoneModelString(const CompositionManager::PhoneM
     }
 }
 
+QColor CompositionManager::getGlyphColor(const qreal& percent)
+{
+    Q_ASSERT(percent >= 0 && percent <= 1);
+    return QColor::fromHsvF(this->glyphOnColor.hueF(),
+                            this->glyphOnColor.saturationF(),
+                            percent * (this->glyphOnColor.valueF() - this->glyphOffValue) + this->glyphOffValue
+                            );
+}
+
 /*
  * ==================================
  *             Functions
@@ -260,15 +269,6 @@ void CompositionManager::parseLightData(const QString &filepathLightData)
 
         lineN++;
     }
-}
-
-QColor CompositionManager::getGlyphColor(const qreal& percent)
-{
-    Q_ASSERT(percent >= 0 && percent <= 1);
-    return QColor::fromHsvF(this->glyphOnColor.hueF(),
-                            this->glyphOnColor.saturationF(),
-                            percent * (this->glyphOnColor.valueF() - this->glyphOffValue) + this->glyphOffValue
-                            );
 }
 
 /*
