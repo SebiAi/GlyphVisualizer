@@ -150,6 +150,19 @@ void CompositionManager::loadComposition(const QString &filepathAudio, const QSt
     this->playerInit(filepathAudio);
 }
 
+void CompositionManager::skipToPercentage(const qreal& percentage)
+{
+    // Check if the percentage is out of range
+    if (percentage > 1.0 || percentage < 0.0)
+        return;
+
+    // Check if the player has a media loaded and is seekable
+    if (!this->player->isSeekable() || !this->player->hasAudio())
+        return;
+
+    this->player->setPosition(this->player->duration() * percentage);
+}
+
 void CompositionManager::playerInit(const QString &filepathAudio)
 {
 //    connect(this->player, SIGNAL(metaDataChanged()), this, SLOT(player_onMetaDataChanged()), Qt::UniqueConnection);

@@ -110,6 +110,11 @@ public:
      * @throws CompositionManager::InvalidLightDataContentException Invalid light data in light data file.
      */
     void loadComposition(const QString &filepathAudio, const QString &filepathLightData);
+    /**
+     * @brief Skip to the provided percentage in the composition if one is loaded.
+     * @param percentage The percentage. Range 0 to 1.
+     */
+    void skipToPercentage(const qreal& percentage);
 
 
     /**

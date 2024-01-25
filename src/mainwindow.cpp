@@ -97,6 +97,17 @@ MainWindow::MainWindow(QWidget *parent)
     playerControlsLayout->addWidget(this->seekBar);
     connect(this->seekBar, SIGNAL(valueChanged(int)), this, SLOT(seekBar_onValueChanged(int)));
     connect(this->seekBar, SIGNAL(sliderReleased()), this, SLOT(seekBar_onSliderReleased()));
+    // Create shortcuts to skip time
+    connect(new QShortcut(QKeySequence("0"), this), &QShortcut::activated, this, [=](){ this->glyphWidget->compositionManager->skipToPercentage(0.0); });
+    connect(new QShortcut(QKeySequence("1"), this), &QShortcut::activated, this, [=](){ this->glyphWidget->compositionManager->skipToPercentage(0.1); });
+    connect(new QShortcut(QKeySequence("2"), this), &QShortcut::activated, this, [=](){ this->glyphWidget->compositionManager->skipToPercentage(0.2); });
+    connect(new QShortcut(QKeySequence("3"), this), &QShortcut::activated, this, [=](){ this->glyphWidget->compositionManager->skipToPercentage(0.3); });
+    connect(new QShortcut(QKeySequence("4"), this), &QShortcut::activated, this, [=](){ this->glyphWidget->compositionManager->skipToPercentage(0.4); });
+    connect(new QShortcut(QKeySequence("5"), this), &QShortcut::activated, this, [=](){ this->glyphWidget->compositionManager->skipToPercentage(0.5); });
+    connect(new QShortcut(QKeySequence("6"), this), &QShortcut::activated, this, [=](){ this->glyphWidget->compositionManager->skipToPercentage(0.6); });
+    connect(new QShortcut(QKeySequence("7"), this), &QShortcut::activated, this, [=](){ this->glyphWidget->compositionManager->skipToPercentage(0.7); });
+    connect(new QShortcut(QKeySequence("8"), this), &QShortcut::activated, this, [=](){ this->glyphWidget->compositionManager->skipToPercentage(0.8); });
+    connect(new QShortcut(QKeySequence("9"), this), &QShortcut::activated, this, [=](){ this->glyphWidget->compositionManager->skipToPercentage(0.9); });
 
     // Length time label
     this->lengthTimeLabel = new QLabel("--:--");
