@@ -298,6 +298,9 @@ void MainWindow::button_onClicked(bool checked)
 
 void MainWindow::openFileAction_onTriggered(bool checked)
 {
+    // Save the playing state
+    this->playerWasPlayingBefore = this->glyphWidget->compositionManager->player->isPlaying();
+
     // Pause the player
     this->glyphWidget->compositionManager->player->pause();
 
@@ -336,8 +339,9 @@ void MainWindow::openCompositionDialog_onFinished(int result)
         processOpenCompositionDialogAccepted(this->openCompositionDialog->openModeResult, this->openCompositionDialog->row0Result, this->openCompositionDialog->row1Result);
         break;
     case QDialog::DialogCode::Rejected: // == 1
-        // Resume playing the composition
-        this->glyphWidget->compositionManager->player->play();
+        // Resume playing the composition if it was playing before
+        if (this->playerWasPlayingBefore)
+            this->glyphWidget->compositionManager->player->play();
         break;
     default:
         // This should never happen

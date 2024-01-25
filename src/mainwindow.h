@@ -59,6 +59,7 @@ private:
     QAction *checkForUpdateAction;
 
     OpenCompositionDialog *openCompositionDialog;
+    bool playerWasPlayingBefore = false;
 
     QShortcut *playPauseShortcut;
     QToolButton *playPauseButton;
