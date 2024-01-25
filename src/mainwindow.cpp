@@ -6,7 +6,6 @@ Q_LOGGING_CATEGORY(mainWindow, "MainWindow")
 Q_LOGGING_CATEGORY(mainWindowVerbose, "MainWindow.Verbose")
 // TODO: Actually implement proper loggin in MainWindow
 
-// TODO: [END] Leak check with Valgrind: 'valgrind --leak-check=full ./GlyphVisualizer'
 // TODO: Set the application icon: https://doc.qt.io/qt-6/appicon.html
 
 MainWindow::MainWindow(QWidget *parent)
@@ -88,7 +87,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Seek bar
     this->seekBar = new QSlider(Qt::Orientation::Horizontal);
-    this->seekBar->setStyle(new SeekBarStyle(this->seekBar->style())); // Needed so the bar moves exactly to where we click with the mouse
+    this->seekBarStyle = new SeekBarStyle(this->seekBar->style());
+    this->seekBar->setStyle(this->seekBarStyle); // Needed so the bar moves exactly to where we click with the mouse
     this->seekBar->setEnabled(false);
     this->seekBar->setMinimum(0);
     this->seekBar->setSingleStep(1000);
@@ -441,16 +441,6 @@ MainWindow::~MainWindow()
 {
     delete this->ui;
 
-    delete this->mainLayout;
-    delete this->glyphWidget;
-
-    delete this->openFileAction;
-    delete this->fileMenu;
-
-    delete this->aboutAction;
-    delete this->checkForUpdateAction;
-    delete this->helpMenu;
-
-    delete this->openCompositionDialog;
+    //delete this->seekBarStyle; // TODO: This delete causes invalid reads??? See valgrind memcheck.
 }
 

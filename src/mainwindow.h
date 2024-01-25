@@ -64,6 +64,7 @@ private:
     QToolButton *playPauseButton;
     QLabel *currentTimeLabel;
     QSlider *seekBar;
+    SeekBarStyle *seekBarStyle;
     QLabel *lengthTimeLabel;
 
     Config *config = nullptr;

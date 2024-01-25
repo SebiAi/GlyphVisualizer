@@ -34,7 +34,7 @@ public:
      * @param referenceOffset The offset from the reference. Is used in the calculate function.
      * @param id The id of a path. If specified renders only the path with this id if available. Will render the whole svg if the path id is not available.
      */
-    explicit Glyph(const QString &filename, const Glyph::Reference& reference, const QPointF& referenceOffset, const QString& id = QString());
+    explicit Glyph(const QString &filename, const Glyph::Reference& reference, const QPointF& referenceOffset, const QString& id = QString(), QObject *parent = nullptr);
 
     /**
      * @brief Renders the Glyph with the given painter and with the paintRect as bounds. Call calculate first.

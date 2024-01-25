@@ -60,21 +60,23 @@ public:
      * @brief Empty constructor for the CompositionManager class. Use the CompositionManager::loadComposition() function to load a Composition.
      * @param glyphOnColor The color of the Glyphs if they are 100% on.
      * @param glyphOffValue Value of the HSV glyphOnColor where the Glyphs are 0% on. Range 0 to 1.
+     * @param parent The parent object.
      */
-    explicit CompositionManager(const QColor& glyphOnColor, const qreal& glyphOffValue);
+    explicit CompositionManager(const QColor& glyphOnColor, const qreal& glyphOffValue, QObject *parent = nullptr);
     /**
      * @brief Load a Composition with a seperate ogg and light data file.
      * @param glyphOnColor The color of the Glyphs if they are 100% on.
      * @param glyphOffValue Value of the HSV glyphOnColor where the Glyphs are 0% on. Range 0 to 1.
      * @param filepathAudio Filepath to the audio ogg file.
      * @param filepathLightData Filepath to the light data file.
+     * @param parent The parent object.
      *
      * @throws std::invalid_argument Audio file does not exist.
      * @throws std::invalid_argument Light data file does not exist.
      * @throws std::invalid_argument Can not open the light data file.
      * @throws CompositionManager::InvalidLightDataContentException Invalid light data in light data file.
      */
-    explicit CompositionManager(const QColor& glyphOnColor, const qreal& glyphOffValue, const QString &filepathAudio, const QString &filepathLightData);
+    explicit CompositionManager(const QColor& glyphOnColor, const qreal& glyphOffValue, const QString &filepathAudio, const QString &filepathLightData, QObject *parent = nullptr);
     ~CompositionManager();
 
     /**

@@ -25,21 +25,21 @@ inline void CompositionManager::init()
     colorValuesPhone2 = new QList<QList<QColor>>();
 
     // Create player
-    this->player = new QMediaPlayer();
-    this->audioOutput = new QAudioOutput();
+    this->player = new QMediaPlayer(this);
+    this->audioOutput = new QAudioOutput(this->player);
 
     // Create elapsed timer
     this->elapsedTimer = new QElapsedTimer();
 }
 
-CompositionManager::CompositionManager(const QColor& glyphOnColor, const qreal& glyphOffValue)
-    : QObject{}, glyphOnColor{glyphOnColor}, glyphOffValue{glyphOffValue}
+CompositionManager::CompositionManager(const QColor& glyphOnColor, const qreal& glyphOffValue, QObject *parent)
+    : QObject{parent}, glyphOnColor{glyphOnColor}, glyphOffValue{glyphOffValue}
 {
     this->init();
 }
 
-CompositionManager::CompositionManager(const QColor& glyphOnColor, const qreal& glyphOffValue, const QString &filepathAudio, const QString &filepathLightData)
-    : QObject{}, glyphOnColor{glyphOnColor}, glyphOffValue{glyphOffValue}
+CompositionManager::CompositionManager(const QColor& glyphOnColor, const qreal& glyphOffValue, const QString &filepathAudio, const QString &filepathLightData, QObject *parent)
+    : QObject{parent}, glyphOnColor{glyphOnColor}, glyphOffValue{glyphOffValue}
 {
     this->init();
 
@@ -319,9 +319,6 @@ void CompositionManager::player_onMediaStatusChanged(QMediaPlayer::MediaStatus s
 
 CompositionManager::~CompositionManager()
 {
-    delete player;
-    delete audioOutput;
-
     delete colorValuesPhone1;
     delete colorOffValuesPhone1;
     delete colorValuesPhone2;
