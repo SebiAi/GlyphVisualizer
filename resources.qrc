@@ -21,4 +21,8 @@
         <file alias="led_c1_zones">assets/glyphs/phone2/led_c1_zones.svg</file>
         <file alias="led_d_zones">assets/glyphs/phone2/led_d_zones.svg</file>
     </qresource>
+    <qresource prefix="/icons">
+        <file alias="media_pause">assets/icons/media/media_pause.svg</file>
+        <file alias="media_play">assets/icons/media/media_play.svg</file>
+    </qresource>
 </RCC>

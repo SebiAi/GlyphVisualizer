@@ -68,6 +68,9 @@ private:
     SeekBarStyle *seekBarStyle;
     QLabel *lengthTimeLabel;
 
+    const QIcon iconMediaPlay = QIcon(":/icons/media_play"); // Doesn't work when static - probably because of the QPaintDevice inside which needs a QApplication instance
+    const QIcon iconMediaPause = QIcon(":/icons/media_pause");  // Doesn't work when static - probably because of the QPaintDevice inside which needs a QApplication instance
+
     Config *config = nullptr;
 
     UpdateChecker *updateChecker;

@@ -71,7 +71,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Play button
     this->playPauseButton = new QToolButton();
-    this->playPauseButton->setIcon(this->style()->standardIcon(QStyle::StandardPixmap::SP_MediaPlay));
+    this->playPauseButton->setIcon(this->iconMediaPlay);
     this->playPauseButton->setIconSize(QSize(40, 40));
     this->playPauseButton->setAutoRaise(true);
     playerControlsLayout->addWidget(this->playPauseButton);
@@ -424,13 +424,13 @@ void MainWindow::glyphWidget_onPlaybackStateChanged(QMediaPlayer::PlaybackState 
     switch (newState)
     {
     case QMediaPlayer::PlaybackState::PlayingState:
-        this->playPauseButton->setIcon(this->style()->standardIcon(QStyle::StandardPixmap::SP_MediaPause));
+        this->playPauseButton->setIcon(this->iconMediaPause);
         break;
     case QMediaPlayer::PlaybackState::StoppedState:
         // Stop the player to reset the position to 0
         this->glyphWidget->compositionManager->player->stop();
     case QMediaPlayer::PlaybackState::PausedState:
-        this->playPauseButton->setIcon(this->style()->standardIcon(QStyle::StandardPixmap::SP_MediaPlay));
+        this->playPauseButton->setIcon(this->iconMediaPlay);
         break;
     }
 }
