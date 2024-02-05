@@ -64,7 +64,7 @@
 # :grey_question: What is this? Why would I need that?
 This is a tool that is meant to be used in combination with my [custom-nothing-glyph-tools](https://github.com/SebiAi/custom-nothing-glyph-tools/) scripts (*GlyphTranslator*, *GlyphModder*). When you create a custom ringtone or notification tone with these scripts, you want to test them as often as possible. You can use this tool to visualize your composition and rapidly iterate on it - no file transfer to your phone is needed.
 
-And apart from that, you can use it if you want to view the composition without having access to a Nothing Phone.
+**And apart from that, you can use it if you want to view the composition without having access to a Nothing Phone.**
 
 ***
 
@@ -89,12 +89,33 @@ You can find the full roadmap [here](https://github.com/users/SebiAi/projects/5)
 
 <!-- TOC --><a name="heading-rocket-how-to-use"></a>
 # :rocket: How to use
-For now, you need to use the [custom-nothing-glyph-tools](https://github.com/SebiAi/custom-nothing-glyph-tools/) to extract the light data (csv/glypha) from the audio file:
-1. Download and extract the custom-nothing-glyph-tools: [Download](https://github.com/SebiAi/custom-nothing-glyph-tools/archive/refs/heads/main.zip)
-2. Install the requirements for custom-nothing-glyph-tools: [Tutorial](https://github.com/SebiAi/custom-nothing-glyph-tools#memo-requirements)
-3. Use the *GlyphModder* script to extract the light data: [Tutorial](https://github.com/SebiAi/custom-nothing-glyph-tools#read-from-an-audio-file)
+## Audio only (Recommended)
+Only the composition itself is needed:
+1. Open *GlyphVisualizer*
+2. Go to *File*->*Open Composition* OR press <kbd>CTRL</kbd> + <kbd>O</kbd>
+3. Make sure ***Audio file (ogg)*** is selected
+4. Select your composition and hit *Open*
 
-Now pass the original composition audio and the extracted light data to the software and it will play it back.
+## Audio file and Light data file 
+This is mode is for composition creators which use the [custom-nothing-glyph-tools](https://github.com/SebiAi/custom-nothing-glyph-tools/):
+
+1. Export your Audio from Audacity with the opus codec and change the extension from `.opus` to `.ogg` (Make sure that you show [File name extensions](https://www.howtogeek.com/205086/beginner-how-to-make-windows-show-file-extensions/) on Windows!)
+2. Export your Label file from Audacity
+3. Use the *GlyphTranslator.py* script to get the `.glypha` file
+4. Open *GlyphVisualizer*
+5. Go to *File*->*Open Composition* OR press <kbd>CTRL</kbd> + <kbd>O</kbd>
+6. Make sure ***Audio file (ogg) + Light data file (glypha)*** is selected
+7. Select your Audio, your `.glypha` file and hit *Open*
+
+> [!TIP]
+> If your Audio file and your `.glypha` file are
+> * in the same directory and
+> * have the same name
+>
+> then *GlyphVisualizer* will automatically fill in the path for the `.glypha` file.
+
+## Audio file and Audacity Label file
+This mode is **not implemented yet**. Please wait for an update.
 
 ***
 
@@ -130,11 +151,12 @@ Now pass the original composition audio and the extracted light data to the soft
 # :construction: Compilation
 <!-- TOC --><a name="heading-nut_and_bolt-build-dependencies"></a>
 ## :nut_and_bolt: Build Dependencies
-You can use the Qt Online Installer to install all the build dependencies.
-* [Qt 6.6.0](https://www.qt.io/download)
+You can use the Qt Online Installer to install Qt, Ninja, CMake and a C++ compiler
+* [Qt 6.6.0](https://www.qt.io/download-open-source#hs_cos_wrapper_widget_1567539130992)
 * [Ninja](https://ninja-build.org/)
 * [CMake](https://cmake.org/)
 * A compiler like g++ or MSVC depending on your OS
+* [TagLib 2.0](https://github.com/taglib/taglib/tree/v2.0) **without** ZLIB
 
 <!-- TOC --><a name="heading-hammer_and_pick-build"></a>
 ## :hammer_and_pick: Build
@@ -143,11 +165,16 @@ Clone the repo
 git clone https://github.com/SebiAi/GlyphVisualizer.git
 cd GlyphVisualizer
 ```
-Set `DCMAKE_PREFIX_PATH` to the Qt location and build the application
+Set `DCMAKE_PREFIX_PATH` to the Qt location and build the application (This command assumes that the libraries like *TagLib* are properly installed and can be found by CMake)
 ```bash
 cmake -G Ninja "-DCMAKE_PREFIX_PATH=/path/to/qt" "-DCMAKE_BUILD_TYPE:STRING=Release" -S . -B build && cmake --build build --config Release
 ```
 The built application is now in the `build` directory.
+
+> [!WARNING]
+> The built application might not open right out of the box because dynamically linked libraries are not available without proper setup.
+>
+> See [:package: Package up](#heading-package-package-up) to fix that.
 
 <!-- TOC --><a name="heading-package-package-up"></a>
 ## :package: Package up
@@ -158,6 +185,10 @@ Move the application to its own directory
 ```batch
 mkdir GlyphVisualizer-main_windows-x64-portable
 move build/GlyphVisualizer GlyphVisualizer-main_windows-x64-portable
+```
+Copy the built *TagLib* dll into the directory
+```batch
+copy C:\path\to\tag.dll GlyphVisualizer-main_windows-x64-portable
 ```
 Use [windeployqt](https://doc.qt.io/qt-6/windows-deployment.html)
 ```batch
@@ -188,6 +219,10 @@ You now have `GlyphVisualizer-main_linux-ubuntu-x64.AppImage`, which can be tran
 Navigate to the build folder
 ```bash
 cd build
+```
+Copy the built *TagLib* into the directory
+```batch
+copy /path/to/libtag.dylib GlyphVisualizer.app/Contents/Frameworks/
 ```
 Use [macdeployqt](https://doc.qt.io/qt-6/macos-deployment.html#the-mac-deployment-tool)
 ```bash

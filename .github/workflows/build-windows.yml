@@ -28,6 +28,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
+      # Build and install TagLib dependency
+      - name: Cache TagLib build
+        id: cache-taglib
+        uses: actions/cache@v4
+        with:
+          path: taglib
+          key: taglib-${{ runner.os }}-${{ hashFiles('.github/workflows/build-windows.yml') }}
+      - name: Build TagLib
+        if: ${{ steps.cache-taglib.outputs.cache-hit != 'true' }}
+        run: |
+          git clone --depth 1 --branch v2.0 https://github.com/taglib/taglib.git
+          cd taglib
+          git submodule update --init
+          cmake -G Ninja -DBUILD_SHARED_LIBS=ON -DWITH_ZLIB=OFF -DCMAKE_BUILD_TYPE=Release -S . -B build
+          cmake --build build --config Release
+          cd ..
+      - name: Install TagLib
+        run: cmake --install taglib/build
+      
       # Update project version
       - name: Cache Node modules
         uses: actions/cache@v4
@@ -54,7 +73,9 @@ jobs:
       # TODO: Use NSIS to create an installer (Extract files, silently install vc_redist.x64.exe, create start menu entry, etc.)
       - name: Package with windeployqt and zip
         run: |
-          mkdir GlyphVisualizer-$((Get-Content .version))_windows-x64-portable && mv build\GlyphVisualizer.exe GlyphVisualizer-$((Get-Content .version))_windows-x64-portable && windeployqt --release GlyphVisualizer-$((Get-Content .version))_windows-x64-portable\GlyphVisualizer.exe
+          mkdir GlyphVisualizer-$((Get-Content .version))_windows-x64-portable && mv build\GlyphVisualizer.exe GlyphVisualizer-$((Get-Content .version))_windows-x64-portable
+          copy taglib/build/taglib/Release/tag.dll GlyphVisualizer-$((Get-Content .version))_windows-x64-portable
+          windeployqt --release GlyphVisualizer-$((Get-Content .version))_windows-x64-portable\GlyphVisualizer.exe
           Compress-Archive -Path GlyphVisualizer-$((Get-Content .version))_windows-x64-portable -DestinationPath GlyphVisualizer-$((Get-Content .version))_windows-x64-portable.zip
       
       # Calculate the checksum

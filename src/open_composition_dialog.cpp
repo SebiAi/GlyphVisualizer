@@ -5,7 +5,7 @@ Q_LOGGING_CATEGORY(openCompositionDialog, "OpenCompositionDialog")
 Q_LOGGING_CATEGORY(openCompositionDialogVerbose, "OpenCompositionDialog.Verbose")
 
 const QList<OpenCompositionDialog::CompositionOpenMode> OpenCompositionDialog::openModes = {
-    CompositionOpenMode("Audio file (ogg)", "Audio file:", QString(), "Select Audio (ogg)", "", "*.ogg", "", false, false),
+    CompositionOpenMode("Audio file (ogg)", "Audio file:", QString(), "Select Audio (ogg)", "", "*.ogg", "", false, true),
     CompositionOpenMode("Audio file (ogg) + Light data file (glypha)", "Audio file:", "Light data file:", "Select Audio (ogg)", "Select Light data (glypha)", "*.ogg", "*.glypha", true, true),
     CompositionOpenMode("Audio file (ogg) + Audacity Labels file (txt)", "Audio file:", "Audacity Labels file:", "Select Audio (ogg)", "Select Audacity Labels (txt)", "*.ogg", "*.txt", true, false)
 };
@@ -209,16 +209,15 @@ void OpenCompositionDialog::comboBox_openMode_onCurrentIndexChanged(int index)
     this->buttonBox->button(QDialogButtonBox::Open)->setEnabled(true);
     setRow0Enabled(true);
     setRow1Enabled(this->openModes.at(index).needsRow1);
+
+    // Check if we should autocomplete the second row
+    QLineEdit *lineEditRow0 = qobject_cast<QLineEdit*>(this->row0Container[1]);
+    Q_ASSERT(lineEditRow0);
+    if (this->openModes.at(index).needsRow1)
+        autoCompleteHelper(lineEditRow0->text(), this->openModes.at(index).fileDialogFilter[1], this->row1Container[1]);
 }
 
-/**
- * @brief [Helper Function] Try to autocomplete the given QLineEdit by combining the filter with the source path.
- * @param filePathSource From which path it should autocomplete.
- * @param fileDialogFilterDestination The filter of the destination. Should contain an extension which will be added to the basename of filePathSource. E.g.: "*.txt"
- * @param lineEditDestination Where to write the autocompleted path to.
- * @return An empty string if the filePathSource is empty, if the autocompleted file does not exist. The path to the autocompleted file if it exists.
- */
-QString autoCompleteHelper(const QString& filePathSource, const QString& fileDialogFilterDestination, QWidget *lineEditDestination)
+QString OpenCompositionDialog::autoCompleteHelper(const QString& filePathSource, const QString& fileDialogFilterDestination, QWidget *lineEditDestination)
 {
     // Get the QLineEdit
     QLineEdit *lineEdit = qobject_cast<QLineEdit*>(lineEditDestination);

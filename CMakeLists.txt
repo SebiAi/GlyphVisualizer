@@ -13,6 +13,8 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Svg)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Multimedia)
+# Include TagLib
+find_package(TagLib 2.0.0 REQUIRED)
 
 set(PROJECT_SOURCES
         src/main.cpp
@@ -57,6 +59,8 @@ endif()
 target_link_libraries(GlyphVisualizer PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(GlyphVisualizer PRIVATE Qt${QT_VERSION_MAJOR}::Svg)
 target_link_libraries(GlyphVisualizer PRIVATE Qt${QT_VERSION_MAJOR}::Multimedia)
+# Include TagLib
+target_link_libraries(GlyphVisualizer PRIVATE TagLib::tag)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

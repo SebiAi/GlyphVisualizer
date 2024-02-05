@@ -207,29 +207,8 @@ void MainWindow::processOpenCompositionDialogAccepted(const OpenCompositionDialo
     // Load the composition
     try
     {
-        // Load the composition with the right function
-        switch (openMode)
-        {
-        case OpenCompositionDialog::CompositionOpenModeResult::AUDIO_ONLY:
-            qCInfo(mainWindow) << "Loading composition (Audio Only)";
-            throw std::logic_error(std::string("[Development Error] Audio only not implemented yet: '").append(__FUNCTION__).append("'!"));
-            break;
-        case OpenCompositionDialog::CompositionOpenModeResult::AUDIO_LIGHT_DATA:
-            qCInfo(mainWindow) << "Loading composition (Audio + Light data)";
-            this->glyphWidget->compositionManager->loadComposition(str0, str1);
-            break;
-        case OpenCompositionDialog::CompositionOpenModeResult::AUDIO_AUDACITY_LABELS:
-            qCInfo(mainWindow) << "Loading composition (Audio + Audacity Labels)";
-            throw std::logic_error(std::string("[Development Error] Audio only not implemented yet: '").append(__FUNCTION__).append("'!"));
-            break;
-        case OpenCompositionDialog::CompositionOpenModeResult::None:
-            throw std::logic_error(std::string("[Development Error] Ups... This should not happen. Please report this error to the developer. '").append(__FUNCTION__).append("'!"));
-            break;
-        default:
-            // This should never happen
-            throw std::logic_error(std::string("[Development Error] switch in function '").append(__FUNCTION__).append("' not updated!"));
-            return;
-        }
+        // Load the composition
+        this->glyphWidget->compositionManager->loadComposition(str0, str1, openMode);
     }
     catch (const std::invalid_argument& e)
     {
@@ -349,7 +328,8 @@ void MainWindow::aboutAction_onTriggered(bool checked)
     QMessageBox* mb = new QMessageBox(QMessageBox::Icon::NoIcon, "About GlyphVisualizer",
                                  QString("# GlyphVisualizer\n**A Glyph composition player written with the Qt6 framework in C++ that plays Glyph compositions from Nothing Phones.**\n***\nVersion: *").append(APPLICATION_VERSION)
                                      .append("*\n\nCommit Hash: ").append(QString("[*%1*](%2)").arg(APPLICATION_GIT_COMMIT_HASH, APPLICATION_GITHUB_COMMIT_URL))
-                                     .append("\n***\nCreator: *Sebastian Aigner aka. SebiAi*\n\nGitHub: ").append(QString("[*%1*](%2)").arg(APPLICATION_GITHUB_REPO_URL, APPLICATION_GITHUB_REPO_URL)),
+                                     .append("\n***\nCreator: *Sebastian Aigner aka. SebiAi*\n\nGitHub: ").append(QString("[*%1*](%2)").arg(APPLICATION_GITHUB_REPO_URL, APPLICATION_GITHUB_REPO_URL))
+                                     .append("\n***\nLibraries used:\n- *Qt6*\n- *TagLib*"),
                                  QMessageBox::StandardButton::Ok, this);
     mb->setTextFormat(Qt::TextFormat::MarkdownText);
     connect(mb, &QDialog::finished, mb, &QWidget::deleteLater); // Delete the dialog after it finished

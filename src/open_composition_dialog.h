@@ -140,6 +140,15 @@ private:
     void setComboBoxItemEnabled(const QComboBox* comboBox, int index, bool enabled);
 
     /**
+     * @brief [Helper Function] Try to autocomplete the given QLineEdit by combining the filter with the source path.
+     * @param filePathSource From which path it should autocomplete.
+     * @param fileDialogFilterDestination The filter of the destination. Should contain an extension which will be added to the basename of filePathSource. E.g.: "*.txt"
+     * @param lineEditDestination Where to write the autocompleted path to.
+     * @return An empty string if the filePathSource is empty, if the autocompleted file does not exist. The path to the autocompleted file if it exists.
+     */
+    QString autoCompleteHelper(const QString& filePathSource, const QString& fileDialogFilterDestination, QWidget *lineEditDestination);
+
+    /**
      * @brief Enable/Disable the whole audioFileRow in the QFormLayout
      * @param enabled true: Enable all the items; false: Disable all the items
      */

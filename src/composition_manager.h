@@ -13,6 +13,11 @@
 #include <QColor>
 #include <QList>
 #include "helper.h"
+#include "open_composition_dialog.h"
+
+// TagLib
+#include <taglib/fileref.h>
+#include <taglib/tpropertymap.h>
 
 // Logging
 #include <QLoggingCategory>
@@ -71,19 +76,20 @@ public:
      */
     explicit CompositionManager(const QColor& glyphOnColor, const qreal& glyphOffValue, QObject *parent = nullptr);
     /**
-     * @brief Load a Composition with a seperate ogg and light data file.
+     * @brief Load a Composition with audio and light data.
      * @param glyphOnColor The color of the Glyphs if they are 100% on.
      * @param glyphOffValue Value of the HSV glyphOnColor where the Glyphs are 0% on. Range 0 to 1.
      * @param filepathAudio Filepath to the audio ogg file.
-     * @param filepathLightData Filepath to the light data file.
+     * @param filepathLightData Filepath to the light data file. Can be empty if the mode reflects that.
+     * @param mode Which mode to use.
      * @param parent The parent object.
      *
      * @throws std::invalid_argument Audio file does not exist.
      * @throws std::invalid_argument Light data file does not exist.
      * @throws std::invalid_argument Can not open the light data file.
-     * @throws CompositionManager::InvalidLightDataContentException Invalid light data in light data file.
+     * @throws CompositionManager::InvalidLightDataContentException Invalid light data.
      */
-    explicit CompositionManager(const QColor& glyphOnColor, const qreal& glyphOffValue, const QString &filepathAudio, const QString &filepathLightData, QObject *parent = nullptr);
+    explicit CompositionManager(const QColor& glyphOnColor, const qreal& glyphOffValue, const QString &filepathAudio, const QString &filepathLightData, const OpenCompositionDialog::CompositionOpenModeResult& mode, QObject *parent = nullptr);
     ~CompositionManager();
 
     /**
@@ -107,16 +113,17 @@ public:
 
 
     /**
-     * @brief Load a composition with a seperate ogg and light data file.
+     * @brief Load a composition with audio and light data.
      * @param filepathAudio Filepath to the audio ogg file.
-     * @param filepathLightData Filepath to the light data file.
+     * @param filepathLightData Filepath to the light data file. Can be empty if the mode reflects that.
+     * @param mode Which mode to use.
      *
      * @throws std::invalid_argument Audio file does not exist.
      * @throws std::invalid_argument Light data file does not exist.
      * @throws std::invalid_argument Can not open the light data file.
-     * @throws CompositionManager::InvalidLightDataContentException Invalid light data in light data file.
+     * @throws CompositionManager::InvalidLightDataContentException Invalid light data.
      */
-    void loadComposition(const QString &filepathAudio, const QString &filepathLightData);
+    void loadComposition(const QString &filepathAudio, const QString &filepathLightData, const OpenCompositionDialog::CompositionOpenModeResult& mode);
     /**
      * @brief Skip to the provided percentage in the composition if one is loaded.
      * @param percentage The percentage. Range 0 to 1.
@@ -224,13 +231,23 @@ private:
      */
     void playerInit(const QString &filepathAudio);
     /**
-     * @brief Read the light data from the light data file and parse it.
+     * @brief Parse a single raw line of the light data.
+     * @param rawLightDataLine The light data line to parse.
+     * @param firstLine A bool indicating if this is the first line (will be modified).
+     * @param lineN The number of the line (will be modified).
+     * @param globalColorValues Where to append the parsed line to.
+     */
+    void parseRawLightDataLine(const QString &rawLightDataLine, bool &firstLine, qsizetype &lineN, QList<QList<QColor>> *&globalColorValues);
+    /**
+     * @brief Read the light data and parse it.
+     * @param filepathAudio Filepath to the audio ogg file.
      * @param filepathLightData The path to the audio file.
+     * @param mode Which mode to use.
      *
      * @throws std::invalid_argument Can not open the light data file.
      * @throws CompositionManager::InvalidLightDataContentException Invalid light data in light data file.
      */
-    void parseLightData(const QString &filepathLightData);
+    void parseLightData(const QString &filepathAudio, const QString &filepathLightData, const OpenCompositionDialog::CompositionOpenModeResult& mode);
 
     /**
      * @brief Get the color where the Glyph is on for a certain percent.
