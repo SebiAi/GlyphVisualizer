@@ -1,0 +1,79 @@
+name: Build for Linux
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  build-linux:
+    permissions:
+      contents: 'write'
+    runs-on: ubuntu-22.04
+    steps:
+      # Install build dependencies
+      - name: Update packages
+        run: sudo apt update
+      - name: Install Ninja
+        run: sudo apt install -y ninja-build
+      - name: Install Qt6.6.0
+        uses: jurplel/install-qt-action@v3
+        with:
+          # See https://ddalcino.github.io/aqt-list-server/
+          aqtversion: '==3.1.*'
+          version: '6.6.0'
+          modules: 'qtmultimedia'
+          cache: true
+          cache-key-prefix: install-qt-6.6.0-action-${{ runner.os }}
+      - name: Download linuxdeploy tools
+        run: |
+          wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
+          wget https://github.com/linuxdeploy/linuxdeploy-plugin-appimage/releases/download/continuous/linuxdeploy-plugin-appimage-x86_64.AppImage
+          chmod +x linuxdeploy-x86_64.AppImage
+          chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
+          chmod +x linuxdeploy-plugin-appimage-x86_64.AppImage
+          sudo apt install -y libfuse2 libxcb-cursor0
+      
+      # Checkout the repository
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      # Update project version
+      - name: Cache Node modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - name: Install semantic-release
+        run: npm install
+      - name: Update version
+        run: python deploy/update_version.py src/APPLICATION_INFO.h
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Save the version as an output
+        id: get_version
+        run: echo "version=$(cat .version)" >> "$GITHUB_OUTPUT"
+        shell: bash
+      
+      # Build the project
+      - name: Build
+        # No need to set CMAKE_PREFIX_PATH, because install-qt-action did the work for us
+        run: cmake -G Ninja "-DCMAKE_BUILD_TYPE:STRING=Release" -S . -B build && cmake --build build --config Release
+
+      # Package as AppImage
+      - name: Package AppImage
+        run: LDAI_VERSION="$(cat .version)" LDAI_OUTPUT="GlyphVisualizer-$(cat .version)_linux-ubuntu-x64.AppImage" LDAI_UPDATE_INFORMATION="gh-releases-zsync|SebiAi|GlyphVisualizer|latest|GlyphVisualizer*_linux-ubuntu-x64.AppImage.zsync" ./linuxdeploy-x86_64.AppImage --executable "build/GlyphVisualizer" --desktop-file "deploy/linux/AppImage/com.sebiai.GlyphVisualizer.desktop" --icon-file "deploy/linux/AppImage/GlyphVisualizer.png" --plugin qt --appdir AppDir --output appimage
+      
+      # Calculate the checksum
+      - name: Calculate Checksum
+        run: sha256sum -b GlyphVisualizer-$(cat .version)_linux-ubuntu-x64.AppImage | tee GlyphVisualizer-$(cat .version)_linux-ubuntu-x64.AppImage.sha256
+
+      # Upload the artifacts
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: GlyphVisualizer-${{ steps.get_version.outputs.version }}_linux-ubuntu-x64
+          path: |
+            GlyphVisualizer*_linux-ubuntu-x64.AppImage
+            GlyphVisualizer*_linux-ubuntu-x64.AppImage.zsync
+            GlyphVisualizer*_linux-ubuntu-x64.AppImage.sha256

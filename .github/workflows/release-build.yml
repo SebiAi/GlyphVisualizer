@@ -1,0 +1,43 @@
+name: Build and Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  call-build-all:
+    name: Build all platforms
+    permissions:
+      contents: 'write'
+    uses: ./.github/workflows/build-all.yml
+
+
+  create_release:
+    name: Create Release
+    needs: call-build-all
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      # Prepare
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Cache Node modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - name: Install semantic-release
+        run: npm install
+
+      # Get artifacts
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+
+      # Create release
+      - name: Create Release with semantic-release
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

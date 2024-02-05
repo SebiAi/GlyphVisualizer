@@ -1,0 +1,28 @@
+name: Build the project for all platforms
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  call-build-windows:
+    name: Build for Windows
+    permissions:
+      contents: 'write'
+    uses: ./.github/workflows/platform-builds/build-windows.yml
+  call-build-linux:
+    name: Build for Linux
+    permissions:
+      contents: 'write'
+    uses: ./.github/workflows/platform-builds/build-linux.yml
+  call-build-macos:
+    name: Build for MacOS
+    permissions:
+      contents: 'write'
+    uses: ./.github/workflows/platform-builds/build-macOS.yml
