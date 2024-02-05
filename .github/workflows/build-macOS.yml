@@ -72,8 +72,9 @@ jobs:
       # Package with macdeployqt
       - name: Package with macdeployqt
         run: |
+          mkdir -p build/GlyphVisualizer.app/Contents/Frameworks/
+          cp taglib/build/libtag.dylib build/GlyphVisualizer.app/Contents/Frameworks/
           cd build
-          cp taglib/build/libtag.dylib GlyphVisualizer.app/Contents/Frameworks/
           macdeployqt GlyphVisualizer.app -dmg
           cd ..
       - name: Move and rename executable
