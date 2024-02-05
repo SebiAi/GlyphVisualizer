@@ -15,14 +15,14 @@ jobs:
     name: Build for Windows
     permissions:
       contents: 'write'
-    uses: ./.github/workflows/platform-builds/build-windows.yml
+    uses: ./.github/workflows/build-windows.yml
   call-build-linux:
     name: Build for Linux
     permissions:
       contents: 'write'
-    uses: ./.github/workflows/platform-builds/build-linux.yml
+    uses: ./.github/workflows/build-linux.yml
   call-build-macos:
     name: Build for MacOS
     permissions:
       contents: 'write'
-    uses: ./.github/workflows/platform-builds/build-macOS.yml
+    uses: ./.github/workflows/build-macOS.yml
