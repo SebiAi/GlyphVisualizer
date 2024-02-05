@@ -74,6 +74,8 @@ jobs:
       - name: Package with windeployqt and zip
         run: |
           mkdir GlyphVisualizer-$((Get-Content .version))_windows-x64-portable && mv build\GlyphVisualizer.exe GlyphVisualizer-$((Get-Content .version))_windows-x64-portable
+          pwd
+          tree
           copy taglib/build/taglib/Release/tag.dll GlyphVisualizer-$((Get-Content .version))_windows-x64-portable
           windeployqt --release GlyphVisualizer-$((Get-Content .version))_windows-x64-portable\GlyphVisualizer.exe
           Compress-Archive -Path GlyphVisualizer-$((Get-Content .version))_windows-x64-portable -DestinationPath GlyphVisualizer-$((Get-Content .version))_windows-x64-portable.zip
