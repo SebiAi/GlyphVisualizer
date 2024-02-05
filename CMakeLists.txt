@@ -1,6 +1,17 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(GlyphVisualizer VERSION 0.1 LANGUAGES CXX)
+# Set the version of the project - the .version file is created when the project is built with the GitHub workflow
+if (EXISTS ${CMAKE_CURRENT_LIST_DIR}/.version)
+    file(READ ${CMAKE_CURRENT_LIST_DIR}/.version VERSION) # Read the version from the file
+    string(STRIP ${VERSION} VERSION) # Remove leading and trailing whitespaces
+    string(SUBSTRING ${VERSION} 1 -1 VERSION) # Remove the first character which is 'v'
+else()
+    set(VERSION "0.0.0")
+endif()
+
+message(STATUS "Version: ${VERSION}")
+
+project(GlyphVisualizer VERSION ${VERSION} LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
