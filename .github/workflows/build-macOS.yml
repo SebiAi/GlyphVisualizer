@@ -73,6 +73,8 @@ jobs:
       - name: Package with macdeployqt
         run: |
           mkdir -p build/GlyphVisualizer.app/Contents/Frameworks/
+          brew install tree
+          tree
           cp taglib/build/libtag.dylib build/GlyphVisualizer.app/Contents/Frameworks/
           cd build
           macdeployqt GlyphVisualizer.app -dmg
