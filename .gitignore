@@ -78,3 +78,6 @@ CMakeLists.txt.user*
 *.glypha
 *.glyphc1
 *.ogg
+linuxdeploy-*
+/AppDir/
+build/
