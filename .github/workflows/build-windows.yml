@@ -5,7 +5,7 @@ on:
   workflow_call:
 
 jobs:
-  build-linux:
+  build-windows:
     permissions:
       contents: 'write'
     runs-on: windows-2022

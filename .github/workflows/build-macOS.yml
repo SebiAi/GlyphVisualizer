@@ -5,7 +5,7 @@ on:
   workflow_call:
 
 jobs:
-  build-linux:
+  build-macOS:
     permissions:
       contents: 'write'
     runs-on: macos-12
