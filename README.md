@@ -220,9 +220,10 @@ Navigate to the build folder
 ```bash
 cd build
 ```
-Copy the built *TagLib* into the directory
+Create the directory and copy the built *TagLib* into the directory
 ```batch
-copy /path/to/libtag.dylib GlyphVisualizer.app/Contents/Frameworks/
+mkdir GlyphVisualizer.app/Contents/Frameworks/
+copy /path/to/libtag.2.dylib GlyphVisualizer.app/Contents/Frameworks/
 ```
 Use [macdeployqt](https://doc.qt.io/qt-6/macos-deployment.html#the-mac-deployment-tool)
 ```bash
