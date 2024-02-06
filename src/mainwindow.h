@@ -14,6 +14,9 @@
 #include <QSettings>
 #include <QDateTime>
 #include <QShowEvent>
+#include <QInputDialog>
+#include <QRegularExpression>
+#include <QRegularExpressionMatch>
 
 #include "APPLICATION_INFO.h"
 #include "glyph_widget.h"
@@ -21,6 +24,7 @@
 #include "seekbar_style.h"
 #include "config.h"
 #include "update_checker.h"
+#include "glyph_web_socket_client.h"
 
 // Logging
 #include <QLoggingCategory>
@@ -57,6 +61,8 @@ private:
     QMenu *helpMenu;
     QAction *aboutAction;
     QAction *checkForUpdateAction;
+    QMenu *extrasMenu;
+    QAction *connectDeviceAction;
 
     OpenCompositionDialog *openCompositionDialog;
     bool playerWasPlayingBefore = false;
@@ -74,6 +80,14 @@ private:
     Config *config = nullptr;
 
     UpdateChecker *updateChecker;
+
+    GlyphWebSocketClient *wsClient;
+
+    /**
+     * @brief Every ip:port should match this simple regex: "/^(?:\b25[0-5]|\b2[0-4][0-9]|\b[01]?[0-9][0-9]?)(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}:(\d+)$/g", see here: https://ihateregex.io/expr/ip/
+     * @brief Extra validation for the port is required! (0-65535)
+     */
+    static const QRegularExpression ipPortRegex;
 
     /**
      * @brief Loads the composition with the glyphWidget. Will be executed after the OpenCompositionDialog closes with the Accept return value.
@@ -111,6 +125,11 @@ public slots:
      * @param checked If the action is checked.
      */
     void aboutAction_onTriggered(bool checked);
+    /**
+     * @brief Will be called by the void QAction::triggered(bool checked) signal.
+     * @param checked If the action is checked.
+     */
+    void connectDeviceAction_onTriggered(bool checked);
     /**
      * @brief Will be called by the void OpenCompositionDialog::finished(int result) signal.
      * @param result The result code.
@@ -159,5 +178,18 @@ public slots:
      * @brief Will be called by the void UpdateChecker::noUpdateAvailable() signal.
      */
     void updateChecker_onNoUpdateAvailable();
+    /**
+     * @brief Will be called by the void GlyphWebSocketClient::connected() signal.
+     */
+    void wsClient_onConnected();
+    /**
+     * @brief Will be called by the void GlyphWebSocketClient::disconnected() signal.
+     */
+    void wsClient_onDisconnected();
+    /**
+     * @brief Will be called by the void GlyphWebSocketClient::errorOccurred(QAbstractSocket::SocketError) signal.
+     * @param error The error which occurred.
+     */
+    void wsClient_onErrorOccurred(QAbstractSocket::SocketError error);
 };
 #endif // MAINWINDOW_H

@@ -24,6 +24,7 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Svg)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Multimedia)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets WebSockets)
 # Include TagLib
 find_package(TagLib 2.0.0 REQUIRED)
 
@@ -48,6 +49,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/APPLICATION_INFO.h
         src/update_checker.h src/update_checker.cpp
         src/config.h src/config.cpp
+        src/glyph_web_socket_client.h src/glyph_web_socket_client.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET GlyphVisualizer APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -70,6 +72,7 @@ endif()
 target_link_libraries(GlyphVisualizer PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(GlyphVisualizer PRIVATE Qt${QT_VERSION_MAJOR}::Svg)
 target_link_libraries(GlyphVisualizer PRIVATE Qt${QT_VERSION_MAJOR}::Multimedia)
+target_link_libraries(GlyphVisualizer PRIVATE Qt${QT_VERSION_MAJOR}::WebSockets)
 # Include TagLib
 target_link_libraries(GlyphVisualizer PRIVATE TagLib::tag)
 

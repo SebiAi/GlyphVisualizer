@@ -19,7 +19,7 @@ jobs:
           # See https://ddalcino.github.io/aqt-list-server/
           aqtversion: '==3.1.*'
           version: '6.6.0'
-          modules: 'qtmultimedia'
+          modules: 'qtmultimedia qtwebsockets'
           cache: true
           cache-key-prefix: install-qt-6.6.0-action-${{ runner.os }}
       

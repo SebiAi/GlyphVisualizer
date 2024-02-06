@@ -105,6 +105,13 @@ public:
      */
     const QList<QColor>* const getPhoneColorValues(const qint64& position, const CompositionManager::PhoneModel& phone) const;
     /**
+     * @brief Get the string line of the phone for the position.
+     * @param position The audio time in milliseconds.
+     * @param phone For which phone.
+     * @return A string concat with ',' representing the glyph data.
+     */
+    const QString& getPhoneStringLine(const qint64& position, const CompositionManager::PhoneModel& phone) const;
+    /**
      * @brief Get the string representation of the phone.
      * @param phone For which phone
      * @return A string representation of the PhoneModel enum.
@@ -224,6 +231,22 @@ private:
      * @brief Holds the color values for each of the Phone (2) Zones. Inner list has a length of numberOfZones[(int)GlyphMode::Phone2] when set.
      */
     QList<QList<QColor>> *colorValuesPhone2;
+    /**
+     * @brief Holds the processed lines from the input. Is as big as the size of colorValuesPhone1.
+     */
+    QList<QString> *stringLinesPhone1;
+    /**
+     * @brief Holds the default stringLine off values for Phone (1).
+     */
+    QString stringLinesOffValuesPhone1;
+    /**
+     * @brief Holds the processed lines from the input. Is as big as the size of colorValuesPhone2.
+     */
+    QList<QString> *stringLinesPhone2;
+    /**
+     * @brief Holds the default stringLine off values for Phone (2).
+     */
+    QString stringLinesOffValuesPhone2;
 
     /**
      * @brief Initialize the media player. Does NOT check file type, compatibility or extension - YOLO!
@@ -236,8 +259,10 @@ private:
      * @param firstLine A bool indicating if this is the first line (will be modified).
      * @param lineN The number of the line (will be modified).
      * @param globalColorValues Where to append the parsed line to.
+     * @param globalStringLines Where to append the parsed string line to.
+     * @param globalRawData Where to append the parsed raw data line to.
      */
-    void parseRawLightDataLine(const QString &rawLightDataLine, bool &firstLine, qsizetype &lineN, QList<QList<QColor>> *&globalColorValues);
+    void parseRawLightDataLine(const QString &rawLightDataLine, bool &firstLine, qsizetype &lineN, QList<QList<QColor>> *&globalColorValues, QList<QString> *&globalStringLines, QList<QList<uint>> &globalRawData);
     /**
      * @brief Read the light data and parse it.
      * @param filepathAudio Filepath to the audio ogg file.

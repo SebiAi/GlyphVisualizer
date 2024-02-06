@@ -7,6 +7,10 @@ Q_LOGGING_CATEGORY(mainWindowVerbose, "MainWindow.Verbose")
 
 // TODO: Set the application icon: https://doc.qt.io/qt-6/appicon.html
 
+
+const QRegularExpression MainWindow::ipPortRegex = QRegularExpression("^(?:\\b25[0-5]|\\b2[0-4][0-9]|\\b[01]?[0-9][0-9]?)(?:\\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}:(\\d+)$");
+
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -27,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Add entrys to MenuBar
     this->fileMenu = ui->menubar->addMenu("&File");
+    this->extrasMenu = ui->menubar->addMenu("&Extras");
     this->helpMenu = ui->menubar->addMenu("&Help");
 
     // Add 'Open File' action to the fileMenu
@@ -34,6 +39,11 @@ MainWindow::MainWindow(QWidget *parent)
     this->openFileAction->setShortcut(QKeySequence("Ctrl+O"));
     this->fileMenu->addAction(this->openFileAction);
     connect(this->openFileAction, SIGNAL(triggered(bool)), this, SLOT(openFileAction_onTriggered(bool)));
+
+    // Add 'Connect device' action to extrasMenu
+    this->connectDeviceAction = new QAction("Connect device", this->extrasMenu);
+    this->extrasMenu->addAction(this->connectDeviceAction);
+    connect(this->connectDeviceAction, SIGNAL(triggered(bool)), this, SLOT(connectDeviceAction_onTriggered(bool)));
 
     // Add 'Check for Updates...' action to helpMenu
     this->checkForUpdateAction = new QAction("Check for Updates...", this->helpMenu);
@@ -43,6 +53,12 @@ MainWindow::MainWindow(QWidget *parent)
     this->aboutAction = new QAction("About GlyphVisualizer", this->helpMenu);
     this->helpMenu->addAction(this->aboutAction);
     connect(this->aboutAction, SIGNAL(triggered(bool)), this, SLOT(aboutAction_onTriggered(bool)));
+
+    // Init WebSocket
+    this->wsClient = new GlyphWebSocketClient(this);
+    connect(this->wsClient, SIGNAL(connected()), this, SLOT(wsClient_onConnected()));
+    connect(this->wsClient, SIGNAL(disconnected()), this, SLOT(wsClient_onDisconnected()));
+    connect(this->wsClient, SIGNAL(errorOccurred(QAbstractSocket::SocketError)), this, SLOT(wsClient_onErrorOccurred(QAbstractSocket::SocketError)));
 
     // Create OpenCompositionDialog
     this->openCompositionDialog = new OpenCompositionDialog(this);
@@ -336,6 +352,53 @@ void MainWindow::aboutAction_onTriggered(bool checked)
     mb->open();
 }
 
+void MainWindow::connectDeviceAction_onTriggered(bool checked)
+{
+    qCInfo(mainWindowVerbose) << "Connect device action triggered";
+
+    QString text;
+    while (true)
+    {
+        bool ok = false;
+        text = QInputDialog::getText(this, "Connect device",
+                                             "Enter the devices IP-Address and Port which\nare displayed at the bottom of the Android app like this:\n\"IP:Port\"\n\nExample:\"192.168.0.123:4777\"",
+                                             QLineEdit::EchoMode::Normal,
+                                             text,
+                                             &ok);
+
+        // Check dialog result
+        if (!ok)
+            return;
+
+        // Check if the ip/port is valid
+        QRegularExpressionMatch match = this->ipPortRegex.match(text);
+        if (!match.hasMatch())
+        {
+            qCWarning(mainWindowVerbose) << "Invalid IP-Address input";
+            QMessageBox::critical(this, "Invalid Input", "You've provided an invalid input or IP-Address.\nPlease input the IP and Port of the device like this: \"IP:Port\"");
+            continue;
+        }
+        int port = match.captured(1).toInt(&ok);
+        if (port < 0 || port > 65535)
+        {
+            qCWarning(mainWindowVerbose) << "Invalid port";
+            QMessageBox::critical(this, "Invalid Port", "You've provided an invalid Port which must be between 0-65535.\nPlease input the IP and Port of the device like this: \"IP:Port\"");
+            continue;
+        }
+        break;
+    }
+
+    // Connect to the device
+    qCInfo(mainWindow) << "Opening a connection to device:" << text;
+    this->wsClient->open(QUrl(QString("ws://%1").arg(text)));
+
+    // Disable action while trying to connect
+    this->connectDeviceAction->setEnabled(false);
+
+    // Set the status bar message
+    this->ui->statusbar->showMessage("Connecting to device...");
+}
+
 void MainWindow::openCompositionDialog_onFinished(int result)
 {
     qCInfo(mainWindowVerbose) << "OpenCompositionDialog finished with result code:" << result;
@@ -388,6 +451,14 @@ void MainWindow::glyphWidget_onPositionChanged(qint64 position)
     // Change the seekBar position when the slider is not beeing held down
     if (!this->seekBar->isSliderDown())
         this->seekBar->setValue(position);
+
+    // Send the current light data to the WebSocket
+    CompositionManager::PhoneModel phone = this->wsClient->getCurrentlyConnectedModel();
+    if (!this->wsClient->isValid() || phone == CompositionManager::PhoneModel::None)
+        return;
+    if (phone == CompositionManager::PhoneModel::Phone1 && this->glyphWidget->compositionManager->getGlyphMode() != CompositionManager::GlyphMode::Compatibility)
+        return;
+    this->wsClient->sendTextMessage(this->glyphWidget->compositionManager->getPhoneStringLine(position, phone));
 }
 
 void MainWindow::seekBar_onSliderReleased()
@@ -465,6 +536,57 @@ void MainWindow::updateChecker_onNoUpdateAvailable()
                                  QString("## No update available\n\n**You are on the latest version of this software!**"),
                                  QMessageBox::StandardButton::Ok, this);
     mb->setTextFormat(Qt::TextFormat::MarkdownText);
+    connect(mb, &QDialog::finished, mb, &QWidget::deleteLater); // Delete the dialog after it finished
+    mb->open();
+}
+
+void MainWindow::wsClient_onConnected()
+{
+    qCInfo(mainWindow) << "Connected successfully to device";
+
+    // Set status bar message
+    this->ui->statusbar->showMessage(QString("Connected to device (%1)").arg(this->wsClient->peerAddress().toString()));
+
+    // Display success dialog
+    QMessageBox* mb = new QMessageBox(QMessageBox::Icon::Information,
+                                 "Successfully connected",
+                                 QString("The connection to the device is established."),
+                                 QMessageBox::StandardButton::Ok, this);
+    connect(mb, &QDialog::finished, mb, &QWidget::deleteLater); // Delete the dialog after it finished
+    mb->open();
+}
+
+void MainWindow::wsClient_onDisconnected()
+{
+    qCInfo(mainWindow) << "Connection lost to device";
+
+    // Enable action after we disconnected from the server
+    this->connectDeviceAction->setEnabled(true);
+
+    // Set status bar message
+    this->ui->statusbar->showMessage("Connection lost to device", 5000);
+
+    // Display disconnected dialog
+    QMessageBox* mb = new QMessageBox(QMessageBox::Icon::Information,
+                                      "Device disconnected",
+                                      QString("The connection to the device was lost."),
+                                      QMessageBox::StandardButton::Ok, this);
+    connect(mb, &QDialog::finished, mb, &QWidget::deleteLater); // Delete the dialog after it finished
+    mb->open();
+}
+
+void MainWindow::wsClient_onErrorOccurred(QAbstractSocket::SocketError error)
+{
+    qCInfo(mainWindow).nospace() << "Connection failed: " << error << ", Error string:" << this->wsClient->errorString();
+
+    // Set status bar message
+    this->ui->statusbar->showMessage("Connection failed!", 5000);
+
+    // Display error dialog
+    QMessageBox* mb = new QMessageBox(QMessageBox::Icon::Critical,
+                                      "Error occurred",
+                                      QString("An error occurred when trying to connect to the device:\n%1").arg(this->wsClient->errorString()),
+                                      QMessageBox::StandardButton::Ok, this);
     connect(mb, &QDialog::finished, mb, &QWidget::deleteLater); // Delete the dialog after it finished
     mb->open();
 }

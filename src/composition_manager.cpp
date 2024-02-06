@@ -18,15 +18,23 @@ inline void CompositionManager::init()
     colorOffValuesPhone1 = new QList<QColor>();
     colorOffValuesPhone1->reserve((int)GlyphMode::Compatibility);
     for (quint8 i = 0; i < numberOfZones[(int)GlyphMode::Compatibility]; i++)
+    {
         colorOffValuesPhone1->append(this->getGlyphColor(0));
+        this->stringLinesOffValuesPhone1.append(this->stringLinesOffValuesPhone1.isEmpty() ? "" : ",").append("0");
+    }
     colorOffValuesPhone2 = new QList<QColor>();
     colorOffValuesPhone2->reserve(numberOfZones[(int)GlyphMode::Phone2]);
     for (quint8 i = 0; i < numberOfZones[(int)GlyphMode::Phone2]; i++)
+    {
         colorOffValuesPhone2->append(this->getGlyphColor(0));
+        this->stringLinesOffValuesPhone2.append(this->stringLinesOffValuesPhone2.isEmpty() ? "" : ",").append("0");
+    }
 
     // Init lists
     colorValuesPhone1 = new QList<QList<QColor>>();
     colorValuesPhone2 = new QList<QList<QColor>>();
+    stringLinesPhone1 = new QList<QString>();
+    stringLinesPhone2 = new QList<QString>();
 
     // Create player
     this->player = new QMediaPlayer(this);
@@ -102,6 +110,39 @@ const QList<QColor>* const CompositionManager::getPhoneColorValues(const qint64&
     }
 
     return &colorValues->at(index);
+}
+const QString& CompositionManager::getPhoneStringLine(const qint64& position, const CompositionManager::PhoneModel& phone) const
+{
+    const qsizetype index = getIndexFromPosition(position);
+
+    QList<QString>* stringLineValues = nullptr;
+    const QString* stringLineOffValues = nullptr;
+    switch (phone)
+    {
+    case CompositionManager::PhoneModel::Phone1:
+        stringLineValues = this->stringLinesPhone1;
+        stringLineOffValues = &this->stringLinesOffValuesPhone1;
+        break;
+    case CompositionManager::PhoneModel::Phone2:
+        stringLineValues = this->stringLinesPhone2;
+        stringLineOffValues = &this->stringLinesOffValuesPhone2;
+        break;
+    case CompositionManager::PhoneModel::None:
+        // This should never happen
+        throw std::logic_error(std::string("[Development Error] Phone model None in function '").append(__FUNCTION__).append("' - can't be None!"));
+    default:
+        // This should never happen
+        throw std::logic_error(std::string("[Development Error] switch in function '").append(__FUNCTION__).append("' not updated!"));
+        //return;
+    }
+
+    if (index >= stringLineValues->length())
+    {
+        // Overrun => just return off state
+        return *stringLineOffValues;
+    }
+
+    return stringLineValues->at(index);
 }
 
 QString CompositionManager::getPhoneModelString(const CompositionManager::PhoneModel& phone)
@@ -189,7 +230,7 @@ void CompositionManager::playerInit(const QString &filepathAudio)
     this->player->setSource(QUrl::fromLocalFile(filepathAudio));
 }
 
-void CompositionManager::parseRawLightDataLine(const QString &rawLightDataLine, bool &firstLine, qsizetype &lineN, QList<QList<QColor>> *&globalColorValues)
+void CompositionManager::parseRawLightDataLine(const QString &rawLightDataLine, bool &firstLine, qsizetype &lineN, QList<QList<QColor>> *&globalColorValues, QList<QString> *&globalStringLines, QList<QList<uint>> &globalRawData)
 {
     // Trim line and remove prepend ','
     QString line = rawLightDataLine.trimmed();
@@ -219,9 +260,11 @@ void CompositionManager::parseRawLightDataLine(const QString &rawLightDataLine, 
             return;
         case GlyphMode::Compatibility:
             globalColorValues = colorValuesPhone1;
+            globalStringLines = stringLinesPhone1;
             break;
         case GlyphMode::Phone2:
             globalColorValues = colorValuesPhone2;
+            globalStringLines = stringLinesPhone2;
             break;
         default:
             // This should never happen
@@ -234,7 +277,9 @@ void CompositionManager::parseRawLightDataLine(const QString &rawLightDataLine, 
         firstLine = false;
     }
 
+    QList<uint> rawData;
     QList<QColor> colorValues;
+    QString stringLine;
     bool conversionSuccess;
     for (const QString& s: line.split(','))
     {
@@ -246,6 +291,12 @@ void CompositionManager::parseRawLightDataLine(const QString &rawLightDataLine, 
 
         // Calculate color
         colorValues.append(this->getGlyphColor(std::min(number, (uint)COMPOSITION_MANAGER_MAX_LIGHT_VALUE) / (qreal)COMPOSITION_MANAGER_MAX_LIGHT_VALUE));
+
+        // Create string
+        stringLine.append(stringLine.isEmpty() ? "" : ",").append(QString::number(number));
+
+        // Save raw data for later
+        rawData.append(number);
     }
     // Check the number of columns in the light data
     if (colorValues.length() != numberOfZones[(int)currentGlyphMode])
@@ -253,18 +304,23 @@ void CompositionManager::parseRawLightDataLine(const QString &rawLightDataLine, 
 
     // Add current line to the data
     globalColorValues->append(colorValues);
+    globalStringLines->append(stringLine);
+    globalRawData.append(rawData);
 
     if (currentGlyphMode == GlyphMode::Compatibility)
     {
         // Convert the Phone (1) light data to Phone (2) light data
         QList<QColor> tmpColor(numberOfZones[(int)GlyphMode::Phone2]);
+        QString tmpStringLine;
         for (qsizetype i = 0; i < numberOfZones[(int)GlyphMode::Phone2]; i++)
         {
             tmpColor[i] = colorValues.at(zone5To33LookupTable[i]);
+            tmpStringLine.append(tmpStringLine.isEmpty() ? "" : ",").append(QString::number(rawData.at(zone5To33LookupTable[i])));
         }
 
         // Add current line to the data
         colorValuesPhone2->append(tmpColor);
+        stringLinesPhone2->append(tmpStringLine);
     }
 
     lineN++;
@@ -275,6 +331,8 @@ void CompositionManager::parseLightData(const QString &filepathAudio, const QStr
     bool firstLine = true;
     qsizetype lineN = 1;
     QList<QList<QColor>> *globalColorValues = nullptr;
+    QList<QString> *globalStringLines = nullptr;
+    QList<QList<uint>> globalRawData;
     // Audio only
     TagLib::FileRef tagLibFile;
     TagLib::PropertyMap tags;
@@ -318,11 +376,13 @@ void CompositionManager::parseLightData(const QString &filepathAudio, const QStr
         // Clear current color value list
         colorValuesPhone1->clear();
         colorValuesPhone2->clear();
+        stringLinesPhone1->clear();
+        stringLinesPhone2->clear();
 
         // Parse the data
         for (const QString &line : decodedAuthor.split("\n"))
         {
-            this->parseRawLightDataLine(line, firstLine, lineN, globalColorValues);
+            this->parseRawLightDataLine(line, firstLine, lineN, globalColorValues, globalStringLines, globalRawData);
         }
 
         break;
@@ -339,6 +399,8 @@ void CompositionManager::parseLightData(const QString &filepathAudio, const QStr
         // Clear current color value list
         colorValuesPhone1->clear();
         colorValuesPhone2->clear();
+        stringLinesPhone1->clear();
+        stringLinesPhone2->clear();
 
         // Read all lines
         while (!file.atEnd())
@@ -354,7 +416,7 @@ void CompositionManager::parseLightData(const QString &filepathAudio, const QStr
             }
 
             // Parse the line
-            this->parseRawLightDataLine(QString(buf), firstLine, lineN, globalColorValues);
+            this->parseRawLightDataLine(QString(buf), firstLine, lineN, globalColorValues, globalStringLines, globalRawData);
         }
         break;
     case OpenCompositionDialog::CompositionOpenModeResult::AUDIO_AUDACITY_LABELS:
@@ -423,6 +485,8 @@ CompositionManager::~CompositionManager()
     delete colorOffValuesPhone1;
     delete colorValuesPhone2;
     delete colorOffValuesPhone2;
+    delete stringLinesPhone1;
+    delete stringLinesPhone2;
 
     delete elapsedTimer;
 }
