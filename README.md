@@ -97,7 +97,7 @@ Only the composition itself is needed:
 4. Select your composition and hit *Open*
 
 ## Audio file and Light data file 
-This is mode is for composition creators which use the [custom-nothing-glyph-tools](https://github.com/SebiAi/custom-nothing-glyph-tools/):
+This mode is for composition creators which use the [custom-nothing-glyph-tools](https://github.com/SebiAi/custom-nothing-glyph-tools/):
 
 1. Export your Audio from Audacity with the opus codec and change the extension from `.opus` to `.ogg` (Make sure that you show [File name extensions](https://www.howtogeek.com/205086/beginner-how-to-make-windows-show-file-extensions/) on Windows!)
 2. Export your Label file from Audacity
