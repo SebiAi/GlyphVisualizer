@@ -19,7 +19,10 @@ def main() -> int:
     # Extract the version from the output
     result = re.findall(r'^\[\d{1,2}:\d{1,2}:\d{1,2} (?:A|P)M\] \[semantic-release\] . .  (?:There is no previous release, t|T)he next release version is (\d+\.\d+\.\d+)$', output, re.MULTILINE)
     if len(result) == 0:
-        print("Could not find version in semantic-release output => no version update")
+        print("Could not find new version in semantic-release output, trying to extract the old version instead")
+        result = re.findall(r'^\[\d{1,2}:\d{1,2}:\d{1,2} (?:A|P)M\] \[semantic-release\] . .  Found git tag v(\d+\.\d+\.\d+) associated with version \d+\.\d+\.\d+ on branch .+$', output, re.MULTILINE)
+        if (len(result)) == 0:
+            print("Could not find the old version => Using default")
     if len(result) > 1:
         print("Error: Found multiple versions in semantic-release output")
         return 1
