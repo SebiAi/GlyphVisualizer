@@ -22,6 +22,10 @@ jobs:
           modules: 'qtmultimedia qtwebsockets'
           cache: true
           cache-key-prefix: install-qt-6.6.0-action-${{ runner.os }}
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
       
       # Checkout the repository
       - name: Checkout
