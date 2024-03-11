@@ -23,6 +23,10 @@ jobs:
       - name: Setup MSVC 2022 for C++ (Windows)
         # See supported versions here: https://doc.qt.io/qt-6/windows.html
         uses: ilammy/msvc-dev-cmd@v1
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
       
       # Checkout the repository
       - name: Checkout
