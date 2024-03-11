@@ -26,7 +26,7 @@ def main() -> int:
     if len(result) > 1:
         print("Error: Found multiple versions in semantic-release output")
         return 1
-    version = "v" + str(result[0]) if len(result) > 0 else "VERSION_HERE"
+    version = "v" + str(result[0]) if len(result) > 0 else "0.0.0"
 
     # Write the version to a file
     with open(".version", 'w') as f:
