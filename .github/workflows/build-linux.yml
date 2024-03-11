@@ -26,6 +26,10 @@ jobs:
           cache-key-prefix: install-qt-6.6.0-action-${{ runner.os }}
       - name: Install dependencies for linuxdeploy tools
         run: sudo apt install -y libfuse2 libxcb-cursor0
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
       
       # Checkout the repository
       - name: Checkout
