@@ -66,6 +66,9 @@ This is a tool that is meant to be used in combination with my [custom-nothing-g
 
 **And apart from that, you can use it if you want to view the composition without having access to a Nothing Phone.**
 
+> [!CAUTION]
+> The *GlyphVisualizer* version 1.1.0 and below does NOT work properly with the new *v1-Glyph Format*!
+
 ***
 
 <!-- TOC --><a name="heading-pushpin-disclaimer"></a>
