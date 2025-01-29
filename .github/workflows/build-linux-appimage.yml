@@ -12,7 +12,7 @@ jobs:
   build:
     name: Build Linux Appimage
     runs-on: ubuntu-latest
-    container: ghcr.io/sebiai/glyphvisualizer-appimage-qt6-build-container:latest
+    container: ghcr.io/sebiai/glyphvisualizer-linux-appimage-qt6-build-container:latest
     steps:
       - uses: actions/checkout@v4
         with:

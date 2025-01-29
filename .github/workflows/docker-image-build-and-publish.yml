@@ -37,4 +37,4 @@ jobs:
           context: .
           file: devscripts/Dockerfile
           push: true
-          tags: ghcr.io/sebiai/glyphvisualizer-appimage-qt6-build-container:latest
+          tags: ghcr.io/sebiai/glyphvisualizer-linux-appimage-qt6-build-container:latest
