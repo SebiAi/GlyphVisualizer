@@ -1,0 +1,24 @@
+name: Build the project for all supported platforms and in all supported formats
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  push:
+    branches:
+      - main
+    paths-ignore: devscripts/Dockerfile
+  pull_request:
+    branches:
+      - main
+    paths-ignore: devscripts/Dockerfile
+
+jobs:
+  call-build-windows:
+    name: Build for Windows
+    uses: ./.github/workflows/build-windows-portable.yml
+  call-build-linux:
+    name: Build for Linux
+    uses: ./.github/workflows/build-linux-appimage.yml
+  call-build-macos:
+    name: Build for MacOS
+    uses: ./.github/workflows/build-macOS-dmg.yml

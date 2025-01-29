@@ -1,0 +1,65 @@
+name: Build MacOS DMG
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  build:
+    name: Build MacOS DMG
+    runs-on: macos-13
+    steps:
+      # Install build dependencies
+      - name: Install Qt6.8.1
+        uses: jurplel/install-qt-action@v4
+        with:
+          # See https://ddalcino.github.io/aqt-list-server/
+          aqtversion: '==3.1.*'
+          version: '6.8.1'
+          modules: 'qtmultimedia'
+          cache: true
+          cache-key-prefix: install-qt-6.8.1-action-${{ runner.os }}
+      - name: Install Ninja Build System
+        run: brew install ninja
+
+      # Checkout the repository
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      # Build and install TagLib dependency (static) (https://github.com/taglib/taglib/blob/master/INSTALL.md)
+      - name: Cache TagLib build
+        id: cache-taglib
+        uses: actions/cache@v4
+        with:
+          path: taglib
+          key: taglib-${{ runner.os }}-${{ hashFiles('.github/workflows/build-macOS-dmg.yml') }}
+      # No need to install zlib as it is already included in macOS
+      - name: Install TagLib build dependencies
+        if: steps.cache-taglib.outputs.cache-hit != 'true'
+        run: brew install utf8cpp
+      - name: Build TagLib
+        if: steps.cache-taglib.outputs.cache-hit != 'true'
+        run: |
+          git clone -b v2.0.2 --depth 1 https://github.com/taglib/taglib.git taglib
+          cmake -B taglib/build -DBUILD_SHARED_LIBS=OFF -DVISIBILITY_HIDDEN=ON -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF -DCMAKE_BUILD_TYPE=Release taglib
+          cmake --build taglib/build --config Release -j$(sysctl -n hw.ncpu)
+      - name: Install TagLib
+        run: cmake --install taglib/build --strip
+
+      - name: Build and package
+        run: |
+            /bin/bash -c "./devscripts/clean-build.sh"
+            /bin/bash -c "./devscripts/make-dmg.sh"
+
+      - name: Get version from CMakeLists.txt
+        id: get_version
+        run: |
+          echo "version=v$(grep -oE 'project\(GlyphVisualizer VERSION [0-9]+\.[0-9]+\.[0-9]+' CMakeLists.txt | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')" >> $GITHUB_OUTPUT
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: GlyphVisualizer-${{ steps.get_version.outputs.version }}_macOS-13-x64
+          path: |
+            ./build/GlyphVisualizer*_macOS-13-x64.dmg
+            ./build/GlyphVisualizer*_macOS-13-x64.dmg.sha256

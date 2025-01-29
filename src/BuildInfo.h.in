@@ -1,0 +1,39 @@
+/*
+This file is part of the GlyphVisualizer project, a Glyph composition
+player that plays Glyph compositions from Nothing phones.
+Copyright (C) 2025  Sebastian Aigner (aka. SebiAi)
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+
+#ifndef GV_BUILDINFO_H
+#define GV_BUILDINFO_H
+
+#include <QStringLiteral>
+
+// CMake configuration
+
+#define BUILDINFO_VERSION "@GV_VERSION@"
+#define BUILDINFO_GIT_COMMIT_HASH "@BUILDINFO_GIT_COMMIT_HASH@"
+#define BUILDINFO_GIT_COMMIT_HASH_SHORT "@BUILDINFO_GIT_COMMIT_HASH_SHORT@"
+
+#define BUILDINFO_GITHUB_REPO_URL "https://github.com/SebiAi/GlyphVisualizer"
+#define BUILDINFO_GITHUB_COMMIT_URL QStringLiteral("https://github.com/SebiAi/GlyphVisualizer/commit/%1").arg(BUILDINFO_GIT_COMMIT_HASH)
+#define BUILDINFO_RELEASE_URL QStringLiteral("https://github.com/SebiAi/GlyphVisualizer/releases/tag/%1")
+
+#define BUILDINFO_GITHUB_LATEST_RELEASE_API_URL "https://api.github.com/repos/SebiAi/GlyphVisualizer/releases/latest"
+#define BUILDINFO_CRASH_REPORTING_URL "https://github.com/SebiAi/GlyphVisualizer/issues/new/choose"
+
+#endif // GV_BUILDINFO_H

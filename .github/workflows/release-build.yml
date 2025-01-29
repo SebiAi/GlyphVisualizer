@@ -1,0 +1,49 @@
+name: Build and Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  call-build-all:
+    name: Build all platforms
+    uses: ./.github/workflows/build-all.yml
+
+  create_release:
+    name: Create Release
+    needs: call-build-all
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      # Prepare
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+        # Fetch all history for tags for the release note generator
+          fetch-depth: 0
+
+      # Get artifacts
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+    
+      # Get version
+      - name: Get version from CMakeLists.txt
+        id: get_version
+        run: echo "version=v$(grep -oP 'project\(GlyphVisualizer VERSION \K[0-9]+\.[0-9]+\.[0-9]+' CMakeLists.txt)" >> $GITHUB_OUTPUT
+      
+      # Generate release notes
+      - name: Generate release notes
+        run: python3 devscripts/create_release_notes.py ${{ steps.get_version.outputs.version }}
+
+      # Create release
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.get_version.outputs.version }}
+          body_path: RELEASE_NOTES.md
+        # body gets picked if body_path can not be found
+          body: No changes detected.
+          files: GlyphVisualizer-*
+          fail_on_unmatched_files: true

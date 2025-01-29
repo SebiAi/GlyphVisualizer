@@ -1,28 +1,32 @@
 <RCC>
     <qresource prefix="/glyphs/phone1">
-        <file alias="led_1">assets/glyphs/phone1/led_1.svg</file>
-        <file alias="led_2">assets/glyphs/phone1/led_2.svg</file>
-        <file alias="led_3">assets/glyphs/phone1/led_3.svg</file>
-        <file alias="led_4">assets/glyphs/phone1/led_4.svg</file>
-        <file alias="led_5">assets/glyphs/phone1/led_5.svg</file>
+        <file alias="led_1">resources/glyphs/phone1/led_1.svg</file>
+        <file alias="led_2">resources/glyphs/phone1/led_2.svg</file>
+        <file alias="led_3_zones">resources/glyphs/phone1/led_3_zones.svg</file>
+        <file alias="led_4_zones">resources/glyphs/phone1/led_4_zones.svg</file>
+        <file alias="led_5">resources/glyphs/phone1/led_5.svg</file>
     </qresource>
     <qresource prefix="/glyphs/phone2">
-        <file alias="led_a1">assets/glyphs/phone2/led_a1.svg</file>
-        <file alias="led_a2">assets/glyphs/phone2/led_a2.svg</file>
-        <file alias="led_b">assets/glyphs/phone2/led_b.svg</file>
-        <file alias="led_c1">assets/glyphs/phone2/led_c1.svg</file>
-        <file alias="led_c2">assets/glyphs/phone2/led_c2.svg</file>
-        <file alias="led_c3">assets/glyphs/phone2/led_c3.svg</file>
-        <file alias="led_c4">assets/glyphs/phone2/led_c4.svg</file>
-        <file alias="led_c5">assets/glyphs/phone2/led_c5.svg</file>
-        <file alias="led_c6">assets/glyphs/phone2/led_c6.svg</file>
-        <file alias="led_d">assets/glyphs/phone2/led_d.svg</file>
-        <file alias="led_e">assets/glyphs/phone2/led_e.svg</file>
-        <file alias="led_c1_zones">assets/glyphs/phone2/led_c1_zones.svg</file>
-        <file alias="led_d_zones">assets/glyphs/phone2/led_d_zones.svg</file>
+        <file alias="led_a1">resources/glyphs/phone2/led_a1.svg</file>
+        <file alias="led_a2">resources/glyphs/phone2/led_a2.svg</file>
+        <file alias="led_b">resources/glyphs/phone2/led_b.svg</file>
+        <file alias="led_c1_zones">resources/glyphs/phone2/led_c1_zones.svg</file>
+        <file alias="led_c2">resources/glyphs/phone2/led_c2.svg</file>
+        <file alias="led_c3">resources/glyphs/phone2/led_c3.svg</file>
+        <file alias="led_c4">resources/glyphs/phone2/led_c4.svg</file>
+        <file alias="led_c5">resources/glyphs/phone2/led_c5.svg</file>
+        <file alias="led_c6">resources/glyphs/phone2/led_c6.svg</file>
+        <file alias="led_d_zones">resources/glyphs/phone2/led_d_zones.svg</file>
+        <file alias="led_e">resources/glyphs/phone2/led_e.svg</file>
+    </qresource>
+    <qresource prefix="/glyphs/phone2a">
+        <file alias="led_a_zones">resources/glyphs/phone2a/led_a_zones.svg</file>
+        <file alias="led_b">resources/glyphs/phone2a/led_b.svg</file>
+        <file alias="led_c">resources/glyphs/phone2a/led_c.svg</file>
+        <file alias="center_part">resources/glyphs/phone2a/center_part.svg</file>
     </qresource>
     <qresource prefix="/icons">
-        <file alias="media_pause">assets/icons/media/media_pause.svg</file>
-        <file alias="media_play">assets/icons/media/media_play.svg</file>
+        <file alias="media_pause">resources/icons/media/media_pause.svg</file>
+        <file alias="media_play">resources/icons/media/media_play.svg</file>
     </qresource>
 </RCC>

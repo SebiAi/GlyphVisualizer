@@ -44,7 +44,9 @@ body:
       description: |
         It should start like this:
       placeholder: |
+        WindowsLoggingWorkaround: Not Windows - nothing to do
         Main.Verbose: Verbose logging activated
+        Main.Verbose: #### Software Information #####
         Main.Verbose: Current software version: VERSION_HERE
         Main.Verbose: Current software git hash: GIT_COMMIT_HASH_HERE
         <more lines>

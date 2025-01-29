@@ -21,34 +21,34 @@
 ***
 
 # :writing_hand: Table of contents
+
 <!-- TOC Generator settings -->
 <!-- Preset: GitHub -->
 <!-- indent characters: '-*+' -->
-<!-- algorithm used to generate anchors: DEFAULT -->
-<!-- Max indent level: 3 -->
-<!-- trim toc indent: True -->
-<!-- oneshot: False -->
 <!-- generate anchors: True -->
 <!-- anchors prefix: 'heading-' -->
 <!-- concat spaces: True -->
 <!-- comment style: HTML -->
-<!-- Is a bit buggy with generating the correct links to the headings - please double check -->
+<!-- indent spaces: 3 -->
+<!-- algorithm used to generate anchors: DEFAULT -->
+<!-- Max indent level: 3 -->
+<!-- trim toc indent: True -->
+<!-- oneshot: False -->
 <!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
 
 - [:grey_question: What is this? Why would I need that?](#heading-grey_question-what-is-this-why-would-i-need-that)
 - [:pushpin: Disclaimer](#heading-pushpin-disclaimer)
-- [:safety_vest: Need help?](#heading-safety_vest-need-help)
-- [:page_with_curl: Roadmap](#heading-page_with_curl-roadmap)
 - [:rocket: How to use](#heading-rocket-how-to-use)
 - [:inbox_tray: Installation](#heading-inbox_tray-installation)
    * [<img src="https://www.vectorlogo.zone/logos/microsoft/microsoft-icon.svg" height="20"/> Windows portable](#heading-windows-portable)
    * [:penguin: Linux](#heading-penguin-linux)
       + [<img src="https://www.vectorlogo.zone/logos/ubuntu/ubuntu-icon.svg" height="20"/> Ubuntu and derivatives](#heading-ubuntu-and-derivatives)
    * [<img src="https://www.vectorlogo.zone/logos/apple/apple-tile.svg" height="20"/> MacOS](#heading-macos)
+- [:safety_vest: Need help?](#heading-safety_vest-need-help)
+- [:page_with_curl: Roadmap](#heading-page_with_curl-roadmap)
 - [:construction: Compilation](#heading-construction-compilation)
    * [:nut_and_bolt: Build Dependencies](#heading-nut_and_bolt-build-dependencies)
    * [:hammer_and_pick: Build](#heading-hammer_and_pick-build)
-   * [:package: Package up](#heading-package-package-up)
       + [<img src="https://www.vectorlogo.zone/logos/microsoft/microsoft-icon.svg" height="20"/> Windows portable](#heading-windows-portable-1)
       + [<img src="https://www.vectorlogo.zone/logos/ubuntu/ubuntu-icon.svg" height="20"/> Ubuntu and derivatives](#heading-ubuntu-and-derivatives-1)
       + [<img src="https://www.vectorlogo.zone/logos/apple/apple-tile.svg" height="20"/> MacOS](#heading-macos-1)
@@ -66,9 +66,6 @@ This is a tool that is meant to be used in combination with my [custom-nothing-g
 
 **And apart from that, you can use it if you want to view the composition without having access to a Nothing Phone.**
 
-> [!CAUTION]
-> The *GlyphVisualizer* version 1.1.0 and below does NOT work properly with the new *v1-Glyph Format*!
-
 ***
 
 <!-- TOC --><a name="heading-pushpin-disclaimer"></a>
@@ -78,47 +75,13 @@ This repo is in no way, shape or form affiliated with Nothing Technology Limited
 
 ***
 
-<!-- TOC --><a name="heading-safety_vest-need-help"></a>
-# :safety_vest: Need help?
-If you need help, look at the [Troubleshooting](#interrobang-troubleshooting) chapter. If this does not help either feel free to use the [Discussion feature on GitHub](https://github.com/SebiAi/GlyphVisualizer/discussions) or reach out to me on Discord: @sebiai
-
-***
-
-<!-- TOC --><a name="heading-page_with_curl-roadmap"></a>
-# :page_with_curl: Roadmap
-You can find the full roadmap [here](https://github.com/users/SebiAi/projects/5).
-
-***
-
 <!-- TOC --><a name="heading-rocket-how-to-use"></a>
 # :rocket: How to use
-## Audio only (Recommended)
 Only the composition itself is needed:
 1. Open *GlyphVisualizer*
 2. Go to *File*->*Open Composition* OR press <kbd>CTRL</kbd> + <kbd>O</kbd>
 3. Make sure ***Audio file (ogg)*** is selected
 4. Select your composition and hit *Open*
-
-## Audio file and Light data file 
-This mode is for composition creators which use the [custom-nothing-glyph-tools](https://github.com/SebiAi/custom-nothing-glyph-tools/):
-
-1. Export your Audio from Audacity with the opus codec and change the extension from `.opus` to `.ogg` (Make sure that you show [File name extensions](https://www.howtogeek.com/205086/beginner-how-to-make-windows-show-file-extensions/) on Windows!)
-2. Export your Label file from Audacity
-3. Use the *GlyphTranslator.py* script to get the `.glypha` file
-4. Open *GlyphVisualizer*
-5. Go to *File*->*Open Composition* OR press <kbd>CTRL</kbd> + <kbd>O</kbd>
-6. Make sure ***Audio file (ogg) + Light data file (glypha)*** is selected
-7. Select your Audio, your `.glypha` file and hit *Open*
-
-> [!TIP]
-> If your Audio file and your `.glypha` file are
-> * in the same directory and
-> * have the same name
->
-> then *GlyphVisualizer* will automatically fill in the path for the `.glypha` file.
-
-## Audio file and Audacity Label file
-This mode is **not implemented yet**. Please wait for an update.
 
 ***
 
@@ -144,9 +107,27 @@ This mode is **not implemented yet**. Please wait for an update.
 
 <!-- TOC --><a name="heading-macos"></a>
 ## <img src="https://www.vectorlogo.zone/logos/apple/apple-tile.svg" height="20"/> MacOS
-1. Download the latest version (`GlyphVisualizer-*_macOS-12-x64.dmg`) from [the latest release](https://github.com/SebiAi/GlyphVisualizer/releases/latest).
-2. (Optional) Verify file integrity by downloading `GlyphVisualizer-*_macOS-12-x64.dmg.sha256` to the same directory as the AppImage and running `shasum -a 256 -c ./GlyphVisualizer-*_macOS-12-x64.dmg.sha256`. If it outputs 'OK', you are good.
+1. Download the latest version (`GlyphVisualizer-*_macOS-13-x64.dmg`) from [the latest release](https://github.com/SebiAi/GlyphVisualizer/releases/latest).
+2. (Optional) Verify file integrity by downloading `GlyphVisualizer-*_macOS-13-x64.dmg.sha256` to the same directory as the disk image file and running `shasum -a 256 -c ./GlyphVisualizer-*_macOS-13-x64.dmg.sha256`. If it outputs 'OK', you are good.
 3. Run the application
+
+***
+
+<!-- TOC --><a name="heading-safety_vest-need-help"></a>
+# :safety_vest: Need help?
+If you need help, look at the [Troubleshooting](#interrobang-troubleshooting) chapter. If this does not help either feel free to use the [discussion feature on GitHub](https://github.com/SebiAi/GlyphVisualizer/discussions) or join the Discord Server:
+
+<div align="center">
+    <a href="https://discord.gg/EmcnHqDxZt">
+        <img src="https://www.vectorlogo.zone/logos/discord/discord-official.svg" height="50"/>
+    </a>
+</div>
+
+***
+
+<!-- TOC --><a name="heading-page_with_curl-roadmap"></a>
+# :page_with_curl: Roadmap
+You can find the full roadmap [here](https://github.com/users/SebiAi/projects/5).
 
 ***
 
@@ -155,11 +136,12 @@ This mode is **not implemented yet**. Please wait for an update.
 <!-- TOC --><a name="heading-nut_and_bolt-build-dependencies"></a>
 ## :nut_and_bolt: Build Dependencies
 You can use the Qt Online Installer to install Qt, Ninja, CMake and a C++ compiler
-* [Qt 6.6.0](https://www.qt.io/download-open-source#hs_cos_wrapper_widget_1567539130992)
+* [Qt 6.6.0 or higher](https://www.qt.io/download-open-source#hs_cos_wrapper_widget_1567539130992) - currently using v6.8.1
 * [Ninja](https://ninja-build.org/)
 * [CMake](https://cmake.org/)
 * A compiler like g++ or MSVC depending on your OS
-* [TagLib 2.0](https://github.com/taglib/taglib/tree/v2.0) **without** ZLIB
+* [TagLib 2.0 or higher](https://github.com/taglib/taglib/tree/v2.0) - currently using v2.0.2
+* [git](https://git-scm.com/)
 
 <!-- TOC --><a name="heading-hammer_and_pick-build"></a>
 ## :hammer_and_pick: Build
@@ -169,74 +151,47 @@ git clone https://github.com/SebiAi/GlyphVisualizer.git
 cd GlyphVisualizer
 ```
 Set `DCMAKE_PREFIX_PATH` to the Qt location and build the application (This command assumes that the libraries like *TagLib* are properly installed and can be found by CMake)
-```bash
-cmake -G Ninja "-DCMAKE_PREFIX_PATH=/path/to/qt" "-DCMAKE_BUILD_TYPE:STRING=Release" -S . -B build && cmake --build build --config Release
-```
-The built application is now in the `build` directory.
 
-> [!WARNING]
-> The built application might not open right out of the box because dynamically linked libraries are not available without proper setup.
->
-> See [:package: Package up](#heading-package-package-up) to fix that.
-
-<!-- TOC --><a name="heading-package-package-up"></a>
-## :package: Package up
-The application itself may not execute because it is not finding the linked libraries. Packaging guarantees that the application finds them and runs as expected.
 <!-- TOC --><a name="heading-windows-portable-1"></a>
 ### <img src="https://www.vectorlogo.zone/logos/microsoft/microsoft-icon.svg" height="20"/> Windows portable
-Move the application to its own directory
+You can get started quickly by just downloading the [Buildtools for Visual Studio](https://visualstudio.microsoft.com/de/downloads/#build-tools-for-visual-studio-2022) and selecting the `Desktop development with C++` workload in the installer.
+
+> [!IMPORTANT]
+> This code assumes that you used [vcpkg](https://learn.microsoft.com/de-de/vcpkg/get_started/get-started?pivots=shell-cmd) to install the dependencies for taglib and that the `VCPKG_ROOT` environment variable is set correctly. See the [workflow file for windows](.github/workflows/build-windows-portable.yml) on how to install these and how to properly build taglib.
+
+> [!WARNING]
+> Set `CMAKE_PREFIX_PATH` to the location where your Qt installation is located!
 ```batch
-mkdir GlyphVisualizer-main_windows-x64-portable
-move build/GlyphVisualizer GlyphVisualizer-main_windows-x64-portable
+set "CMAKE_PREFIX_PATH=%USERPROFILE%\Qt\QTVERSION\PLATFORM"
+set "PATH=%CMAKE_PREFIX_PATH%\bin;%PATH%"
+set "CMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake"
+devscripts\clean-build.bat
+devscripts\make-portable.bat
 ```
-Copy the built *TagLib* dll into the directory
-```batch
-copy C:\path\to\tag.dll GlyphVisualizer-main_windows-x64-portable
-```
-Use [windeployqt](https://doc.qt.io/qt-6/windows-deployment.html)
-```batch
-windeployqt --release GlyphVisualizer-main_windows-x64-portable\GlyphVisualizer.exe
-```
-The directory `GlyphVisualizer-main_windows-x64-portable` now contains the application and all its dynamic dependencies. Can be zip'ed up and transferred to other Windows machines.
+The zip file `build\GlyphVisualizer-*_windows-x64-portable.zip` contains the portable windows build.
 
 <!-- TOC --><a name="heading-ubuntu-and-derivatives-1"></a>
 ### <img src="https://www.vectorlogo.zone/logos/ubuntu/ubuntu-icon.svg" height="20"/> Ubuntu and derivatives
-Download dependencies (linuxdeploy, libfuse2, libxcb-cursor0)
+> [!NOTE]
+> I would recommend to use [docker](https://docs.docker.com/engine/install/ubuntu/) for the build process because it is repeatable and no dependencies need to be installed to the system.
+> 
+> If you don't want that you can use the similar named scripts without docker instead. Then make sure that taglib and Qt (`CMAKE_PREFIX_PATH="/path/to/Qt/QTVERSION/PLATFORM"`) can be found and that you can execute AppImages (`apt install libfuse2 libxcb-cursor0`).
 ```bash
-wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
-wget https://github.com/linuxdeploy/linuxdeploy-plugin-appimage/releases/download/continuous/linuxdeploy-plugin-appimage-x86_64.AppImage
-chmod +x linuxdeploy-x86_64.AppImage
-chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
-chmod +x linuxdeploy-plugin-appimage-x86_64.AppImage
-sudo apt install -y libfuse2 libxcb-cursor0
+./devscripts/clean-build-with-docker.sh && ./devscripts/make-appimage-with-docker.sh
 ```
-Set `QMAKE` to the qt *qmake* executable and use linuxdeploy
-```bash
-QMAKE="/path/to/my/qmake" LDAI_VERSION="main" LDAI_OUTPUT="GlyphVisualizer-main_linux-ubuntu-x64.AppImage" ./linuxdeploy-x86_64.AppImage --executable "build/GlyphVisualizer" --desktop-file "deploy/linux/AppImage/com.sebiai.GlyphVisualizer.desktop" --icon-file "deploy/linux/AppImage/GlyphVisualizer.png" --plugin qt --appdir AppDir --output appimage
-```
-You now have `GlyphVisualizer-main_linux-ubuntu-x64.AppImage`, which can be transferred to other Ubuntu-based distributions.
+The AppImage `build/GlyphVisualizer-*_linux-ubuntu-x64.AppImage` is the final result.
 
 <!-- TOC --><a name="heading-macos-1"></a>
 ### <img src="https://www.vectorlogo.zone/logos/apple/apple-tile.svg" height="20"/> MacOS
-Navigate to the build folder
+> [!WARNING]
+> Set `CMAKE_PREFIX_PATH` to the location where your Qt installation is located!
 ```bash
-cd build
+CMAKE_PREFIX_PATH="/path/to/Qt/QTVERSION/PLATFORM"
+PATH="${CMAKE_PREFIX_PATH}/bin:${PATH}"
+./devscripts/clean-build.sh
+./devscripts/make-dmg.sh
 ```
-Create the directory and copy the built *TagLib* into the directory
-```batch
-mkdir GlyphVisualizer.app/Contents/Frameworks/
-copy /path/to/libtag.2.dylib GlyphVisualizer.app/Contents/Frameworks/
-```
-Use [macdeployqt](https://doc.qt.io/qt-6/macos-deployment.html#the-mac-deployment-tool)
-```bash
-macdeployqt GlyphVisualizer.app -dmg
-```
-Rename
-```bash
-mv GlyphVisualizer.dmg GlyphVisualizer-main_macOS-12-x64.dmg
-```
-You now have `GlyphVisualizer-main_macOS-12-x64.dmg`, which can be transferred to other MacOS machines.
+The disk image file `build/GlyphVisualizer-*_macOS-13-x64.dmg` is the final result.
 
 <!-- TOC --><a name="heading-interrobang-troubleshooting"></a>
 # :interrobang: Troubleshooting

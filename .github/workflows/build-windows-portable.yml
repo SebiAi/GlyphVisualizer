@@ -1,0 +1,78 @@
+name: Build Windows Portable
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  build:
+    name: Build Windows Portable
+    runs-on: windows-2022
+    steps:
+      # Install build dependencies
+      - name: Install Qt6.8.1
+        uses: jurplel/install-qt-action@v4
+        with:
+          # See https://ddalcino.github.io/aqt-list-server/
+          aqtversion: '==3.1.*'
+          version: '6.8.1'
+          modules: 'qtmultimedia'
+          cache: true
+          cache-key-prefix: install-qt-6.8.1-action-${{ runner.os }}
+      - name: Install Ninja Build System
+        run: choco install ninja
+      - name: Setup MSVC 2022 for C++ (Windows)
+        # See supported versions here: https://doc.qt.io/qt-6/windows.html
+        # See here on what this does: https://learn.microsoft.com/en-us/cpp/build/building-on-the-command-line
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          vsversion: '2022'
+
+      # Checkout the repository
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      # Build and install TagLib dependency (static) (https://github.com/taglib/taglib/blob/master/INSTALL.md)
+      - name: Cache TagLib build
+        id: cache-taglib
+        uses: actions/cache@v4
+        with:
+          path: taglib
+          key: taglib-${{ runner.os }}-${{ hashFiles('.github/workflows/build-windows-portable.yml') }}
+      - name: Install TagLib dependencies
+        run: vcpkg install zlib
+      - name: Install TagLib build dependencies
+        if: steps.cache-taglib.outputs.cache-hit != 'true'
+        run: vcpkg install utfcpp
+      - name: Build TagLib
+        if: steps.cache-taglib.outputs.cache-hit != 'true'
+        run: |
+          git clone -b v2.0.2 --depth 1 https://github.com/taglib/taglib.git taglib
+          cmake -B taglib/build -DBUILD_SHARED_LIBS=OFF -DVISIBILITY_HIDDEN=ON -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" taglib
+          # We need to specify that it is a release or else the compiler will build the Debug config => Fails to install
+          cmake --build taglib/build --config Release
+      - name: Install TagLib
+        run: cmake --install taglib/build --strip
+
+      # Build and package
+      - name: Build and package
+        run: |
+          $env:CMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
+          ./devscripts/clean-build.bat
+          ./devscripts/make-portable.bat
+
+      - name: Get version from CMakeLists.txt
+        id: get_version
+        shell: bash
+        run: |
+          # See here why we need to set LC_ALL: https://stackoverflow.com/questions/61456142
+          export LC_ALL=en_US.utf8
+          echo "version=v$(grep -oP 'project\(GlyphVisualizer VERSION \K[0-9]+\.[0-9]+\.[0-9]+' CMakeLists.txt)" >> $GITHUB_OUTPUT
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: GlyphVisualizer-${{ steps.get_version.outputs.version }}_windows-x64-portable
+          path: |
+            ./build/GlyphVisualizer*_windows-x64-portable.zip
+            ./build/GlyphVisualizer*_windows-x64-portable.zip.sha256.txt
