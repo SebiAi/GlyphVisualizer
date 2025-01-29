@@ -130,6 +130,10 @@ def main() -> int:
         print_warning("No tags found in the repository! Creating release notes from the first commit onwards.")
     print_info(f"Latest Tag: {latest_tag!r}")
 
+    # Check if the latest tag is the same as the current tag
+    if latest_tag == TAG_NAME:
+        print_critical_error(f"The latest tag is the same as the current tag {TAG_NAME!r}. Skipping the release notes generation.")
+
     # Current date
     CURRENT_DATE: str = time.strftime("%Y-%m-%d")
     
