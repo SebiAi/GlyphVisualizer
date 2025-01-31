@@ -20,13 +20,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Glyph.h"
 
 Glyph::Glyph(const QString& filename, const Reference& reference, const QPointF& referenceOffset, const QString& id)
-	: MySvgRenderer{filename, reference, referenceOffset, id}
+    : MySvgRenderer{filename, reference, referenceOffset, id}
 {
-	// Use the ARGB32_Premultiplied format because it is best optimized for rendering with QPainter
+    // Use the ARGB32_Premultiplied format because it is best optimized for rendering with QPainter
     this->svgImage = QImage(QSize(1, 1), QImage::Format::Format_ARGB32_Premultiplied);
 }
 Glyph::Glyph(const Glyph& g)
-	: MySvgRenderer{g}, svgImage{g.svgImage}
+    : MySvgRenderer{g}, svgImage{g.svgImage}
 {}
 
 void Glyph::renderColored(QPainter* painter, const QColor& color) {
@@ -37,30 +37,30 @@ void Glyph::renderColored(QPainter* painter, const QColor& color) {
     this->svgImage.fill(Qt::GlobalColor::transparent); // Make sure the image is transparent or the coloring won't work properly
 
     // Draw the svg onto the image
-	QRectF savedAlignedBounds{this->scaledAlignedBounds};
-	this->scaledAlignedBounds = this->svgImage.rect().toRectF();
+    QRectF savedAlignedBounds{this->scaledAlignedBounds};
+    this->scaledAlignedBounds = this->svgImage.rect().toRectF();
     QPainter svgPainter(&this->svgImage);
-	MySvgRenderer::render(&svgPainter);
-	this->scaledAlignedBounds = savedAlignedBounds;
+    MySvgRenderer::render(&svgPainter);
+    this->scaledAlignedBounds = savedAlignedBounds;
 
     // Color the svg with the requested color
-	svgPainter.setCompositionMode(QPainter::CompositionMode::CompositionMode_SourceAtop);
-	svgPainter.fillRect(this->svgImage.rect(), color);
+    svgPainter.setCompositionMode(QPainter::CompositionMode::CompositionMode_SourceAtop);
+    svgPainter.fillRect(this->svgImage.rect(), color);
 
     // Stop painting on the image and draw the image to the original painter
     svgPainter.end();
     painter->save();
     painter->setRenderHints(QPainter::RenderHint::Antialiasing | QPainter::RenderHint::SmoothPixmapTransform);
-	painter->drawImage(this->scaledAlignedBounds, svgImage);
+    painter->drawImage(this->scaledAlignedBounds, svgImage);
     painter->restore();
 }
 
 void Glyph::calcBounds(const QRect& drawingArea, qreal scale) {
-	MySvgRenderer::calcBounds(drawingArea, scale);
+    MySvgRenderer::calcBounds(drawingArea, scale);
 
     // Adjust the size of the intermediate image
     // Use the ARGB32_Premultiplied format because it is best optimized for rendering with QPainter
     // Also make sure that we have an valid image of at least size 1x1. We get a QPainter error spam otherwise
     // We double the scale to make the rendered SVG look good after rendering the image to the passed in painter
-	this->svgImage = QImage(this->scaledAlignedBounds.size().toSize().expandedTo(QSize(1, 1)) * 2, QImage::Format::Format_ARGB32_Premultiplied);
+    this->svgImage = QImage(this->scaledAlignedBounds.size().toSize().expandedTo(QSize(1, 1)) * 2, QImage::Format::Format_ARGB32_Premultiplied);
 }

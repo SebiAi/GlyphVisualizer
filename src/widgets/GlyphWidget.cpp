@@ -38,7 +38,7 @@ void GlyphWidget::setConfiguration(IConfiguration* configuration) {
     if (configuration == nullptr)
         throw std::logic_error("Tried to set a nullptr as IConfiguration");
 
-	qCInfo(glyphWidget) << "Setting configuration to" << configuration->build;
+    qCInfo(glyphWidget) << "Setting configuration to" << configuration->build;
 
     this->configuration = configuration;
     // Resize and update the widget

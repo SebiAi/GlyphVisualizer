@@ -24,31 +24,31 @@ Q_LOGGING_CATEGORY(compositionManagerControls, "CompositionManagerControls")
 Q_LOGGING_CATEGORY(compositionManagerControlsVerbose, "CompositionManagerControls.Verbose")
 
 CompositionManagerControls::CompositionManagerControls(CompositionManager* cm, QWidget *parent)
-	: QWidget{parent}, cm{cm}, playPauseButton{new PlayPauseButton()}, currentTimeLabel{new TimeLabel()}, seekBar{new SeekBar()}, totalTimeLabel{new TimeLabel()}
+    : QWidget{parent}, cm{cm}, playPauseButton{new PlayPauseButton()}, currentTimeLabel{new TimeLabel()}, seekBar{new SeekBar()}, totalTimeLabel{new TimeLabel()}
 {
-	// Create horizontal layout
-	QHBoxLayout* layout = new QHBoxLayout(this);
-	layout->setSpacing(8);
-	layout->setContentsMargins(11, 0, 22, 0);
-	setLayout(layout);
+    // Create horizontal layout
+    QHBoxLayout* layout = new QHBoxLayout(this);
+    layout->setSpacing(8);
+    layout->setContentsMargins(11, 0, 22, 0);
+    setLayout(layout);
 
-	// Add UI elements
-	layout->addWidget(this->playPauseButton);
-	layout->addWidget(this->currentTimeLabel);
-	layout->addWidget(this->seekBar);
-	layout->addWidget(this->totalTimeLabel);
+    // Add UI elements
+    layout->addWidget(this->playPauseButton);
+    layout->addWidget(this->currentTimeLabel);
+    layout->addWidget(this->seekBar);
+    layout->addWidget(this->totalTimeLabel);
 
-	// Connect signals
-	connect(this->playPauseButton, &PlayPauseButton::clicked, this, &CompositionManagerControls::onPlayPauseButtonClicked);
-	connect(this->seekBar, &SeekBar::seek, this, &CompositionManagerControls::onSeekBarSeek);
-	connect(this->seekBar, &SeekBar::percentageSeek, this, &CompositionManagerControls::onSeekBarPercentageSeek);
-	connect(this->cm, &CompositionManager::playbackStateChanged, this, &CompositionManagerControls::onCompositionManagerPlaybackStateChanged);
-	connect(this->cm, &CompositionManager::durationChanged, this, &CompositionManagerControls::onCompositionManagerDurationChanged);
-	connect(this->cm, &CompositionManager::positionChanged, this, &CompositionManagerControls::onCompositionManagerPositionChanged);
+    // Connect signals
+    connect(this->playPauseButton, &PlayPauseButton::clicked, this, &CompositionManagerControls::onPlayPauseButtonClicked);
+    connect(this->seekBar, &SeekBar::seek, this, &CompositionManagerControls::onSeekBarSeek);
+    connect(this->seekBar, &SeekBar::percentageSeek, this, &CompositionManagerControls::onSeekBarPercentageSeek);
+    connect(this->cm, &CompositionManager::playbackStateChanged, this, &CompositionManagerControls::onCompositionManagerPlaybackStateChanged);
+    connect(this->cm, &CompositionManager::durationChanged, this, &CompositionManagerControls::onCompositionManagerDurationChanged);
+    connect(this->cm, &CompositionManager::positionChanged, this, &CompositionManagerControls::onCompositionManagerPositionChanged);
 }
 
 void CompositionManagerControls::resetControls() {
-	qCInfo(compositionManagerControlsVerbose) << "Clearing controls...";
+    qCInfo(compositionManagerControlsVerbose) << "Clearing controls...";
 
     this->currentTimeLabel->clearTimestamp();
     this->totalTimeLabel->clearTimestamp();
@@ -56,53 +56,53 @@ void CompositionManagerControls::resetControls() {
 }
 
 void CompositionManagerControls::onPlayPauseButtonClicked(){
-	qCInfo(compositionManagerControlsVerbose) << "Play/Pause button clicked";
+    qCInfo(compositionManagerControlsVerbose) << "Play/Pause button clicked";
 
-	if (this->cm->isPlaying())
-		this->cm->pause();
-	else
-		this->cm->play();
+    if (this->cm->isPlaying())
+        this->cm->pause();
+    else
+        this->cm->play();
 
-	emit playbackChanged(this->cm->isPlaying());
+    emit playbackChanged(this->cm->isPlaying());
 }
 
 void CompositionManagerControls::onSeekBarSeek() {
-	qCInfo(compositionManagerControlsVerbose) << "Seeking to position" << this->seekBar->sliderPosition() << "ms";
+    qCInfo(compositionManagerControlsVerbose) << "Seeking to position" << this->seekBar->sliderPosition() << "ms";
 
-	this->cm->seek(this->seekBar->sliderPosition());
+    this->cm->seek(this->seekBar->sliderPosition());
 }
 
 void CompositionManagerControls::onSeekBarPercentageSeek(qreal percent) {
-	qCInfo(compositionManagerControlsVerbose).nospace() << "Seeking to percentage " << percent * 100 << "% (" << this->seekBar->maximum() * percent << " ms)";
+    qCInfo(compositionManagerControlsVerbose).nospace() << "Seeking to percentage " << percent * 100 << "% (" << this->seekBar->maximum() * percent << " ms)";
 
-	this->cm->seek(this->seekBar->maximum() * percent);
+    this->cm->seek(this->seekBar->maximum() * percent);
 }
 
 void CompositionManagerControls::onCompositionManagerPlaybackStateChanged(QMediaPlayer::PlaybackState newState) {
-	qCInfo(compositionManagerControlsVerbose) << "Playback state changed to:" << newState;
+    qCInfo(compositionManagerControlsVerbose) << "Playback state changed to:" << newState;
 
-	switch (newState) {
-	case QMediaPlayer::PlaybackState::PausedState:
-	case QMediaPlayer::PlaybackState::StoppedState:
-		this->playPauseButton->setPlayingState(false);
-		break;
-	case QMediaPlayer::PlaybackState::PlayingState:
-		this->playPauseButton->setPlayingState(true);
-		break;
-	}
+    switch (newState) {
+    case QMediaPlayer::PlaybackState::PausedState:
+    case QMediaPlayer::PlaybackState::StoppedState:
+        this->playPauseButton->setPlayingState(false);
+        break;
+    case QMediaPlayer::PlaybackState::PlayingState:
+        this->playPauseButton->setPlayingState(true);
+        break;
+    }
 }
 void CompositionManagerControls::onCompositionManagerDurationChanged(qint64 duration) {
-	qCInfo(compositionManagerControlsVerbose) << "Duration changed:" << duration << "ms";
+    qCInfo(compositionManagerControlsVerbose) << "Duration changed:" << duration << "ms";
 
-	// Configure SeekBar
-	this->seekBar->setMaximum((int)duration);
+    // Configure SeekBar
+    this->seekBar->setMaximum((int)duration);
 
-	// Configure total time label
-	this->totalTimeLabel->setMS(duration);
+    // Configure total time label
+    this->totalTimeLabel->setMS(duration);
 }
 void CompositionManagerControls::onCompositionManagerPositionChanged(qint64 position) {
-	// Update SeekBar
-	this->seekBar->updatePosition((int)position);
-	// Update current time label
-	this->currentTimeLabel->setMS(position);
+    // Update SeekBar
+    this->seekBar->updatePosition((int)position);
+    // Update current time label
+    this->currentTimeLabel->setMS(position);
 }

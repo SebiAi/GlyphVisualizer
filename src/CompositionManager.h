@@ -47,21 +47,21 @@ public:
 
     explicit CompositionManager(QObject *parent = nullptr);
 
-	bool isPlaying() const { return this->player->isPlaying(); }
+    bool isPlaying() const { return this->player->isPlaying(); }
 
 signals:
     void compositionTick(qint64 position);
-	void mediaStatusChanged(QMediaPlayer::MediaStatus status);
-	void playbackStateChanged(QMediaPlayer::PlaybackState newState);
-	void durationChanged(qint64 duration);
-	void positionChanged(qint64 position);
+    void mediaStatusChanged(QMediaPlayer::MediaStatus status);
+    void playbackStateChanged(QMediaPlayer::PlaybackState newState);
+    void durationChanged(qint64 duration);
+    void positionChanged(qint64 position);
 
 public slots:
     void seek(qint64 position);
     void loadAudio(const QString& audioPath);
-	void play() { this->player->play(); };
-	void pause() { this->player->pause(); };
-	void stop() { this->player->stop(); }
+    void play() { this->player->play(); };
+    void pause() { this->player->pause(); };
+    void stop() { this->player->stop(); }
 
 private:
     QMediaPlayer* player;

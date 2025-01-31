@@ -29,19 +29,19 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 class PlayPauseButton : public QToolButton
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	explicit PlayPauseButton(QWidget *parent = nullptr);
+    explicit PlayPauseButton(QWidget *parent = nullptr);
 
-	static QIcon getIconPlay() { return QIcon{QStringLiteral(":/icons/media_play")}; }
-	static QIcon getIconPause() { return QIcon{QStringLiteral(":/icons/media_pause")}; }
+    static QIcon getIconPlay() { return QIcon{QStringLiteral(":/icons/media_play")}; }
+    static QIcon getIconPause() { return QIcon{QStringLiteral(":/icons/media_pause")}; }
 
 public slots:
-	void setPlayingState(bool isPlay);
+    void setPlayingState(bool isPlay);
 
 private:
-	QShortcut* spaceShortcut;
-	QShortcut* kShortcut;
+    QShortcut* spaceShortcut;
+    QShortcut* kShortcut;
 };
 
 #endif // GV_PLAYPAUSEBUTTON_H

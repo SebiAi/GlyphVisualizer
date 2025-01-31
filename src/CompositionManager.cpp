@@ -35,11 +35,11 @@ CompositionManager::CompositionManager(QObject *parent)
     this->tickTimer->setInterval(CompositionManager::tickIntervalMSINT);
     connect(this->tickTimer, &QTimer::timeout, this, &CompositionManager::onTick);
 
-	// Forward all the signals
-	connect(this->player, &QMediaPlayer::mediaStatusChanged, this, &CompositionManager::mediaStatusChanged);
-	connect(this->player, &QMediaPlayer::playbackStateChanged, this, &CompositionManager::playbackStateChanged);
-	connect(this->player, &QMediaPlayer::durationChanged, this, &CompositionManager::durationChanged);
-	connect(this->player, &QMediaPlayer::positionChanged, this, &CompositionManager::positionChanged);
+    // Forward all the signals
+    connect(this->player, &QMediaPlayer::mediaStatusChanged, this, &CompositionManager::mediaStatusChanged);
+    connect(this->player, &QMediaPlayer::playbackStateChanged, this, &CompositionManager::playbackStateChanged);
+    connect(this->player, &QMediaPlayer::durationChanged, this, &CompositionManager::durationChanged);
+    connect(this->player, &QMediaPlayer::positionChanged, this, &CompositionManager::positionChanged);
 }
 
 void CompositionManager::seek(qint64 position) {
@@ -52,7 +52,7 @@ void CompositionManager::seek(qint64 position) {
 }
 
 void CompositionManager::loadAudio(const QString& audioPath) {
-	qCInfo(compositionManager) << "Loading audio" << audioPath;
+    qCInfo(compositionManager) << "Loading audio" << audioPath;
 
     QFileInfo fileInfo{audioPath};
     if (!fileInfo.isFile())

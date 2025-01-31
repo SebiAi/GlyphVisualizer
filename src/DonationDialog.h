@@ -41,26 +41,26 @@ Q_DECLARE_LOGGING_CATEGORY(donationDialogVerbose)
 
 class DonationDialog : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	explicit DonationDialog(QWidget* parent, Config* config, bool neverShowAgainOption);
+    explicit DonationDialog(QWidget* parent, Config* config, bool neverShowAgainOption);
 
 public slots:
-	virtual void accept() override;
-	virtual void reject() override;
+    virtual void accept() override;
+    virtual void reject() override;
 
 protected:
-	virtual void showEvent(QShowEvent* event) override;
+    virtual void showEvent(QShowEvent* event) override;
 
 private:
-	Config* config;
+    Config* config;
 
-	QVBoxLayout* layout;
+    QVBoxLayout* layout;
 
-	// QCheckBox* doNotShowAgainCheckBox;
-	QDialogButtonBox* buttonBox;
+    // QCheckBox* doNotShowAgainCheckBox;
+    QDialogButtonBox* buttonBox;
 
-	void initUi(bool neverShowAgainOption);
+    void initUi(bool neverShowAgainOption);
 };
 
 #endif // DONATIONDIALOG_H

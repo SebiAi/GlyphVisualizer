@@ -38,25 +38,25 @@ Q_DECLARE_LOGGING_CATEGORY(updateCheckerVerbose)
 
 class UpdateChecker : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	explicit UpdateChecker(QObject *parent = nullptr);
+    explicit UpdateChecker(QObject *parent = nullptr);
 
-	void checkForUpdate(const QString &currentVersion, bool silent = false);
+    void checkForUpdate(const QString &currentVersion, bool silent = false);
 
 signals:
-	void updateAvailable(const QString &newVersion) const;
-	void noUpdateAvailable() const;
-	void updateCheckFailed(const QString &errorMessage) const;
+    void updateAvailable(const QString &newVersion) const;
+    void noUpdateAvailable() const;
+    void updateCheckFailed(const QString &errorMessage) const;
 
 private:
-	static const QNetworkRequest request;
-	static const QRegularExpression versionRegex;
+    static const QNetworkRequest request;
+    static const QRegularExpression versionRegex;
 
-	bool versionAbiggerThanVersionB(QString versionA, QString versionB) const;
+    bool versionAbiggerThanVersionB(QString versionA, QString versionB) const;
 
 private slots:
-	void onReplyFinished(QNetworkReply* reply, const QString &currentVersion, bool silent) const;
+    void onReplyFinished(QNetworkReply* reply, const QString &currentVersion, bool silent) const;
 };
 
 #endif // GV_UPDATECHECKER_H

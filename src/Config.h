@@ -36,77 +36,77 @@ Q_DECLARE_LOGGING_CATEGORY(configVerbose)
 
 class Config : private QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	class ConfigVersionTooHighError: public std::runtime_error {
-	public:
-		const std::string filePath;
-		explicit ConfigVersionTooHighError(const std::string& msg, const std::string& filePath): std::runtime_error{msg}, filePath{filePath} {}
-	};
+    class ConfigVersionTooHighError: public std::runtime_error {
+    public:
+        const std::string filePath;
+        explicit ConfigVersionTooHighError(const std::string& msg, const std::string& filePath): std::runtime_error{msg}, filePath{filePath} {}
+    };
 
-	enum class Setting
-	{
-		ConfigVersion_Int = 0,
-		UpdateChecker_AutoUpdateCheckEnabled_Bool = 1,
-		UpdateChecker_LastAutoUpdateCheck_QDateTime = 2,
-		DonationDialog_DoNotShowAgain_Bool = 3,
-		DonationDialog_LastShown_QDateTime = 4,
-		FirstStart_Bool = 5
-	};
-	Q_ENUM(Setting)
+    enum class Setting
+    {
+        ConfigVersion_Int = 0,
+        UpdateChecker_AutoUpdateCheckEnabled_Bool = 1,
+        UpdateChecker_LastAutoUpdateCheck_QDateTime = 2,
+        DonationDialog_DoNotShowAgain_Bool = 3,
+        DonationDialog_LastShown_QDateTime = 4,
+        FirstStart_Bool = 5
+    };
+    Q_ENUM(Setting)
 
-	explicit Config(QObject *parent = nullptr);
-	void load(const QString& configPath, bool resetConfig = false);
+    explicit Config(QObject *parent = nullptr);
+    void load(const QString& configPath, bool resetConfig = false);
 
-	int getInt(Config::Setting setting) const { return getValue<int>(setting); }
-	bool getBool(Config::Setting setting) const { return getValue<bool>(setting); }
-	QDateTime getQDateTime(Config::Setting setting) const { return getValue<QDateTime>(setting); }
+    int getInt(Config::Setting setting) const { return getValue<int>(setting); }
+    bool getBool(Config::Setting setting) const { return getValue<bool>(setting); }
+    QDateTime getQDateTime(Config::Setting setting) const { return getValue<QDateTime>(setting); }
 
-	void setValue(Config::Setting setting, const QVariant& value);
-	void resetConfig();
+    void setValue(Config::Setting setting, const QVariant& value);
+    void resetConfig();
 
 signals:
 
 private:
-	static const QMap<Config::Setting, QString> settingsKeyMap;
-	static const QMap<Config::Setting, QVariant> settingsDefaultValues;
-	static constexpr int minConfigVersion{1};
+    static const QMap<Config::Setting, QString> settingsKeyMap;
+    static const QMap<Config::Setting, QVariant> settingsDefaultValues;
+    static constexpr int minConfigVersion{1};
 
-	QSettings* settings;
+    QSettings* settings;
 
-	template <typename T>
-	T getValue(Config::Setting setting) const {
-		QVariant defaultValue{getDefaultValueSafe(setting)};
+    template <typename T>
+    T getValue(Config::Setting setting) const {
+        QVariant defaultValue{getDefaultValueSafe(setting)};
 
-		// Check type compatibility between type of defaultValue and T
-		if (defaultValue.metaType() != QMetaType::fromType<T>())
-			throw std::logic_error(
-				std::string("Setting ")
-					.append(QMetaEnum::fromType<Config::Setting>().valueToKey((int)setting))
-					.append(" is not compatible with type ")
-					.append(typeid(T).name())
-			);
+        // Check type compatibility between type of defaultValue and T
+        if (defaultValue.metaType() != QMetaType::fromType<T>())
+            throw std::logic_error(
+                std::string("Setting ")
+                    .append(QMetaEnum::fromType<Config::Setting>().valueToKey((int)setting))
+                    .append(" is not compatible with type ")
+                    .append(typeid(T).name())
+            );
 
-		// Get the setting
-		QVariant variant{this->settings->value(settingToKeySafe(setting))};
+        // Get the setting
+        QVariant variant{this->settings->value(settingToKeySafe(setting))};
 
-		// Check if conversion is possible
-		// canConvert returns true for values like "123" if T is type bool
-		if (!variant.canConvert<T>()) {
-			// Save back the default value
-			this->settings->setValue(settingToKeySafe(setting), defaultValue);
-			return defaultValue.value<T>();
-		}
+        // Check if conversion is possible
+        // canConvert returns true for values like "123" if T is type bool
+        if (!variant.canConvert<T>()) {
+            // Save back the default value
+            this->settings->setValue(settingToKeySafe(setting), defaultValue);
+            return defaultValue.value<T>();
+        }
 
-		return variant.value<T>();
-	}
-	static QString settingToKeySafe(Config::Setting setting);
-	static QVariant getDefaultValueSafe(Config::Setting setting);
+        return variant.value<T>();
+    }
+    static QString settingToKeySafe(Config::Setting setting);
+    static QVariant getDefaultValueSafe(Config::Setting setting);
 
-	void writeDefaultConfig();
+    void writeDefaultConfig();
 
-	void backupConfig() const;
-	void upgradeConfig(int oldVersion, int newVersion);
+    void backupConfig() const;
+    void upgradeConfig(int oldVersion, int newVersion);
 };
 
 #endif // GV_CONFIG_H

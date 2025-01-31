@@ -20,7 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "MySvgRenderer.h"
 
 MySvgRenderer::MySvgRenderer(const QString& filename, const Reference& reference, const QPointF& referenceOffset, const QString& id)
-	: QSvgRenderer{}, filename{filename}, reference{reference}, referenceOffset{referenceOffset}, id{id}, bounds{QRectF()}, scaledAlignedBounds{QRectF()}
+    : QSvgRenderer{}, filename{filename}, reference{reference}, referenceOffset{referenceOffset}, id{id}, bounds{QRectF()}, scaledAlignedBounds{QRectF()}
 {
     if (!load(filename)) {
         throw std::logic_error("Could not load glyph file '" + filename.toStdString() + "'");
@@ -32,7 +32,7 @@ MySvgRenderer::MySvgRenderer(const QString& filename, const Reference& reference
         throw std::logic_error("Path " + this->id.toStdString() + " does not exist in svg " + filename.toStdString() + "!");
 }
 MySvgRenderer::MySvgRenderer(const MySvgRenderer& g)
-	: MySvgRenderer{g.filename, g.reference, g.referenceOffset, g.id}
+    : MySvgRenderer{g.filename, g.reference, g.referenceOffset, g.id}
 {
     // Copy all other values
     this->bounds = g.bounds;
@@ -42,12 +42,12 @@ MySvgRenderer::MySvgRenderer(const MySvgRenderer& g)
 void MySvgRenderer::render(QPainter* painter) {
     painter->save();
     painter->setRenderHints(QPainter::RenderHint::Antialiasing | QPainter::RenderHint::SmoothPixmapTransform);
-	if (!this->id.isEmpty())
-	{
-		QSvgRenderer::render(painter, this->id, this->scaledAlignedBounds);
-	} else {
-		QSvgRenderer::render(painter, this->scaledAlignedBounds);
-	}
+    if (!this->id.isEmpty())
+    {
+        QSvgRenderer::render(painter, this->id, this->scaledAlignedBounds);
+    } else {
+        QSvgRenderer::render(painter, this->scaledAlignedBounds);
+    }
     painter->restore();
 }
 
@@ -58,34 +58,34 @@ void MySvgRenderer::calcBounds(const QRect& drawingArea, qreal scale) {
 
     // Align the svg to the reference point
     switch (this->reference) {
-	case MySvgRenderer::Reference::TOP_LEFT:
+    case MySvgRenderer::Reference::TOP_LEFT:
         this->scaledAlignedBounds.moveTopLeft(drawingArea.topLeft());
         break;
-	case MySvgRenderer::Reference::TOP_RIGHT:
+    case MySvgRenderer::Reference::TOP_RIGHT:
         this->scaledAlignedBounds.moveTopRight(drawingArea.topRight());
         break;
-	case MySvgRenderer::Reference::BOTTOM_LEFT:
+    case MySvgRenderer::Reference::BOTTOM_LEFT:
         this->scaledAlignedBounds.moveBottomLeft(drawingArea.bottomLeft());
         break;
-	case MySvgRenderer::Reference::BOTTOM_RIGHT:
+    case MySvgRenderer::Reference::BOTTOM_RIGHT:
         this->scaledAlignedBounds.moveBottomRight(drawingArea.bottomRight());
         break;
-	case MySvgRenderer::Reference::CENTERED:
+    case MySvgRenderer::Reference::CENTERED:
         this->scaledAlignedBounds.moveCenter(drawingArea.center());
         break;
-	case MySvgRenderer::Reference::CENTERED_H_BOTTOM:
+    case MySvgRenderer::Reference::CENTERED_H_BOTTOM:
         this->scaledAlignedBounds.moveCenter(drawingArea.center());
         this->scaledAlignedBounds.moveBottom(drawingArea.bottom());
         break;
-	case MySvgRenderer::Reference::CENTERED_H_TOP:
+    case MySvgRenderer::Reference::CENTERED_H_TOP:
         this->scaledAlignedBounds.moveCenter(drawingArea.center());
         this->scaledAlignedBounds.moveTop(drawingArea.top());
         break;
-	case MySvgRenderer::Reference::CENTERED_V_LEFT:
+    case MySvgRenderer::Reference::CENTERED_V_LEFT:
         this->scaledAlignedBounds.moveCenter(drawingArea.center());
         this->scaledAlignedBounds.moveLeft(drawingArea.left());
         break;
-	case MySvgRenderer::Reference::CENTERED_V_RIGHT:
+    case MySvgRenderer::Reference::CENTERED_V_RIGHT:
         this->scaledAlignedBounds.moveCenter(drawingArea.center());
         this->scaledAlignedBounds.moveRight(drawingArea.right());
         break;

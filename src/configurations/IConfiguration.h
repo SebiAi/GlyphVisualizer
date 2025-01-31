@@ -40,10 +40,10 @@ public:
     const DeviceBuild build;
     QList<qsizetype> supportedZones;
     const QSize sizeHint;
-	QList<MySvgRenderer> decorations;
+    QList<MySvgRenderer> decorations;
 
-	IConfiguration(const QColor& fallbackColor, const QList<Glyph>& glyphs, const DeviceBuild& build, const QList<qsizetype>& supportedZones, const QSize& sizeHint, const QList<MySvgRenderer>& decorations = QList<MySvgRenderer>())
-		: fallbackColor{fallbackColor}, glyphs{glyphs}, parsedColors{}, build{build}, supportedZones{supportedZones}, sizeHint{sizeHint}, decorations{decorations}
+    IConfiguration(const QColor& fallbackColor, const QList<Glyph>& glyphs, const DeviceBuild& build, const QList<qsizetype>& supportedZones, const QSize& sizeHint, const QList<MySvgRenderer>& decorations = QList<MySvgRenderer>())
+        : fallbackColor{fallbackColor}, glyphs{glyphs}, parsedColors{}, build{build}, supportedZones{supportedZones}, sizeHint{sizeHint}, decorations{decorations}
     {
         if (!this->fallbackColor.isValid())
             throw std::logic_error("fallbackColor must be valid!");
@@ -54,10 +54,10 @@ public:
     virtual ~IConfiguration() {}
 
     virtual void calcBounds(const QRect& drawingArea, qreal scale) {
-		for (MySvgRenderer& s: this->decorations)
-			s.calcBounds(drawingArea, scale);
+        for (MySvgRenderer& s: this->decorations)
+            s.calcBounds(drawingArea, scale);
 
-		for (Glyph& g: this->glyphs)
+        for (Glyph& g: this->glyphs)
             g.calcBounds(drawingArea, scale);
     }
 
@@ -70,14 +70,14 @@ public:
 
 protected:
     virtual void renderPrivate(QPainter& painter, const QList<QColor>& colors) {
-		if (this->glyphs.size() != colors.size())
+        if (this->glyphs.size() != colors.size())
             throw std::logic_error("The default implementation expects equal size of glyphs and colors!");
 
-		// Render the decorations first because we always want to see the glyphs
-		for (MySvgRenderer& s: this->decorations)
-			s.render(&painter);
+        // Render the decorations first because we always want to see the glyphs
+        for (MySvgRenderer& s: this->decorations)
+            s.render(&painter);
 
-		// Render the glyphs second to render over any decorations that render to the same spot
+        // Render the glyphs second to render over any decorations that render to the same spot
         for (qsizetype i = 0; i < colors.size(); ++i)
             this->glyphs[i].renderColored(&painter, colors.at(i));
     }

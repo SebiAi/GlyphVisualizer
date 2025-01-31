@@ -20,18 +20,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "PlayPauseButton.h"
 
 PlayPauseButton::PlayPauseButton(QWidget *parent)
-	: QToolButton{parent}
+    : QToolButton{parent}
 {
-	setIcon(PlayPauseButton::getIconPlay());
-	setIconSize(QSize{40, 40});
-	setAutoRaise(true);
+    setIcon(PlayPauseButton::getIconPlay());
+    setIconSize(QSize{40, 40});
+    setAutoRaise(true);
 
-	this->spaceShortcut = new QShortcut{Qt::Key::Key_Space, this};
-	this->kShortcut = new QShortcut{Qt::Key::Key_K, this};
-	connect(this->spaceShortcut, &QShortcut::activated, this, &QToolButton::click);
-	connect(this->kShortcut, &QShortcut::activated, this, &QToolButton::click);
+    this->spaceShortcut = new QShortcut{Qt::Key::Key_Space, this};
+    this->kShortcut = new QShortcut{Qt::Key::Key_K, this};
+    connect(this->spaceShortcut, &QShortcut::activated, this, &QToolButton::click);
+    connect(this->kShortcut, &QShortcut::activated, this, &QToolButton::click);
 }
 
 void PlayPauseButton::setPlayingState(bool isPlay) {
-	setIcon(isPlay ? PlayPauseButton::getIconPause() : PlayPauseButton::getIconPlay());
+    setIcon(isPlay ? PlayPauseButton::getIconPause() : PlayPauseButton::getIconPlay());
 }

@@ -36,25 +36,25 @@ ConfigurationManager::ConfigurationManager()
 }
 
 IConfiguration* ConfigurationManager::getConfiguration(DeviceBuild device) {
-	if (!this->configurations.contains(device)) {
-		qCCritical(configurationManager) << "Requested invalid DeviceBuild:" << device;
+    if (!this->configurations.contains(device)) {
+        qCCritical(configurationManager) << "Requested invalid DeviceBuild:" << device;
         throw std::logic_error("Requested invalid DeviceBuild!");
-	}
+    }
 
     return this->configurations.value(device).get();
 }
 
 DeviceBuild ConfigurationManager::loadCompositionFromAudio(const QString& audioPath) {
-	qCInfo(configurationManager) << "Loading composition from audio...";
+    qCInfo(configurationManager) << "Loading composition from audio...";
 
     // Make sure the file exists
     QFileInfo fileInfo{audioPath};
-	if (!fileInfo.isFile()) {
+    if (!fileInfo.isFile()) {
         throw SourceFileException("The audio file '" + audioPath.toStdString() + "' could not be found!");
-	}
-	if (fileInfo.suffix() != QStringLiteral("ogg")) {
+    }
+    if (fileInfo.suffix() != QStringLiteral("ogg")) {
         throw SourceFileException("Wrong file extension! Only opus files with the .ogg extension are supported!");
-	}
+    }
 
     // Read the audio tags with TagLib
     // TagLib also makes sure that the codec is opus
@@ -70,29 +70,29 @@ DeviceBuild ConfigurationManager::loadCompositionFromAudio(const QString& audioP
     }
     if (!tags.contains("AUTHOR") || tags["AUTHOR"].size() != 1)
         throw InvalidLightDataException("Malformed light data! Could not extract the 'AUTHOR' tag.");
-	QByteArray author{tags.value("AUTHOR").front().to8Bit().c_str()};
-	qCInfo(configurationManagerVerbose) << "Author raw:" << author;
+    QByteArray author{tags.value("AUTHOR").front().to8Bit().c_str()};
+    qCInfo(configurationManagerVerbose) << "Author raw:" << author;
     if (!tags.contains("COMPOSER") || tags["COMPOSER"].size() != 1)
         throw InvalidLightDataException("Malformed light data! Could not extract the 'COMPOSER' tag.");
-	QString composer{tags.value("COMPOSER").front().to8Bit().c_str()};
-	qCInfo(configurationManagerVerbose) << "Composer:" << composer;
+    QString composer{tags.value("COMPOSER").front().to8Bit().c_str()};
+    qCInfo(configurationManagerVerbose) << "Composer:" << composer;
 
     // Get DeviceBuild from the composer string
-	QRegularExpressionMatch match{ConfigurationManager::composerExpression.match(composer)};
+    QRegularExpressionMatch match{ConfigurationManager::composerExpression.match(composer)};
     if (!match.hasMatch())
         throw InvalidLightDataException("This is not a valid composition! (invalid composer)");
     // Check the version of the composer if matched
     // No match means that it is the initial composer version that launched with Phone (2)
-	if (match.hasCaptured(1)) {
-		qCInfo(configurationManagerVerbose) << "Captured composer version:" << match.captured(1);
-		if (match.captured(1).toInt() > 1)
-			throw InvalidLightDataException("This composition format is not supported yet. Please try updating " + QCoreApplication::applicationName().toStdString() + ".");
-	} else {
-		qCInfo(configurationManagerVerbose) << "No composer version captured => 0";
-	}
+    if (match.hasCaptured(1)) {
+        qCInfo(configurationManagerVerbose) << "Captured composer version:" << match.captured(1);
+        if (match.captured(1).toInt() > 1)
+            throw InvalidLightDataException("This composition format is not supported yet. Please try updating " + QCoreApplication::applicationName().toStdString() + ".");
+    } else {
+        qCInfo(configurationManagerVerbose) << "No composer version captured => 0";
+    }
     // Get the DeviceBuild from the string
-	qCInfo(configurationManagerVerbose) << "Captured device build:" << match.captured(2);
-	bool deviceSupported{false};
+    qCInfo(configurationManagerVerbose) << "Captured device build:" << match.captured(2);
+    bool deviceSupported{false};
     DeviceBuild build{QMetaEnum::fromType<DeviceBuild>().keyToValue(match.captured(2).toStdString().c_str(), &deviceSupported)};
     if (!deviceSupported)
         throw InvalidLightDataException("Device '" + match.captured(2).toStdString() + "' is either invalid or not supported yet!");
@@ -101,14 +101,14 @@ DeviceBuild ConfigurationManager::loadCompositionFromAudio(const QString& audioP
     if (build == DeviceBuild::PacmanPro)
         build = DeviceBuild::Pacman;
 
-	qCInfo(configurationManagerVerbose) << "Parsed device build:" << build;
+    qCInfo(configurationManagerVerbose) << "Parsed device build:" << build;
 
     // Base64 decode
-	QByteArray::FromBase64Result authorBase64Result{QByteArray::fromBase64Encoding(author)};
+    QByteArray::FromBase64Result authorBase64Result{QByteArray::fromBase64Encoding(author)};
     if (authorBase64Result.decodingStatus != QByteArray::Base64DecodingStatus::Ok)
         throw InvalidLightDataException("Malformed light data! Could not decode data.");
     author = authorBase64Result.decoded;
-	qCInfo(configurationManagerVerbose) << "Author decoded:" << author;
+    qCInfo(configurationManagerVerbose) << "Author decoded:" << author;
 
     // Decompress
     // Prepend the 4 byte header indicating the expected size (we use 200k bytes = 0x030D40) and uncompress the data
@@ -117,19 +117,19 @@ DeviceBuild ConfigurationManager::loadCompositionFromAudio(const QString& audioP
     QString decodedAuthor{qUncompress(author)};
     if (decodedAuthor.trimmed().isEmpty())
         throw InvalidLightDataException("Malformed light data! Could not uncompress data.\nAre you sure that you selected the right entry in the dropdown?");
-	qCInfo(configurationManagerVerbose) << "Author csv:" << decodedAuthor;
+    qCInfo(configurationManagerVerbose) << "Author csv:" << decodedAuthor;
 
     // Parse the data
-	QList<QList<int>> lightData{parseLightData(decodedAuthor)};
+    QList<QList<int>> lightData{parseLightData(decodedAuthor)};
     // We still need to check here bc. a non empty decodedAuthor string can still result
     // in an empty list e.g.: '\n'
     if (lightData.empty())
         throw InvalidLightDataException("Malformed light data! No valid light values (empty).");
-	// qCInfo(configurationManagerVerbose) << "Parsed light data:" << lightData;
+    // qCInfo(configurationManagerVerbose) << "Parsed light data:" << lightData;
 
     // Check if the number of columns are consistent and valid
-	IConfiguration* config{getConfiguration(build)};
-	qsizetype firstSize{lightData.first().size()};
+    IConfiguration* config{getConfiguration(build)};
+    qsizetype firstSize{lightData.first().size()};
     if (!config->supportedZones.contains(firstSize))
         throw InvalidLightDataException(
             std::string("The amount of zones does not match the amount of supported zones (")
@@ -157,12 +157,12 @@ DeviceBuild ConfigurationManager::loadCompositionFromAudio(const QString& audioP
         });
         colors.append(colorRow);
     }
-	// qCInfo(configurationManagerVerbose) << "Color data:" << colors;
+    // qCInfo(configurationManagerVerbose) << "Color data:" << colors;
 
     // Set the colors
     config->parsedColors = colors;
 
-	qCInfo(configurationManager) << "Loaded composition successfully!";
+    qCInfo(configurationManager) << "Loaded composition successfully!";
 
     return build;
 }

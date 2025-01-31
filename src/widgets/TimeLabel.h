@@ -26,12 +26,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 class TimeLabel : public QLabel
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	explicit TimeLabel(QWidget *parent = nullptr);
+    explicit TimeLabel(QWidget *parent = nullptr);
 
 public slots:
-	void setMS(qint64 ms);
+    void setMS(qint64 ms);
     void clearTimestamp();
 
 private:

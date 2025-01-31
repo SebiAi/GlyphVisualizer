@@ -34,53 +34,53 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 class SeekBar : public QSlider
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	explicit SeekBar(QWidget* parent = nullptr);
-	~SeekBar();
+    explicit SeekBar(QWidget* parent = nullptr);
+    ~SeekBar();
 
 signals:
-	void seek(int position);
-	void percentageSeek(qreal percent);
+    void seek(int position);
+    void percentageSeek(qreal percent);
 
 public slots:
-	void updatePosition(int position);
+    void updatePosition(int position);
 
 protected:
-	virtual void resizeEvent(QResizeEvent* event) override;
-	virtual void paintEvent(QPaintEvent* event) override;
+    virtual void resizeEvent(QResizeEvent* event) override;
+    virtual void paintEvent(QPaintEvent* event) override;
 
 private:
-	class SeekBarStyle : public QProxyStyle {
-		int styleHint(QStyle::StyleHint hint, const QStyleOption* option = nullptr, const QWidget* widget = nullptr, QStyleHintReturn* returnData = nullptr) const override {
-			if (hint == QStyle::StyleHint::SH_Slider_AbsoluteSetButtons)
-				return Qt::MouseButton::LeftButton;
-			return QProxyStyle::styleHint(hint, option, widget, returnData);
-		}
-	};
+    class SeekBarStyle : public QProxyStyle {
+        int styleHint(QStyle::StyleHint hint, const QStyleOption* option = nullptr, const QWidget* widget = nullptr, QStyleHintReturn* returnData = nullptr) const override {
+            if (hint == QStyle::StyleHint::SH_Slider_AbsoluteSetButtons)
+                return Qt::MouseButton::LeftButton;
+            return QProxyStyle::styleHint(hint, option, widget, returnData);
+        }
+    };
 
-	static constexpr int borderRadius{5};
+    static constexpr int borderRadius{5};
 
-	SeekBarStyle* seekBarStyle;
-	QRect border;
-	QRect groove;
-	QRect subPage;
+    SeekBarStyle* seekBarStyle;
+    QRect border;
+    QRect groove;
+    QRect subPage;
 
-	QShortcut* zeroPShortcut;
-	QShortcut* onePShortcut;
-	QShortcut* twoPShortcut;
-	QShortcut* threePShortcut;
-	QShortcut* fourPShortcut;
-	QShortcut* fivePShortcut;
-	QShortcut* sixPShortcut;
-	QShortcut* sevenPShortcut;
-	QShortcut* eightPShortcut;
-	QShortcut* ninePShortcut;
+    QShortcut* zeroPShortcut;
+    QShortcut* onePShortcut;
+    QShortcut* twoPShortcut;
+    QShortcut* threePShortcut;
+    QShortcut* fourPShortcut;
+    QShortcut* fivePShortcut;
+    QShortcut* sixPShortcut;
+    QShortcut* sevenPShortcut;
+    QShortcut* eightPShortcut;
+    QShortcut* ninePShortcut;
 
 private slots:
-	void calculateSubPage();
-	void onSliderReleased();
-	void onActionTriggered(int action);
+    void calculateSubPage();
+    void onSliderReleased();
+    void onActionTriggered(int action);
 };
 
 #endif // GV_SEEKBAR_H

@@ -20,16 +20,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "NetworkManager.h"
 
 NetworkManager& NetworkManager::getInstance() {
-	static NetworkManager instance; // This is thread safe (C++11)
-	return instance;
+    static NetworkManager instance; // This is thread safe (C++11)
+    return instance;
 }
 
 QNetworkReply* NetworkManager::get(const QNetworkRequest& request) {
-	QMutexLocker locker(&this->mutex);
-	return manager->get(request);
+    QMutexLocker locker(&this->mutex);
+    return manager->get(request);
 }
 
 NetworkManager::NetworkManager(QObject *parent)
-	: QObject{parent}, manager{new QNetworkAccessManager{this}}
+    : QObject{parent}, manager{new QNetworkAccessManager{this}}
 {}
 

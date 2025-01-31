@@ -65,25 +65,25 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-	MainWindow(Config* config, QWidget *parent = nullptr);
+    MainWindow(Config* config, QWidget *parent = nullptr);
     ~MainWindow();
 
 protected:
-	virtual void showEvent(QShowEvent *event) override;
+    virtual void showEvent(QShowEvent *event) override;
 
 private:
-	Config* config;
-	UpdateChecker* updateChecker;
+    Config* config;
+    UpdateChecker* updateChecker;
 
-	bool firstShow;
+    bool firstShow;
 
     QMenuBar* menuBar;
-	QMenu* fileMenu;
-	QAction* openFileAction;
-	QMenu* helpMenu;
-	QAction* checkForUpdateAction;
-	QAction* donateAction;
-	QAction* aboutAction;
+    QMenu* fileMenu;
+    QAction* openFileAction;
+    QMenu* helpMenu;
+    QAction* checkForUpdateAction;
+    QAction* donateAction;
+    QAction* aboutAction;
 
     OpenCompositionDialog* openCompositionDialog;
 
@@ -91,7 +91,7 @@ private:
     QWidget* centralWidget;
     QVBoxLayout* centralLayout;
     GlyphWidget* glyphWidget;
-	CompositionManagerControls* compositonManagerControls;
+    CompositionManagerControls* compositonManagerControls;
 
     ConfigurationManager configurationManager;
     CompositionManager compositonManager;
@@ -102,17 +102,17 @@ private:
     void openCompositionDialogAccepted();
 
 private slots:
-	void onUpdateCheckerUpdateAvailable(const QString& newVersion);
-	void onUpdateCheckerUpdateCheckFailed(const QString& errorMessage);
-	void onUpdateCheckerNoUpdateAvailable();
+    void onUpdateCheckerUpdateAvailable(const QString& newVersion);
+    void onUpdateCheckerUpdateCheckFailed(const QString& errorMessage);
+    void onUpdateCheckerNoUpdateAvailable();
 
     void onCompositionManagerTick(qint64 position);
-	void onCompositionManagerMediaStatusChanged(QMediaPlayer::MediaStatus status);
+    void onCompositionManagerMediaStatusChanged(QMediaPlayer::MediaStatus status);
 
-	void onOpenFileActionTriggered();
-	void onCheckForUpdateActionTriggered();
-	void onDonateActionTriggered();
-	void onAboutActionTriggered();
+    void onOpenFileActionTriggered();
+    void onCheckForUpdateActionTriggered();
+    void onDonateActionTriggered();
+    void onAboutActionTriggered();
 
     void onOpenCompositionDialogFinished(int result);
 };

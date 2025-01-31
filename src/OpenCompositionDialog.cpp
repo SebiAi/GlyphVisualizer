@@ -130,7 +130,7 @@ QString IBaseWidget::getValidPath(const QString& path) {
 }
 
 void IBaseWidget::onBrowseButtonClicked(qsizetype rowIndex) {
-	qCInfo(openCompositionDialogVerbose) << "Browse button clicked in row" << rowIndex;
+    qCInfo(openCompositionDialogVerbose) << "Browse button clicked in row" << rowIndex;
 
     QGridLayout* row{static_cast<QGridLayout*>(this->layout->itemAt(1 + 2 * rowIndex)->layout())};
     static_cast<QLineEdit*>(row->itemAtPosition(0, 0)->widget())->text();
@@ -167,34 +167,34 @@ void IBaseWidget::onBrowseButtonClicked(qsizetype rowIndex) {
  */
 
 OpenCompositionDialog::OpenCompositionDialog(QWidget* parent)
-	: QDialog{parent}
+    : QDialog{parent}
 {
     initUi();
 }
 
 void OpenCompositionDialog::initUi() {
-	// Window title and size
-	setWindowTitle(QStringLiteral("Open Composition"));
-	resize(800, 200);
+    // Window title and size
+    setWindowTitle(QStringLiteral("Open Composition"));
+    resize(800, 200);
 
-	// Layout
-	setLayout(new QVBoxLayout(this));
-	layout()->setAlignment(Qt::AlignmentFlag::AlignTop);
+    // Layout
+    setLayout(new QVBoxLayout(this));
+    layout()->setAlignment(Qt::AlignmentFlag::AlignTop);
 
-	// Info label
-	QLabel* infoLabel{new QLabel{QStringLiteral("Select the type of composition with the dropdown and then select the required files.")}};
-	infoLabel->setWordWrap(true);
-	layout()->addWidget(infoLabel);
+    // Info label
+    QLabel* infoLabel{new QLabel{QStringLiteral("Select the type of composition with the dropdown and then select the required files.")}};
+    infoLabel->setWordWrap(true);
+    layout()->addWidget(infoLabel);
 
-	// Dropdown
-	this->comboBoxOpenMode = new QComboBox{};
-	layout()->addWidget(this->comboBoxOpenMode);
-	connect(this->comboBoxOpenMode, &QComboBox::currentIndexChanged, this, &OpenCompositionDialog::onComboBoxCurrentIndexChanged);
+    // Dropdown
+    this->comboBoxOpenMode = new QComboBox{};
+    layout()->addWidget(this->comboBoxOpenMode);
+    connect(this->comboBoxOpenMode, &QComboBox::currentIndexChanged, this, &OpenCompositionDialog::onComboBoxCurrentIndexChanged);
 
     // Create forms
     this->forms[AudioFormWidget::staticOpenMode] = QSharedPointer<AudioFormWidget>::create();
-	// TODO: Implement NGlyph format first
-	//this->forms[AudioNGlyphFormWidget::staticOpenMode] = QSharedPointer<AudioNGlyphFormWidget>::create();
+    // TODO: Implement NGlyph format first
+    //this->forms[AudioNGlyphFormWidget::staticOpenMode] = QSharedPointer<AudioNGlyphFormWidget>::create();
 
     // QStackedWidget for the forms
     this->formContainer = new QStackedWidget{this};
@@ -222,10 +222,10 @@ QString OpenCompositionDialog::autoCompleteFilePath(const QString& sourcePath, c
     QFileInfo sourcePathInfo{sourcePath};
     for (const QString& extension: possibleFileExtensions) {
         QFileInfo destinationPathInfo{sourcePathInfo.dir().filePath(sourcePathInfo.completeBaseName().append('.').append(extension))};
-		if (destinationPathInfo.isFile()) {
-			qCInfo(openCompositionDialogVerbose) << "Found auto complete" << destinationPathInfo.filePath() << "for" << sourcePath;
+        if (destinationPathInfo.isFile()) {
+            qCInfo(openCompositionDialogVerbose) << "Found auto complete" << destinationPathInfo.filePath() << "for" << sourcePath;
             return destinationPathInfo.filePath();
-		}
+        }
     }
 
     return QString();
@@ -234,13 +234,13 @@ QString OpenCompositionDialog::autoCompleteFilePath(const QString& sourcePath, c
 void OpenCompositionDialog::onComboBoxCurrentIndexChanged(int index) {
     OpenCompositionMode openMode{this->comboBoxOpenMode->itemData(index).value<OpenCompositionMode>()};
 
-	qCInfo(openCompositionDialogVerbose) << "ComboBox selection changed to" << openMode;
+    qCInfo(openCompositionDialogVerbose) << "ComboBox selection changed to" << openMode;
 
     switch (openMode) {
     case OpenCompositionMode::AUDIO_ONLY:
         // Copy the audio file path from the AUDIO_AND_NGLYPH form to the AUDIO form
-		// TODO: Implement NGlyph format first
-		//this->forms[openMode]->setValues(this->forms[OpenCompositionMode::AUDIO_AND_NGLYPH]->getValues());
+        // TODO: Implement NGlyph format first
+        //this->forms[openMode]->setValues(this->forms[OpenCompositionMode::AUDIO_AND_NGLYPH]->getValues());
         break;
     case OpenCompositionMode::AUDIO_AND_NGLYPH:
         // Copy the audio file path from the AUDIO form to the AUDIO_AND_NGLYPH form
@@ -256,7 +256,7 @@ void OpenCompositionDialog::onComboBoxCurrentIndexChanged(int index) {
 }
 
 void OpenCompositionDialog::onFileSelected(OpenCompositionMode mode, const QString& path, qsizetype rowIndex) {
-	qCInfo(openCompositionDialogVerbose) << "Selected file" << path << "for" << mode << "in row" << rowIndex;
+    qCInfo(openCompositionDialogVerbose) << "Selected file" << path << "for" << mode << "in row" << rowIndex;
 
     // Extra logic based on the open mode
     qsizetype otherRow;

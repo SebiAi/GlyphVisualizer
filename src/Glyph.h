@@ -35,11 +35,11 @@ class Glyph : public MySvgRenderer
 {
 public:
 
-	explicit Glyph(const QString& filename, const Reference& reference, const QPointF& referenceOffset, const QString& id = QString());
+    explicit Glyph(const QString& filename, const Reference& reference, const QPointF& referenceOffset, const QString& id = QString());
     Glyph(const Glyph& g);
 
-	void renderColored(QPainter* painter, const QColor& color);
-	virtual void calcBounds(const QRect& drawingArea, qreal scale) override;
+    void renderColored(QPainter* painter, const QColor& color);
+    virtual void calcBounds(const QRect& drawingArea, qreal scale) override;
 
 private:
     QImage svgImage;

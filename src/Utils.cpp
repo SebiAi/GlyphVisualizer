@@ -30,25 +30,25 @@ QString listToString(const QList<qsizetype>& list, const QString& separator) {
 
 void createPathIfNeeded(const QDir& dir)
 {
-	if (!dir.exists() && !dir.mkpath(dir.absolutePath()))
-		throw std::runtime_error("Could not create directory structure '" + dir.absolutePath().toStdString() + "'");
+    if (!dir.exists() && !dir.mkpath(dir.absolutePath()))
+        throw std::runtime_error("Could not create directory structure '" + dir.absolutePath().toStdString() + "'");
 }
 
 QDir getAppConfigLocation() {
-	// Get all app config locations
-	QStringList appConfigLocations = QStandardPaths::standardLocations(QStandardPaths::AppConfigLocation);
+    // Get all app config locations
+    QStringList appConfigLocations = QStandardPaths::standardLocations(QStandardPaths::AppConfigLocation);
 
-	// We need at least one location
-	if (appConfigLocations.isEmpty())
-	{
-		throw std::runtime_error("No app config location found!!");
-	}
+    // We need at least one location
+    if (appConfigLocations.isEmpty())
+    {
+        throw std::runtime_error("No app config location found!!");
+    }
 
-	// Pick the first location which also has the highest priority
-	QDir appConfigDir = QDir(appConfigLocations.at(0));
+    // Pick the first location which also has the highest priority
+    QDir appConfigDir = QDir(appConfigLocations.at(0));
 
-	// Create the directory structure if the location does not exist
-	createPathIfNeeded(appConfigDir);
+    // Create the directory structure if the location does not exist
+    createPathIfNeeded(appConfigDir);
 
-	return appConfigDir;
+    return appConfigDir;
 }

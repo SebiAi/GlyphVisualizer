@@ -32,32 +32,32 @@ Q_LOGGING_CATEGORY(windowsLoggingWorkaroundVerbose, "WindowsLoggingWorkaround.Ve
 
 class WindowsLoggingWorkaround {
 public:
-	explicit WindowsLoggingWorkaround() {
-		// Windows workarround to output logs to the console if started from one
-		if (AttachConsole(ATTACH_PARENT_PROCESS)) {
-			freopen("CONOUT$", "w", stdout);
-			freopen("CONOUT$", "w", stderr);
-		}
-		qCInfo(windowsLoggingWorkaround) << "Windows detected - attached to console";
-	}
+    explicit WindowsLoggingWorkaround() {
+        // Windows workarround to output logs to the console if started from one
+        if (AttachConsole(ATTACH_PARENT_PROCESS)) {
+            freopen("CONOUT$", "w", stdout);
+            freopen("CONOUT$", "w", stderr);
+        }
+        qCInfo(windowsLoggingWorkaround) << "Windows detected - attached to console";
+    }
 
-	~WindowsLoggingWorkaround() {
-		qCInfo(windowsLoggingWorkaround) << "Windows detected - detaching from console";
-		FreeConsole();
-	}
+    ~WindowsLoggingWorkaround() {
+        qCInfo(windowsLoggingWorkaround) << "Windows detected - detaching from console";
+        FreeConsole();
+    }
 };
 
 #else
 
 class WindowsLoggingWorkaround {
 public:
-	explicit WindowsLoggingWorkaround() {
-		qCInfo(windowsLoggingWorkaround) << "Not Windows - nothing to do";
-	}
+    explicit WindowsLoggingWorkaround() {
+        qCInfo(windowsLoggingWorkaround) << "Not Windows - nothing to do";
+    }
 
-	~WindowsLoggingWorkaround() {
-		qCInfo(windowsLoggingWorkaround) << "Not Windows - nothing to free";
-	}
+    ~WindowsLoggingWorkaround() {
+        qCInfo(windowsLoggingWorkaround) << "Not Windows - nothing to free";
+    }
 };
 
 #endif

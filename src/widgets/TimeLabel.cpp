@@ -22,13 +22,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 const QString TimeLabel::invalidTimestamp{"--:--"};
 
 TimeLabel::TimeLabel(QWidget *parent)
-	: QLabel{parent}
+    : QLabel{parent}
 {
     setText(TimeLabel::invalidTimestamp);
 }
 
 void TimeLabel::setMS(qint64 ms) {
-	setText(QString::asprintf("%02lld:%02lld", ms / 60000, (ms / 1000) % 60));
+    setText(QString::asprintf("%02lld:%02lld", ms / 60000, (ms / 1000) % 60));
 }
 
 void TimeLabel::clearTimestamp() {

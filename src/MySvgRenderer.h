@@ -44,13 +44,13 @@ public:
     };
     Q_ENUM(Reference)
 
-	explicit MySvgRenderer(const QString& filename, const Reference& reference, const QPointF& referenceOffset, const QString& id = QString());
-	MySvgRenderer(const MySvgRenderer& g);
+    explicit MySvgRenderer(const QString& filename, const Reference& reference, const QPointF& referenceOffset, const QString& id = QString());
+    MySvgRenderer(const MySvgRenderer& g);
 
     QRectF getScaledAlignedBounds() const { return this->scaledAlignedBounds; }
 
-	void render(QPainter* painter);
-	virtual void calcBounds(const QRect& drawingArea, qreal scale);
+    void render(QPainter* painter);
+    virtual void calcBounds(const QRect& drawingArea, qreal scale);
 
 protected:
     const QString filename;

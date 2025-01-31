@@ -43,102 +43,102 @@ Q_LOGGING_CATEGORY(mainFunctionVerbose, "Main.Verbose")
 
 int main(int argc, char *argv[])
 {
-	// This object attaches to an existing console so logs are properly output to it.
-	// Frees the console on deconstruction.
-	// Does nothing on other platforms than Windows
-	WindowsLoggingWorkaround wlw;
+    // This object attaches to an existing console so logs are properly output to it.
+    // Frees the console on deconstruction.
+    // Does nothing on other platforms than Windows
+    WindowsLoggingWorkaround wlw;
 
-	try {
-		QApplication a(argc, argv);
-		QCoreApplication::setOrganizationName(QStringLiteral("SebiAi"));
-		QCoreApplication::setOrganizationDomain(QStringLiteral("com.sebiai"));
-		QCoreApplication::setApplicationName(QStringLiteral("GlyphVisualizer"));
-		QCoreApplication::setApplicationVersion(QStringLiteral(BUILDINFO_VERSION));
+    try {
+        QApplication a(argc, argv);
+        QCoreApplication::setOrganizationName(QStringLiteral("SebiAi"));
+        QCoreApplication::setOrganizationDomain(QStringLiteral("com.sebiai"));
+        QCoreApplication::setApplicationName(QStringLiteral("GlyphVisualizer"));
+        QCoreApplication::setApplicationVersion(QStringLiteral(BUILDINFO_VERSION));
 
-		// QTranslator translator;
-		// const QStringList uiLanguages = QLocale::system().uiLanguages();
-		// for (const QString &locale : uiLanguages) {
-		// 	const QString baseName = "GlyphVisualizer_" + QLocale(locale).name();
-		// 	if (translator.load(QStringLiteral(":/i18n/") + baseName)) {
-		// 		a.installTranslator(&translator);
-		// 		break;
-		// 	}
-		// }
+        // QTranslator translator;
+        // const QStringList uiLanguages = QLocale::system().uiLanguages();
+        // for (const QString &locale : uiLanguages) {
+        //     const QString baseName = "GlyphVisualizer_" + QLocale(locale).name();
+        //     if (translator.load(QStringLiteral(":/i18n/") + baseName)) {
+        //         a.installTranslator(&translator);
+        //         break;
+        //     }
+        // }
 
-		// Set up command line parser
-		QCommandLineParser parser;
-		parser.setApplicationDescription("A Glyph composition player written with the Qt6 framework in C++ that plays Glyph compositions from Nothing Phones.");
-		parser.addHelpOption();
-		parser.addVersionOption();
-		// Add verbose logging option
-		QCommandLineOption verboseLogging("verbose", "Enable verbose logging.");
-		parser.addOption(verboseLogging);
+        // Set up command line parser
+        QCommandLineParser parser;
+        parser.setApplicationDescription("A Glyph composition player written with the Qt6 framework in C++ that plays Glyph compositions from Nothing Phones.");
+        parser.addHelpOption();
+        parser.addVersionOption();
+        // Add verbose logging option
+        QCommandLineOption verboseLogging("verbose", "Enable verbose logging.");
+        parser.addOption(verboseLogging);
 
-		// Parse command line options
-		parser.process(a);
+        // Parse command line options
+        parser.process(a);
 
-		// Set verbose logging
-		if (parser.isSet(verboseLogging))
-		{
-			QLoggingCategory::setFilterRules("*.Verbose=true");
-			qCInfo(mainFunctionVerbose) << "Verbose logging activated";
-		}
-		else QLoggingCategory::setFilterRules("*.Verbose=false");
+        // Set verbose logging
+        if (parser.isSet(verboseLogging))
+        {
+            QLoggingCategory::setFilterRules("*.Verbose=true");
+            qCInfo(mainFunctionVerbose) << "Verbose logging activated";
+        }
+        else QLoggingCategory::setFilterRules("*.Verbose=false");
 
-		qCInfo(mainFunctionVerbose) << "#### Software Information #####";
-		qCInfo(mainFunctionVerbose) << "Current software version:" << BUILDINFO_VERSION;
-		qCInfo(mainFunctionVerbose) << "Current software git hash:" << BUILDINFO_GIT_COMMIT_HASH;
+        qCInfo(mainFunctionVerbose) << "#### Software Information #####";
+        qCInfo(mainFunctionVerbose) << "Current software version:" << BUILDINFO_VERSION;
+        qCInfo(mainFunctionVerbose) << "Current software git hash:" << BUILDINFO_GIT_COMMIT_HASH;
 
-		qCInfo(mainFunctionVerbose) << "#### System Information #####";
-		qCInfo(mainFunctionVerbose) << "Product name and version:" << QSysInfo::prettyProductName();
-		qCInfo(mainFunctionVerbose) << "Kernel type and version:" << QSysInfo::kernelType() << QSysInfo::kernelVersion();
+        qCInfo(mainFunctionVerbose) << "#### System Information #####";
+        qCInfo(mainFunctionVerbose) << "Product name and version:" << QSysInfo::prettyProductName();
+        qCInfo(mainFunctionVerbose) << "Kernel type and version:" << QSysInfo::kernelType() << QSysInfo::kernelVersion();
 
-		qCInfo(mainFunctionVerbose) << "#### Logging Start #####";
+        qCInfo(mainFunctionVerbose) << "#### Logging Start #####";
 
-		// Init config
-		Config config;
-		bool resetConfig{false};
-		do {
-			try {
-				config.load(getAppConfigLocation().absoluteFilePath(QStringLiteral("GlyphVisualizer.ini")), resetConfig);
-				resetConfig = false;
-			} catch (const Config::ConfigVersionTooHighError& e) {
-				qCCritical(mainFunction) << "ConfigVersionTooHighError occurred";
-				QMessageBox msg{
-					QMessageBox::Icon::Warning,
-					QStringLiteral("Config Error"),
-					QStringLiteral("The configuration file in '%1' is intended to be used with a higher version of this software.\n\n"
-								   "This usually happens when you either downgrade your software or manually modify the config.\n\n"
-								   "Do you want to clear the config (Recommended) or exit the application?").arg(e.filePath.c_str())
-				};
-				QPushButton* exitSoftwareButton{msg.addButton("Exit Software", QMessageBox::ButtonRole::AcceptRole)};
-				QPushButton* clearConfigButton{msg.addButton("Clear Config (Recommended)", QMessageBox::ButtonRole::DestructiveRole)};
-				msg.exec();
+        // Init config
+        Config config;
+        bool resetConfig{false};
+        do {
+            try {
+                config.load(getAppConfigLocation().absoluteFilePath(QStringLiteral("GlyphVisualizer.ini")), resetConfig);
+                resetConfig = false;
+            } catch (const Config::ConfigVersionTooHighError& e) {
+                qCCritical(mainFunction) << "ConfigVersionTooHighError occurred";
+                QMessageBox msg{
+                    QMessageBox::Icon::Warning,
+                    QStringLiteral("Config Error"),
+                    QStringLiteral("The configuration file in '%1' is intended to be used with a higher version of this software.\n\n"
+                                   "This usually happens when you either downgrade your software or manually modify the config.\n\n"
+                                   "Do you want to clear the config (Recommended) or exit the application?").arg(e.filePath.c_str())
+                };
+                QPushButton* exitSoftwareButton{msg.addButton("Exit Software", QMessageBox::ButtonRole::AcceptRole)};
+                QPushButton* clearConfigButton{msg.addButton("Clear Config (Recommended)", QMessageBox::ButtonRole::DestructiveRole)};
+                msg.exec();
 
-				if (msg.clickedButton() == exitSoftwareButton) {
-					qCWarning(mainFunction) << "ConfigVersionTooHighError - User decided to exit";
-					return 0;
-				} else if (msg.clickedButton() == clearConfigButton) {
-					qCWarning(mainFunction) << "ConfigVersionTooHighError - User decided to clear";
-					resetConfig = true;
-				}
-			}
-		} while (resetConfig);
+                if (msg.clickedButton() == exitSoftwareButton) {
+                    qCWarning(mainFunction) << "ConfigVersionTooHighError - User decided to exit";
+                    return 0;
+                } else if (msg.clickedButton() == clearConfigButton) {
+                    qCWarning(mainFunction) << "ConfigVersionTooHighError - User decided to clear";
+                    resetConfig = true;
+                }
+            }
+        } while (resetConfig);
 
 
-		MainWindow w{&config};
+        MainWindow w{&config};
         w.show();
-		int returnCode{a.exec()};
+        int returnCode{a.exec()};
 
-		// Update config
-		config.setValue(Config::Setting::FirstStart_Bool, false);
+        // Update config
+        config.setValue(Config::Setting::FirstStart_Bool, false);
 
-		return returnCode;
+        return returnCode;
     } catch (const std::exception& e) {
-		qCCritical(mainFunction) << "Unexpected Exception:" << e.what();
+        qCCritical(mainFunction) << "Unexpected Exception:" << e.what();
 
-		QMessageBox msg{QMessageBox::Icon::Critical, QStringLiteral("Unexpected Exception"), QStringLiteral("An unexpected error occured:\n%1\n\nThe application will now exit!").arg(e.what()), QMessageBox::StandardButton::Ok};
-		msg.exec();
+        QMessageBox msg{QMessageBox::Icon::Critical, QStringLiteral("Unexpected Exception"), QStringLiteral("An unexpected error occured:\n%1\n\nThe application will now exit!").arg(e.what()), QMessageBox::StandardButton::Ok};
+        msg.exec();
         return 1;
     }
 }

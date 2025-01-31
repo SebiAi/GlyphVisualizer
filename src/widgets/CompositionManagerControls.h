@@ -35,31 +35,31 @@ Q_DECLARE_LOGGING_CATEGORY(compositionManagerControlsVerbose)
 
 class CompositionManagerControls : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	explicit CompositionManagerControls(CompositionManager* cm, QWidget *parent = nullptr);
+    explicit CompositionManagerControls(CompositionManager* cm, QWidget *parent = nullptr);
 
 signals:
-	void playbackChanged(bool playing);
+    void playbackChanged(bool playing);
 
 public slots:
     void resetControls();
 
 private:
-	CompositionManager* cm;
+    CompositionManager* cm;
 
-	PlayPauseButton* playPauseButton;
-	TimeLabel* currentTimeLabel;
-	SeekBar* seekBar;
-	TimeLabel* totalTimeLabel;
+    PlayPauseButton* playPauseButton;
+    TimeLabel* currentTimeLabel;
+    SeekBar* seekBar;
+    TimeLabel* totalTimeLabel;
 
 private slots:
-	void onPlayPauseButtonClicked();
-	void onSeekBarSeek();
-	void onSeekBarPercentageSeek(qreal percent);
-	void onCompositionManagerPlaybackStateChanged(QMediaPlayer::PlaybackState newState);
-	void onCompositionManagerDurationChanged(qint64 duration);
-	void onCompositionManagerPositionChanged(qint64 position);
+    void onPlayPauseButtonClicked();
+    void onSeekBarSeek();
+    void onSeekBarPercentageSeek(qreal percent);
+    void onCompositionManagerPlaybackStateChanged(QMediaPlayer::PlaybackState newState);
+    void onCompositionManagerDurationChanged(qint64 duration);
+    void onCompositionManagerPositionChanged(qint64 position);
 };
 
 #endif // GV_COMPOSITIONMANAGERCONTROLS_H

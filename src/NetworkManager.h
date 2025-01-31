@@ -29,27 +29,27 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 class NetworkManager : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	// Delete copy constructor and copy operator to prevent copies
-	NetworkManager(const NetworkManager&) = delete;
-	void operator=(const NetworkManager&) = delete;
+    // Delete copy constructor and copy operator to prevent copies
+    NetworkManager(const NetworkManager&) = delete;
+    void operator=(const NetworkManager&) = delete;
 
-	static NetworkManager& getInstance();
+    static NetworkManager& getInstance();
 
 public slots:
-	QNetworkReply* get(const QNetworkRequest& request);
+    QNetworkReply* get(const QNetworkRequest& request);
 
 signals:
 
 private:
-	// QNetworkAccessManagers functions are only reentrant but not thread safe
-	// => We need to protect the functions with a mutex
-	QNetworkAccessManager* manager;
-	QMutex mutex;
+    // QNetworkAccessManagers functions are only reentrant but not thread safe
+    // => We need to protect the functions with a mutex
+    QNetworkAccessManager* manager;
+    QMutex mutex;
 
-	// Do not allow outside instantiation
-	explicit NetworkManager(QObject *parent = nullptr);
+    // Do not allow outside instantiation
+    explicit NetworkManager(QObject *parent = nullptr);
 };
 
 #endif // GV_NETWORKMANAGER_H

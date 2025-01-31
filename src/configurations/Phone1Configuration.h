@@ -34,19 +34,19 @@ public:
         QList<Glyph>{
             Glyph{QStringLiteral(":/glyphs/phone1/led_1"), Glyph::Reference::TOP_LEFT, QPointF{9.35, 10}}, // Camera
             Glyph{QStringLiteral(":/glyphs/phone1/led_2"), Glyph::Reference::TOP_RIGHT, QPointF{-21.7, 21.56}}, // Diagonal
-			Glyph{QStringLiteral(":/glyphs/phone1/led_3_zones"), Glyph::Reference::CENTERED, QPointF{0, 0}, QStringLiteral("path_0")}, // BatteryBottomLeft
-			Glyph{QStringLiteral(":/glyphs/phone1/led_3_zones"), Glyph::Reference::CENTERED, QPointF{0, 0}, QStringLiteral("path_1")}, // BatteryBottomRight
-			Glyph{QStringLiteral(":/glyphs/phone1/led_3_zones"), Glyph::Reference::CENTERED, QPointF{0, 0}, QStringLiteral("path_2")}, // BatteryTopRight
-			Glyph{QStringLiteral(":/glyphs/phone1/led_3_zones"), Glyph::Reference::CENTERED, QPointF{0, 0}, QStringLiteral("path_3")}, // BatteryTopLeft
+            Glyph{QStringLiteral(":/glyphs/phone1/led_3_zones"), Glyph::Reference::CENTERED, QPointF{0, 0}, QStringLiteral("path_0")}, // BatteryBottomLeft
+            Glyph{QStringLiteral(":/glyphs/phone1/led_3_zones"), Glyph::Reference::CENTERED, QPointF{0, 0}, QStringLiteral("path_1")}, // BatteryBottomRight
+            Glyph{QStringLiteral(":/glyphs/phone1/led_3_zones"), Glyph::Reference::CENTERED, QPointF{0, 0}, QStringLiteral("path_2")}, // BatteryTopRight
+            Glyph{QStringLiteral(":/glyphs/phone1/led_3_zones"), Glyph::Reference::CENTERED, QPointF{0, 0}, QStringLiteral("path_3")}, // BatteryTopLeft
             Glyph{QStringLiteral(":/glyphs/phone1/led_5"), Glyph::Reference::CENTERED_H_BOTTOM, QPointF{0, -10}}, // USBDot
-			Glyph{QStringLiteral(":/glyphs/phone1/led_4_zones"), Glyph::Reference::CENTERED_H_BOTTOM, QPointF{0, -7.33}, QStringLiteral("path_0")}, // USBLine_Zone0
-			Glyph{QStringLiteral(":/glyphs/phone1/led_4_zones"), Glyph::Reference::CENTERED_H_BOTTOM, QPointF{0, -7.33}, QStringLiteral("path_1")}, // USBLine_Zone1
-			Glyph{QStringLiteral(":/glyphs/phone1/led_4_zones"), Glyph::Reference::CENTERED_H_BOTTOM, QPointF{0, -7.33}, QStringLiteral("path_2")}, // USBLine_Zone2
-			Glyph{QStringLiteral(":/glyphs/phone1/led_4_zones"), Glyph::Reference::CENTERED_H_BOTTOM, QPointF{0, -7.33}, QStringLiteral("path_3")}, // USBLine_Zone3
-			Glyph{QStringLiteral(":/glyphs/phone1/led_4_zones"), Glyph::Reference::CENTERED_H_BOTTOM, QPointF{0, -7.33}, QStringLiteral("path_4")}, // USBLine_Zone4
-			Glyph{QStringLiteral(":/glyphs/phone1/led_4_zones"), Glyph::Reference::CENTERED_H_BOTTOM, QPointF{0, -7.33}, QStringLiteral("path_5")}, // USBLine_Zone5
-			Glyph{QStringLiteral(":/glyphs/phone1/led_4_zones"), Glyph::Reference::CENTERED_H_BOTTOM, QPointF{0, -7.33}, QStringLiteral("path_6")}, // USBLine_Zone6
-			Glyph{QStringLiteral(":/glyphs/phone1/led_4_zones"), Glyph::Reference::CENTERED_H_BOTTOM, QPointF{0, -7.33}, QStringLiteral("path_7")}, // USBLine_Zone7
+            Glyph{QStringLiteral(":/glyphs/phone1/led_4_zones"), Glyph::Reference::CENTERED_H_BOTTOM, QPointF{0, -7.33}, QStringLiteral("path_0")}, // USBLine_Zone0
+            Glyph{QStringLiteral(":/glyphs/phone1/led_4_zones"), Glyph::Reference::CENTERED_H_BOTTOM, QPointF{0, -7.33}, QStringLiteral("path_1")}, // USBLine_Zone1
+            Glyph{QStringLiteral(":/glyphs/phone1/led_4_zones"), Glyph::Reference::CENTERED_H_BOTTOM, QPointF{0, -7.33}, QStringLiteral("path_2")}, // USBLine_Zone2
+            Glyph{QStringLiteral(":/glyphs/phone1/led_4_zones"), Glyph::Reference::CENTERED_H_BOTTOM, QPointF{0, -7.33}, QStringLiteral("path_3")}, // USBLine_Zone3
+            Glyph{QStringLiteral(":/glyphs/phone1/led_4_zones"), Glyph::Reference::CENTERED_H_BOTTOM, QPointF{0, -7.33}, QStringLiteral("path_4")}, // USBLine_Zone4
+            Glyph{QStringLiteral(":/glyphs/phone1/led_4_zones"), Glyph::Reference::CENTERED_H_BOTTOM, QPointF{0, -7.33}, QStringLiteral("path_5")}, // USBLine_Zone5
+            Glyph{QStringLiteral(":/glyphs/phone1/led_4_zones"), Glyph::Reference::CENTERED_H_BOTTOM, QPointF{0, -7.33}, QStringLiteral("path_6")}, // USBLine_Zone6
+            Glyph{QStringLiteral(":/glyphs/phone1/led_4_zones"), Glyph::Reference::CENTERED_H_BOTTOM, QPointF{0, -7.33}, QStringLiteral("path_7")}, // USBLine_Zone7
         },
         Phone1Configuration::staticBuild,
         QList<qsizetype>({15, 5}),
