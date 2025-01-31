@@ -46,6 +46,7 @@ public:
     static constexpr qint64 tickIntervalNS{(qint64)(tickIntervalMS * 1e6)};
 
     explicit CompositionManager(QObject *parent = nullptr);
+    ~CompositionManager();
 
     bool isPlaying() const { return this->player->isPlaying(); }
 

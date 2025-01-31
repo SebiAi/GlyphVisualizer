@@ -25,7 +25,7 @@ Q_LOGGING_CATEGORY(compositionManagerVerbose, "CompositionManager.Verbose")
 
 CompositionManager::CompositionManager(QObject *parent)
     : QObject{parent}, player{new QMediaPlayer{this}}, audioOutput{new QAudioOutput{this->player}}, tickTimer{new QTimer{this}},
-    elapsedTimer{new QElapsedTimer{}}, audioTimer{new QElapsedTimer{}},waitTimer{new QDeadlineTimer{Qt::TimerType::PreciseTimer}},
+    elapsedTimer{new QElapsedTimer{}}, audioTimer{new QElapsedTimer{}}, waitTimer{new QDeadlineTimer{Qt::TimerType::PreciseTimer}},
     audioResumeTimeMS{0}
 {
     this->audioOutput->setVolume(0.4);
@@ -40,6 +40,11 @@ CompositionManager::CompositionManager(QObject *parent)
     connect(this->player, &QMediaPlayer::playbackStateChanged, this, &CompositionManager::playbackStateChanged);
     connect(this->player, &QMediaPlayer::durationChanged, this, &CompositionManager::durationChanged);
     connect(this->player, &QMediaPlayer::positionChanged, this, &CompositionManager::positionChanged);
+}
+CompositionManager::~CompositionManager() {
+    delete this->elapsedTimer;
+    delete this->audioTimer;
+    delete this->waitTimer;
 }
 
 void CompositionManager::seek(qint64 position) {
