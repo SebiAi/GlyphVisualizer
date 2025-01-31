@@ -49,6 +49,7 @@ public:
     ~CompositionManager();
 
     bool isPlaying() const { return this->player->isPlaying(); }
+    QString audioPath() const { return this->player->source().path(); };
 
 signals:
     void compositionTick(qint64 position);

@@ -67,6 +67,10 @@ public:
             this->glyphs[i].calcBounds(tmpDrawingArea, scale);
     }
 
+    virtual IConfiguration* clone() const override {
+        return new Phone1Configuration{*this};
+    }
+
 protected:
     virtual void renderPrivate(QPainter& painter, const QList<QColor>& colors) override {
         switch (colors.size()) {

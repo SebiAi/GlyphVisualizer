@@ -25,7 +25,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <QDialogButtonBox>
 #include <QComboBox>
 #include <QDialog>
-#include <QDir>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QFormLayout>
@@ -44,7 +43,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <QVBoxLayout>
 #include <QWidget>
 
-#include <QMap>
+#include "Utils.h"
 
 // Logging
 #include <QLoggingCategory>
@@ -100,8 +99,6 @@ namespace OpenCompositionDialogNS {
         QFormLayout* layout;
 
         const QList<FormData> formData;
-
-        static QString getValidPath(const QString& path);
 
     private slots:
         void onBrowseButtonClicked(qsizetype rowIndex);

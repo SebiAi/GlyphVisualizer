@@ -67,6 +67,10 @@ public:
         QList<qsizetype>({33}),
         QSize{182, 389}
     } {}
+
+    virtual IConfiguration* clone() const override {
+        return new Phone2Configuration{*this};
+    }
 };
 
 #endif // GV_PHONE2CONFIGURATION_H

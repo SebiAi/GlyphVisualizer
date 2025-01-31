@@ -51,6 +51,23 @@ void GlyphWidget::render(qsizetype colorIndex) {
     this->index = colorIndex;
     update();
 }
+QImage GlyphWidget::renderRGB32Image(qsizetype colorIndex, const QColor backgroundColor) {
+    // Create image - use RGB32 because it better optimized for QPainter
+    QImage image{size(), QImage::Format::Format_RGB32};
+    image.fill(backgroundColor);
+
+    // Create the painter
+    QPainter painter{&image};
+    painter.setRenderHint(QPainter::RenderHint::Antialiasing);
+
+    // Paint the phone
+    this->index = colorIndex;
+    paintPhone(painter);
+
+    painter.end();
+
+    return image;
+}
 
 void GlyphWidget::resizeEvent(QResizeEvent* event) {
     Q_UNUSED(event);

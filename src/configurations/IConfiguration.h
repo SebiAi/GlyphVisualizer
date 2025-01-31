@@ -68,6 +68,8 @@ public:
         renderPrivate(painter, colors);
     }
 
+    virtual IConfiguration* clone() const = 0;
+
 protected:
     virtual void renderPrivate(QPainter& painter, const QList<QColor>& colors) {
         if (this->glyphs.size() != colors.size())

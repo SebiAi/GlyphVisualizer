@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #define GV_UTILS_H
 
 #include <QDir>
+#include <QFileInfo>
 #include <QList>
 #include <QStandardPaths>
 #include <QStringList>
@@ -39,5 +40,7 @@ public:
 QString listToString(const QList<qsizetype>& list, const QString& separator = QStringLiteral(", "));
 void createPathIfNeeded(const QDir& dir);
 QDir getAppConfigLocation();
+QString getValidPath(const QString& path);
+QString getExecutableFromPath(const QString& executableName);
 
 #endif // GV_UTILS_H

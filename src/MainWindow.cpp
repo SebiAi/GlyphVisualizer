@@ -105,6 +105,7 @@ void MainWindow::initUi() {
             "* { background: #1e2022; color: #f0f2f2 }" // Background and off white acent color
             "QLineEdit,QMenuBar,QPushButton,QComboBox,QMenu,QSlider::groove:horizontal,QStatusBar { background: #2f3033 }" // Lighter color on background
             "QPushButton:hover,QComboBox:hover,QMenuBar::item:selected,QMenu::item:selected { background: #494b50 }" // Even lighter color for hover effects
+            "*:disabled { color: #a3a5a5 }" // Disabled color
         )
     );
 
@@ -122,6 +123,14 @@ void MainWindow::initUi() {
     connect(this->openFileAction, &QAction::triggered, this, &MainWindow::onOpenFileActionTriggered);
     this->openCompositionDialog = new OpenCompositionDialog{this};
     connect(this->openCompositionDialog, &OpenCompositionDialog::finished, this, &MainWindow::onOpenCompositionDialogFinished);
+    // Add "Export as video" action to the file menu
+    this->exportAsVideoAction = new QAction{QStringLiteral("&Export as Video"), this->fileMenu};
+    this->exportAsVideoAction->setShortcut(QKeySequence("Ctrl+E"));
+    this->exportAsVideoAction->setEnabled(false);
+    this->fileMenu->addAction(this->exportAsVideoAction);
+    connect(this->exportAsVideoAction, &QAction::triggered, this, &MainWindow::onExportAsVideoActionTriggered);
+    this->renderingSettingsDialog = new RenderingSettingsDialog{this};
+    connect(this->renderingSettingsDialog, &OpenCompositionDialog::finished, this, &MainWindow::onRenderingSettingsDialogFinished);
 
     // Add "Check for Update..." action to the help menu
     this->checkForUpdateAction = new QAction(QStringLiteral("Check for &Update..."), this->helpMenu);
@@ -276,6 +285,7 @@ void MainWindow::onCompositionManagerMediaStatusChanged(QMediaPlayer::MediaStatu
     case QMediaPlayer::MediaStatus::InvalidMedia:
         // Disable controls
         this->compositonManagerControls->setEnabled(false);
+        this->exportAsVideoAction->setEnabled(false);
         // Reset the controls
         this->compositonManagerControls->resetControls();
         // Render an invalid index to force render the fallback color
@@ -284,6 +294,7 @@ void MainWindow::onCompositionManagerMediaStatusChanged(QMediaPlayer::MediaStatu
     case QMediaPlayer::MediaStatus::LoadedMedia:
         // Enable controls
         this->compositonManagerControls->setEnabled(true);
+        this->exportAsVideoAction->setEnabled(true);
         break;
     default:
         break;
@@ -298,6 +309,15 @@ void MainWindow::onOpenFileActionTriggered() {
     this->compositonManager.pause();
 
     this->openCompositionDialog->open();
+}
+void MainWindow::onExportAsVideoActionTriggered() {
+    qCInfo(mainWindowVerbose) << "Opening the RenderingSettingsDialog";
+
+    // Save the player state so we can restore it after closing the dialog
+    this->compositionWasPlaying = this->compositonManager.isPlaying();
+    this->compositonManager.pause();
+
+    this->renderingSettingsDialog->open(this->compositonManager.audioPath(), this->configurationManager.getConfiguration(this->glyphWidget->getConfigurationDeviceBuild()));
 }
 void MainWindow::onCheckForUpdateActionTriggered() {
     qCInfo(mainWindowVerbose) << "Manual update check triggered";
@@ -364,4 +384,9 @@ void MainWindow::onOpenCompositionDialogFinished(int result) {
             this->compositonManager.play();
         break;
     }
+}
+void MainWindow::onRenderingSettingsDialogFinished(int result) {
+    // Restore the players state before opening the dialog
+    if (this->compositionWasPlaying)
+        this->compositonManager.play();
 }

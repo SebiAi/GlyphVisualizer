@@ -107,28 +107,6 @@ QList<QString> IBaseWidget::getFileExtensionsFromFormDataFilter(qsizetype id) co
     return extensions;
 }
 
-QString IBaseWidget::getValidPath(const QString& path) {
-    QFileInfo pathInfo{path};
-
-    if (pathInfo.exists())
-    {
-        // Path exists (could be file or dir)
-        return pathInfo.canonicalFilePath();
-    }
-
-    if (!pathInfo.suffix().isEmpty()) {
-        // If path is a deleted directory with a dot in its name we also end up here
-        // does not matter - how often does this happen, right?
-        // Might be a file => see if the parent dir exists
-        QDir parentDir{pathInfo.absoluteDir()};
-        if (parentDir.exists())
-            return parentDir.canonicalPath();
-    }
-
-    // Parent dir of file or dir non existent
-    return QDir::homePath();
-}
-
 void IBaseWidget::onBrowseButtonClicked(qsizetype rowIndex) {
     qCInfo(openCompositionDialogVerbose) << "Browse button clicked in row" << rowIndex;
 
@@ -145,7 +123,7 @@ void IBaseWidget::onBrowseButtonClicked(qsizetype rowIndex) {
     };
 
     // Get the current path from the QLineEdit
-    QString currentPath{IBaseWidget::getValidPath(lineEdit->text())};
+    QString currentPath{getValidPath(lineEdit->text())};
 
     // Open file dialog
     const FormData& formData{this->formData.at(rowIndex)};

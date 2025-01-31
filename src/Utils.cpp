@@ -52,3 +52,29 @@ QDir getAppConfigLocation() {
 
     return appConfigDir;
 }
+
+QString getValidPath(const QString& path) {
+    QFileInfo pathInfo{path};
+
+    if (pathInfo.exists())
+    {
+        // Path exists (could be file or dir)
+        return pathInfo.canonicalFilePath();
+    }
+
+    if (!pathInfo.suffix().isEmpty()) {
+        // If path is a deleted directory with a dot in its name we also end up here
+        // does not matter - how often does this happen, right?
+        // Might be a file => see if the parent dir exists
+        QDir parentDir{pathInfo.absoluteDir()};
+        if (parentDir.exists())
+            return parentDir.canonicalPath();
+    }
+
+    // Parent dir of file or dir non existent
+    return QDir::homePath();
+}
+
+QString getExecutableFromPath(const QString& executableName) {
+    return QStandardPaths::findExecutable(executableName);
+}

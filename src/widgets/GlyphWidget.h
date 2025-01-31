@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #define GV_GLYPHWIDGET_H
 
 #include <QColor>
+#include <QImage>
 #include <QPainter>
 #include <QPaintEvent>
 #include <QRect>
@@ -49,6 +50,8 @@ signals:
 public slots:
     void setConfiguration(IConfiguration* configuration);
     void render(qsizetype colorIndex);
+    QImage renderRGB32Image(qsizetype colorIndex, const QColor backgroundColor);
+    void callResizeEvent() { QResizeEvent event{size(), size()}; resizeEvent(&event); }
 
 protected:
     virtual void resizeEvent(QResizeEvent* event) override;

@@ -48,6 +48,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Config.h"
 #include "DonationDialog.h"
 #include "OpenCompositionDialog.h"
+#include "RenderingSettingsDialog.h"
 #include "UpdateChecker.h"
 #include "widgets/CompositionManagerControls.h"
 #include "widgets/GlyphWidget.h"
@@ -80,12 +81,14 @@ private:
     QMenuBar* menuBar;
     QMenu* fileMenu;
     QAction* openFileAction;
+    QAction* exportAsVideoAction;
     QMenu* helpMenu;
     QAction* checkForUpdateAction;
     QAction* donateAction;
     QAction* aboutAction;
 
     OpenCompositionDialog* openCompositionDialog;
+    RenderingSettingsDialog* renderingSettingsDialog;
 
     QStatusBar* statusBar;
     QWidget* centralWidget;
@@ -110,10 +113,12 @@ private slots:
     void onCompositionManagerMediaStatusChanged(QMediaPlayer::MediaStatus status);
 
     void onOpenFileActionTriggered();
+    void onExportAsVideoActionTriggered();
     void onCheckForUpdateActionTriggered();
     void onDonateActionTriggered();
     void onAboutActionTriggered();
 
     void onOpenCompositionDialogFinished(int result);
+    void onRenderingSettingsDialogFinished(int result);
 };
 #endif // GV_MAINWINDOW_H

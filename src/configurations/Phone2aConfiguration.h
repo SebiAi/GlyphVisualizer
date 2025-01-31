@@ -63,6 +63,10 @@ public:
             Glyph{QStringLiteral(":/glyphs/phone2a/center_part"), Glyph::Reference::BOTTOM_LEFT, QPointF{14 + 15, 0 - 15}}, // CenterPart
         }
     } {}
+
+    virtual IConfiguration* clone() const override {
+        return new Phone2aConfiguration{*this};
+    }
 };
 
 #endif // GV_PHONE2ACONFIGURATION_H
