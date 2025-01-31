@@ -66,6 +66,7 @@ qt_add_executable(GlyphVisualizer
     src/UpdateChecker.h src/UpdateChecker.cpp
     src/WindowsLoggingWorkaround.h
     src/DonationDialog.h src/DonationDialog.cpp
+    src/CompositionRenderer.h src/CompositionRenderer.cpp
 )
 configure_file(src/BuildInfo.h.in src/BuildInfo.h @ONLY)
 # Include the binary dir for the configured BuildInfo.h

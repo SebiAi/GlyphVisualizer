@@ -36,6 +36,21 @@ MainWindow::MainWindow(Config* config, QWidget *parent)
     // Init composition manager
     connect(&this->compositonManager, &CompositionManager::compositionTick, this, &MainWindow::onCompositionManagerTick);
     connect(&this->compositonManager, &CompositionManager::mediaStatusChanged, this, &MainWindow::onCompositionManagerMediaStatusChanged);
+
+    // TODO: REMOVE ME
+    this->renderer = new CompositionRenderer{this};
+    connect(this->renderer, &CompositionRenderer::progressChanged, this, [](qint8 progress){qCInfo(mainWindowVerbose) << "Progress:" << progress;});
+    connect(this->renderer, &CompositionRenderer::ffmpegErrorOccurred, this, [](QString error){qCInfo(mainWindowVerbose) << "FFmpeg error:" << error;});
+    connect(this->renderer, &CompositionRenderer::renderingAborted, this, [](){qCInfo(mainWindowVerbose) << "Rendering aborted";});
+    connect(this->renderer, &CompositionRenderer::renderingFinished, this, [](){qCInfo(mainWindowVerbose) << "Finished rendering";});
+    QShortcut* rendering = new QShortcut{Qt::Key::Key_R, this};
+    connect(rendering, &QShortcut::activated, this, [=](){
+        QString audioPath{QStringLiteral("composition.ogg")};
+        DeviceBuild build{configurationManager.loadCompositionFromAudio(audioPath)};
+        IConfiguration* config{configurationManager.getConfiguration(build)};
+
+        this->renderer->render(audioPath, config, "composition.mp4", QSize{1080, 1920}, config->parsedColors.size());
+    });
 }
 
 MainWindow::~MainWindow() {

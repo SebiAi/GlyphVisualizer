@@ -43,6 +43,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "BuildInfo.h"
 #include "CompositionManager.h"
+#include "CompositionRenderer.h" // TODO: REMOVE ME
 #include "configurations/ConfigurationManager.h"
 #include "configurations/DeviceBuild.h"
 #include "Config.h"
@@ -95,6 +96,7 @@ private:
 
     ConfigurationManager configurationManager;
     CompositionManager compositonManager;
+    CompositionRenderer* renderer; // TODO: REMOVE ME
 
     bool compositionWasPlaying;
 
