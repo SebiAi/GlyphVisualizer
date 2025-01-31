@@ -88,5 +88,5 @@ void GlyphWidget::paintPhone(QPainter& painter) {
     painter.drawRoundedRect(this->paintRect, 22 * this->sizeRatio, 22 * this->sizeRatio);
 
     // Rerender all glyphs
-    this->configuration->render(painter, index);
+    this->configuration->render(painter, this->index);
 }
