@@ -48,13 +48,13 @@ int main(int argc, char *argv[])
     // Does nothing on other platforms than Windows
     WindowsLoggingWorkaround wlw;
 
-    try {
-        QApplication a(argc, argv);
-        QCoreApplication::setOrganizationName(QStringLiteral("SebiAi"));
-        QCoreApplication::setOrganizationDomain(QStringLiteral("com.sebiai"));
-        QCoreApplication::setApplicationName(QStringLiteral("GlyphVisualizer"));
-        QCoreApplication::setApplicationVersion(QStringLiteral(BUILDINFO_VERSION));
+    QApplication a(argc, argv);
+    QCoreApplication::setOrganizationName(QStringLiteral("SebiAi"));
+    QCoreApplication::setOrganizationDomain(QStringLiteral("com.sebiai"));
+    QCoreApplication::setApplicationName(QStringLiteral("GlyphVisualizer"));
+    QCoreApplication::setApplicationVersion(QStringLiteral(BUILDINFO_VERSION));
 
+    try {
         // QTranslator translator;
         // const QStringList uiLanguages = QLocale::system().uiLanguages();
         // for (const QString &locale : uiLanguages) {
