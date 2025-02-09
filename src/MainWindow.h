@@ -82,6 +82,7 @@ private:
     QMenu* fileMenu;
     QAction* openFileAction;
     QAction* exportAsVideoAction;
+    QAction* quitAction;
     QMenu* helpMenu;
     QAction* checkForUpdateAction;
     QAction* donateAction;

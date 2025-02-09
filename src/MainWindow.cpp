@@ -131,6 +131,13 @@ void MainWindow::initUi() {
     connect(this->exportAsVideoAction, &QAction::triggered, this, &MainWindow::onExportAsVideoActionTriggered);
     this->renderingSettingsDialog = new RenderingSettingsDialog{this};
     connect(this->renderingSettingsDialog, &OpenCompositionDialog::finished, this, &MainWindow::onRenderingSettingsDialogFinished);
+    // Add separator to the file menu
+    this->fileMenu->addSeparator();
+    // Add "Quit" action to the file menu
+    this->quitAction = new QAction{QStringLiteral("&Quit"), this->fileMenu};
+    this->quitAction->setShortcut(QKeySequence("Ctrl+W"));
+    this->fileMenu->addAction(this->quitAction);
+    connect(this->quitAction, &QAction::triggered, this, &QMainWindow::close);
 
     // Add "Check for Update..." action to the help menu
     this->checkForUpdateAction = new QAction(QStringLiteral("Check for &Update..."), this->helpMenu);
