@@ -25,12 +25,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <QDate>
 #include <QDateTime>
 #include <QDialog>
+#include <QDragEnterEvent>
+#include <QDropEvent>
 #include <QHBoxLayout>
 #include <QKeySequence>
 #include <QMainWindow>
 #include <QMenu>
 #include <QMenuBar>
 #include <QMessageBox>
+#include <QMimeData>
 #include <QShowEvent>
 #include <QStatusBar>
 #include <QString>
@@ -38,6 +41,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <QStyle>
 #include <QTime>
 #include <QTimer>
+#include <QUrl>
 #include <QVBoxLayout>
 #include <QWidget>
 
@@ -72,6 +76,9 @@ public:
 protected:
     virtual void showEvent(QShowEvent *event) override;
 
+    virtual void dragEnterEvent(QDragEnterEvent* event) override;
+    virtual void dropEvent(QDropEvent* event) override;
+
 private:
     Config* config;
     UpdateChecker* updateChecker;
@@ -103,7 +110,7 @@ private:
     bool compositionWasPlaying;
 
     void initUi();
-    void openCompositionDialogAccepted();
+    void loadComposition(const std::pair<OpenCompositionMode, QList<QString>>& compositionData, bool reopenOpenCompositionDialog);
 
 private slots:
     void onUpdateCheckerUpdateAvailable(const QString& newVersion);

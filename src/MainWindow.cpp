@@ -28,6 +28,9 @@ MainWindow::MainWindow(Config* config, QWidget *parent)
 {
     initUi();
 
+    // Enable drops
+    setAcceptDrops(true);
+
     // Init update checker
     connect(this->updateChecker, &UpdateChecker::updateAvailable, this, &MainWindow::onUpdateCheckerUpdateAvailable);
     connect(this->updateChecker, &UpdateChecker::updateCheckFailed, this, &MainWindow::onUpdateCheckerUpdateCheckFailed);
@@ -92,6 +95,31 @@ void MainWindow::showEvent(QShowEvent *event) {
         qCInfo(mainWindow) << "Showing Donation dialog on next start";
     }
 
+}
+
+void MainWindow::dragEnterEvent(QDragEnterEvent* event) {
+    // Determine if we want to accept the drag
+    const QMimeData* mimeData{event->mimeData()};
+    if (mimeData->hasUrls()) {
+        qCInfo(mainWindowVerbose) << "Received dragEnterEvent with url data" << mimeData->urls();
+        event->acceptProposedAction();
+    }
+}
+void MainWindow::dropEvent(QDropEvent* event) {
+    const QMimeData* mimeData{event->mimeData()};
+    if (mimeData->hasUrls()) {
+        qCInfo(mainWindowVerbose) << "Received dropEvent with url data" << mimeData->urls();
+
+        // Use the first url that is a local file
+        for (const QUrl& url : mimeData->urls()) {
+            if (url.isLocalFile()) {
+                QString filePath{url.toLocalFile()};
+                qCInfo(mainWindow) << "Accepting drop event with local file (open audio composition):" << filePath;
+                loadComposition(std::make_pair<OpenCompositionMode, QList<QString>>(OpenCompositionMode::AUDIO_ONLY, {filePath}), false);
+                return;
+            }
+        }
+    }
 }
 
 void MainWindow::initUi() {
@@ -177,30 +205,29 @@ void MainWindow::initUi() {
     this->centralLayout->addWidget(this->compositonManagerControls);
 }
 
-void MainWindow::openCompositionDialogAccepted() {
+void MainWindow::loadComposition(const std::pair<OpenCompositionMode, QList<QString>>& compositionData, bool reopenOpenCompositionDialog) {
     // Reset the UI before loading the new composition - if the loading fails we are still in a valid state
     onCompositionManagerMediaStatusChanged(QMediaPlayer::MediaStatus::NoMedia);
 
-    const std::pair<OpenCompositionMode, QList<QString>>& resultData{this->openCompositionDialog->getResultData()};
-    qCInfo(mainWindowVerbose).nospace() << "OpenCompositionDialog accepted with openMode: " << resultData.first
-                                        << ", " << resultData.second;
+    qCInfo(mainWindowVerbose).nospace() << "Loading composition with openMode: " << compositionData.first
+                                        << ", " << compositionData.second;
     try {
         DeviceBuild build;
-        switch (resultData.first) {
+        switch (compositionData.first) {
         case OpenCompositionMode::AUDIO_ONLY:
             // Load the composition
-            build = configurationManager.loadCompositionFromAudio(resultData.second.at(0));
+            build = configurationManager.loadCompositionFromAudio(compositionData.second.at(0));
             this->glyphWidget->setConfiguration(configurationManager.getConfiguration(build));
-            this->compositonManager.loadAudio(resultData.second.at(0));
+            this->compositonManager.loadAudio(compositionData.second.at(0));
 
             // Play
             this->compositonManager.play();
             break;
         case OpenCompositionMode::AUDIO_AND_NGLYPH:
             // Load the composition
-            build = configurationManager.loadCompositionFromNglyph(resultData.second.at(1));
+            build = configurationManager.loadCompositionFromNglyph(compositionData.second.at(1));
             this->glyphWidget->setConfiguration(configurationManager.getConfiguration(build));
-            this->compositonManager.loadAudio(resultData.second.at(0));
+            this->compositonManager.loadAudio(compositionData.second.at(0));
 
             // Play
             this->compositonManager.play();
@@ -210,14 +237,14 @@ void MainWindow::openCompositionDialogAccepted() {
         qCWarning(mainWindow) << "SourceFileException:" << e.what();
 
         QMessageBox* msg{new QMessageBox{QMessageBox::Icon::Critical, QStringLiteral("Composition file error"), QStringLiteral("Error loading the composition: %1").arg(e.what()), QMessageBox::StandardButton::Ok, this}};
-        connect(msg, &QDialog::finished, [&](){ this->openFileAction->trigger(); }); // Reopen the dialog
+        if (reopenOpenCompositionDialog) connect(msg, &QDialog::finished, [&](){ this->openFileAction->trigger(); }); // Reopen the dialog
         connect(msg, &QDialog::finished, msg, &QObject::deleteLater); // Delete the dialog after it is closed
         msg->open();
     } catch (const InvalidLightDataException& e) {
         qCWarning(mainWindow) << "InvalidLightDataException:" << e.what();
 
         QMessageBox* msg{new QMessageBox{QMessageBox::Icon::Critical, QStringLiteral("Composition light data error"), QStringLiteral("Error loading the composition: %1").arg(e.what()), QMessageBox::StandardButton::Ok, this}};
-        connect(msg, &QDialog::finished, [&](){ this->openFileAction->trigger(); }); // Reopen the dialog
+        if (reopenOpenCompositionDialog) connect(msg, &QDialog::finished, [&](){ this->openFileAction->trigger(); }); // Reopen the dialog
         connect(msg, &QDialog::finished, msg, &QObject::deleteLater); // Delete the dialog after it is closed
         msg->open();
     }
@@ -383,7 +410,7 @@ void MainWindow::onOpenCompositionDialogFinished(int result) {
 
     switch (result) {
     case QDialog::DialogCode::Accepted:
-        openCompositionDialogAccepted();
+        loadComposition(this->openCompositionDialog->getResultData(), true);
         break;
     case QDialog::DialogCode::Rejected:
         // Restore the players state before opening the dialog
