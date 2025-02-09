@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef DONATIONDIALOG_H
-#define DONATIONDIALOG_H
+#ifndef GV_DONATIONDIALOG_H
+#define GV_DONATIONDIALOG_H
 
 #include <QDateTime>
 #include <QDesktopServices>
@@ -63,4 +63,4 @@ private:
     void initUi(bool neverShowAgainOption);
 };
 
-#endif // DONATIONDIALOG_H
+#endif // GV_DONATIONDIALOG_H
