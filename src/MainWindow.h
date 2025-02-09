@@ -25,6 +25,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <QDate>
 #include <QDateTime>
 #include <QDialog>
+#include <QHBoxLayout>
 #include <QKeySequence>
 #include <QMainWindow>
 #include <QMenu>
@@ -37,7 +38,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <QStyle>
 #include <QTime>
 #include <QTimer>
-#include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QWidget>
 
