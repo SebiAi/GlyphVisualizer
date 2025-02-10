@@ -166,6 +166,8 @@ void RenderingSettingsDialog::afterRenderCleanup() {
     // because only then is progressDialog guaranteed to be valid.
     this->progressDialog->reset();
     this->buttonBox->button(QDialogButtonBox::StandardButton::Ok)->setEnabled(true);
+
+    qApp->alert(this->parentWidget()); // Alert the user that the rendering is done
 }
 
 void RenderingSettingsDialog::onFilePathBrowseButtonClicked() {

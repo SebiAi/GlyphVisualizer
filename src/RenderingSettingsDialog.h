@@ -20,6 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef GV_RENDERINGSETTINGSDIALOG_H
 #define GV_RENDERINGSETTINGSDIALOG_H
 
+#include <QApplication>
 #include <QColor>
 #include <QColorDialog>
 #include <QComboBox>
