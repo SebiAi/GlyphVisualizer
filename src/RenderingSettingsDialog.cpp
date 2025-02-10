@@ -227,6 +227,12 @@ void RenderingSettingsDialog::onButtonBoxAccepted() {
     QString ffmpegPath{this->ffmpegPathLineEdit->text().trimmed()};
 
     // Do checks on the values
+    if (filePath.isEmpty() || ffmpegPath.isEmpty()) {
+        QMessageBox* msg{new QMessageBox{QMessageBox::Icon::Warning, QStringLiteral("Invalid values"), QStringLiteral("There is at least one field empty.\nPlease fill out all the fields."), QMessageBox::StandardButton::Ok, this}};
+        connect(msg, &QDialog::finished, msg, &QObject::deleteLater); // Delete the dialog after it is closed
+        msg->open();
+        return;
+    }
     if (!filePath.endsWith(QStringLiteral(".mp4"))) {
         filePath.append(".mp4");
         this->filePathLineEdit->setText(filePath);
