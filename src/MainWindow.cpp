@@ -116,6 +116,7 @@ void MainWindow::dropEvent(QDropEvent* event) {
                 QString filePath{url.toLocalFile()};
                 qCInfo(mainWindow) << "Accepting drop event with local file (open audio composition):" << filePath;
                 loadComposition(std::make_pair<OpenCompositionMode, QList<QString>>(OpenCompositionMode::AUDIO_ONLY, {filePath}), false);
+                activateWindow(); // Focus the window after dropping
                 return;
             }
         }
