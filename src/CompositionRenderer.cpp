@@ -51,7 +51,7 @@ void CompositionRenderer::render(const QString& audioPath, IConfiguration* confi
     // Extract audio length
     TagLib::FileRef f{audioPath.toStdString().c_str(), true, TagLib::AudioProperties::ReadStyle::Accurate};
     if (f.isNull()) {
-        throw SourceFileException("CompositionRenderer: Failed to open file '" + audioPath.toStdString() + "'!");
+        throw SourceFileException("Failed to open file '" + audioPath.toStdString() + "'!");
     }
 
     // Save the parameters
