@@ -22,6 +22,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <QDir>
 #include <QFileInfo>
+#include <QIcon>
 #include <QList>
 #include <QStandardPaths>
 #include <QStringList>
@@ -36,6 +37,8 @@ class SourceFileException: public std::runtime_error {
 public:
     explicit SourceFileException(const std::string& msg): std::runtime_error{msg} {}
 };
+
+QIcon getApplicationIcon();
 
 QString listToString(const QList<qsizetype>& list, const QString& separator = QStringLiteral(", "));
 void createPathIfNeeded(const QDir& dir);

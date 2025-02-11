@@ -55,6 +55,9 @@ if [ -f /.dockerenv ]; then
     dd if=/dev/zero bs=1 count=3 seek=8 conv=notrunc of="${LINUXDEPLOY_APPIMAGE_PLUGIN_APPIMAGE_PATH}"
 fi
 
+# Copy and rename icon file
+cp "${CMAKE_SOURCE_DIR}/resources/icons/appicon/GlyphVisualizer 512x512.png" "${BUILD_DIR}/GlyphVisualizer.png"
+
 # Make AppDir with qt plugin
 cd "${BUILD_DIR}" # The zsync file is created in the current working directory
 GV_APPIMAGE_NAME="GlyphVisualizer-${VERSION}_linux-ubuntu-x64.AppImage"
@@ -65,7 +68,7 @@ APPDIR_PATH="${BUILD_DIR}/AppDir"
 if [ -d "${APPDIR_PATH}" ]; then
     rm -rf "${APPDIR_PATH}"
 fi
-"${LINUXDEPLOY_APPIMAGE_PATH}" --executable "${BUILD_DIR}/GlyphVisualizer" --desktop-file "${CMAKE_SOURCE_DIR}/deploy/linux/AppImage/com.sebiai.GlyphVisualizer.desktop" --icon-file "${CMAKE_SOURCE_DIR}/deploy/GlyphVisualizer.png" --plugin qt --appdir "${APPDIR_PATH}"
+"${LINUXDEPLOY_APPIMAGE_PATH}" --executable "${BUILD_DIR}/GlyphVisualizer" --desktop-file "${CMAKE_SOURCE_DIR}/deploy/linux/AppImage/com.sebiai.GlyphVisualizer.desktop" --icon-file "${BUILD_DIR}/GlyphVisualizer.png" --plugin qt --appdir "${APPDIR_PATH}"
 
 # Add additional files to AppDir if needed
 echo ""
@@ -77,7 +80,7 @@ cp "${CMAKE_SOURCE_DIR}/deploy/linux/AppImage/com.sebiai.GlyphVisualizer.appdata
 # Create AppImage
 echo ""
 echo ""
-"${LINUXDEPLOY_APPIMAGE_PATH}" --executable "${BUILD_DIR}/GlyphVisualizer" --desktop-file "${CMAKE_SOURCE_DIR}/deploy/linux/AppImage/com.sebiai.GlyphVisualizer.desktop" --icon-file "${CMAKE_SOURCE_DIR}/deploy/GlyphVisualizer.png" --appdir "${BUILD_DIR}/AppDir" --output appimage
+"${LINUXDEPLOY_APPIMAGE_PATH}" --executable "${BUILD_DIR}/GlyphVisualizer" --desktop-file "${CMAKE_SOURCE_DIR}/deploy/linux/AppImage/com.sebiai.GlyphVisualizer.desktop" --icon-file "${BUILD_DIR}/GlyphVisualizer.png" --appdir "${BUILD_DIR}/AppDir" --output appimage
 
 # Create checksum file
 echo ""

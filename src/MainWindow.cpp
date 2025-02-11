@@ -128,6 +128,7 @@ void MainWindow::initUi() {
     setObjectName(QStringLiteral("MainWindow"));
     resize(800, 600);
     setWindowTitle(QCoreApplication::applicationName());
+    setWindowIcon(getApplicationIcon());
     // See here: https://doc.qt.io/qt-6/stylesheet-reference.html
     setStyleSheet(
         QStringLiteral(

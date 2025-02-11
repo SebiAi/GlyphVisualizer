@@ -19,6 +19,21 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "Utils.h"
 
+QIcon getApplicationIcon() {
+    static bool initialized = false;
+    static QIcon icon;
+    if (!initialized) {
+        initialized = true;
+        icon.addFile(QStringLiteral(":/icons/appicon/512x512"), QSize{512, 512}, QIcon::Mode::Normal, QIcon::State::On);
+        icon.addFile(QStringLiteral(":/icons/appicon/256x256"), QSize{256, 256}, QIcon::Mode::Normal, QIcon::State::On);
+        icon.addFile(QStringLiteral(":/icons/appicon/48x48"), QSize{48, 48}, QIcon::Mode::Normal, QIcon::State::On);
+        icon.addFile(QStringLiteral(":/icons/appicon/32x32"), QSize{32, 32}, QIcon::Mode::Normal, QIcon::State::On);
+        icon.addFile(QStringLiteral(":/icons/appicon/16x16"), QSize{16, 16}, QIcon::Mode::Normal, QIcon::State::On);
+    }
+
+    return icon;
+}
+
 QString listToString(const QList<qsizetype>& list, const QString& separator) {
     QStringList strings;
     strings.reserve(list.size());

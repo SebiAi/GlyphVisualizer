@@ -40,8 +40,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTORCC ON)
 
-qt_add_executable(GlyphVisualizer
-    WIN32 MACOSX_BUNDLE
+set(SOURCES
     src/main.cpp
     src/MainWindow.h src/MainWindow.cpp
     src/configurations/IConfiguration.h
@@ -69,11 +68,37 @@ qt_add_executable(GlyphVisualizer
     src/CompositionRenderer.h src/CompositionRenderer.cpp
     src/RenderingSettingsDialog.h src/RenderingSettingsDialog.cpp
 )
-configure_file(src/BuildInfo.h.in src/BuildInfo.h @ONLY)
+
+if(WIN32)
+    message(NOTICE "Windows detected - adding windows resource file (icon)")
+    # The resource file contains infos like the icon and name/version of the application
+    # Sources: https://doc.qt.io/qt-6/appicon.html, https://www-user.tu-chemnitz.de/~heha/hsn/chm/gorc.chm/ver.htm
+    # The ico file can be generated with icotool from the icoutils package
+    set(GV_ICON_PATH ${CMAKE_CURRENT_SOURCE_DIR}/GlyphVisualizer.ico)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/GlyphVisualizer.rc.in ${CMAKE_CURRENT_BINARY_DIR}/GlyphVisualizer.rc @ONLY)
+    set(SOURCES ${SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/GlyphVisualizer.rc)
+elseif(APPLE)
+    message(NOTICE "MacOS detected - adding icon")
+    # Sources: https://doc.qt.io/qt-6/appicon.html
+    # The icns file can be generated with iconutil - see https://github.com/dockur/macos
+    # Here WITHOUT the full path
+    set(MACOSX_BUNDLE_ICON_FILE GlyphVisualizer.icns)
+
+    set(app_icon_macos ${CMAKE_CURRENT_SOURCE_DIR}/GlyphVisualizer.icns)
+    set_source_files_properties(${app_icon_macos} PROPERTIES
+           MACOSX_PACKAGE_LOCATION "Resources")
+    set(SOURCES ${SOURCES} ${app_icon_macos})
+endif()
+
+qt_add_executable(GlyphVisualizer
+    WIN32 MACOSX_BUNDLE
+    ${SOURCES}
+)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/BuildInfo.h.in ${CMAKE_CURRENT_BINARY_DIR}/src/BuildInfo.h @ONLY)
 # Include the binary dir for the configured BuildInfo.h
 target_include_directories(GlyphVisualizer
     PRIVATE
-        "${PROJECT_BINARY_DIR}/src"
+        "${CMAKE_CURRENT_BINARY_DIR}/src"
 )
 
 # qt_add_translations(

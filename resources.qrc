@@ -29,4 +29,11 @@
         <file alias="media_pause">resources/icons/media/media_pause.svg</file>
         <file alias="media_play">resources/icons/media/media_play.svg</file>
     </qresource>
+    <qresource prefix="/icons/appicon">
+        <file alias="16x16">resources/icons/appicon/GlyphVisualizer 16x16.png</file>
+        <file alias="32x32">resources/icons/appicon/GlyphVisualizer 32x32.png</file>
+        <file alias="48x48">resources/icons/appicon/GlyphVisualizer 48x48.png</file>
+        <file alias="256x256">resources/icons/appicon/GlyphVisualizer 256x256.png</file>
+        <file alias="512x512">resources/icons/appicon/GlyphVisualizer 512x512.png</file>
+    </qresource>
 </RCC>

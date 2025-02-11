@@ -54,6 +54,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "OpenCompositionDialog.h"
 #include "RenderingSettingsDialog.h"
 #include "UpdateChecker.h"
+#include "Utils.h"
 #include "widgets/CompositionManagerControls.h"
 #include "widgets/GlyphWidget.h"
 
