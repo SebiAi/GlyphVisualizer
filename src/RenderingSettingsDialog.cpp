@@ -268,8 +268,18 @@ void RenderingSettingsDialog::onButtonBoxAccepted() {
     progressDialog->setLabelText(QStringLiteral("Rendering..."));
     progressDialog->setValue(0); // Causes the dialog to open because of setMinimumDuration(0)
 
-    // Start render - no need to catch anything because we confirmed the validity above
-    this->renderer->render(this->audioPath, this->config, filePath, resolution, backgroundColor, ffmpegPath);
+    try {
+        // Start render - no need to catch anything (except for missing audio file) because we confirmed the validity above
+        this->renderer->render(this->audioPath, this->config, filePath, resolution, backgroundColor, ffmpegPath);
+    } catch (const SourceFileException& e) {
+        QMessageBox* msg{new QMessageBox{QMessageBox::Icon::Warning, QStringLiteral("Starting Render Failed"), QStringLiteral("Starting the renderer failed for the following reason:\n%1\n\nTry reopening the composition and try again.").arg(e.what()), QMessageBox::StandardButton::Ok, this}};
+        connect(msg, &QDialog::finished, msg, &QObject::deleteLater); // Delete the dialog after it is closed
+        msg->open();
+
+        this->progressDialog->reset();
+        this->buttonBox->button(QDialogButtonBox::StandardButton::Ok)->setEnabled(true);
+        return;
+    }
 }
 
 void RenderingSettingsDialog::onRendererAborted() {
