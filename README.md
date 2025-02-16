@@ -8,9 +8,11 @@
     <a href="https://github.com/SebiAi/GlyphVisualizer/blob/main/LICENSE">
       <img alt="GitHub License" src="https://img.shields.io/github/license/SebiAi/GlyphVisualizer">
     </a>
-    <a href="https://ko-fi.com/Z8Z7CAN8M">
-      <img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="ko-fi">
-    </a>
+    <p>
+      <a href="https://ko-fi.com/Z8Z7CAN8M">
+        <img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="ko-fi">
+      </a>
+    </p>
     <br><br>
     <video src="https://github.com/SebiAi/GlyphVisualizer/assets/41116921/c86e6f7a-e418-418c-8670-897158e792b1" controls></video>
     <h6>
