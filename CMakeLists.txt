@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.19)
-project(GlyphVisualizer VERSION 2.1.1 LANGUAGES CXX)
+project(GlyphVisualizer VERSION 2.2.0 LANGUAGES CXX)
 
 set(GV_VERSION "v${PROJECT_VERSION}")
 set(BUILDINFO_GIT_COMMIT_HASH "unknown")
