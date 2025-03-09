@@ -1,7 +1,7 @@
 # Oldest LTS release of Ubuntu
 FROM ubuntu:22.04
 
-ENV VERSION_QT=6.8.1
+ENV VERSION_QT=6.8.2
 
 RUN apt-get update && apt-get install -y \
     locales \

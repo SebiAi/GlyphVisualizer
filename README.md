@@ -141,7 +141,7 @@ You can find the full roadmap [here](https://github.com/users/SebiAi/projects/5)
 <!-- TOC --><a name="heading-nut_and_bolt-build-dependencies"></a>
 ## :nut_and_bolt: Build Dependencies
 You can use the Qt Online Installer to install Qt, Ninja, CMake and a C++ compiler
-* [Qt 6.6.0 or higher](https://www.qt.io/download-open-source#hs_cos_wrapper_widget_1567539130992) - currently using v6.8.1
+* [Qt 6.6.0 or higher](https://www.qt.io/download-open-source#hs_cos_wrapper_widget_1567539130992) - currently using v6.8.2
 * [Ninja](https://ninja-build.org/)
 * [CMake](https://cmake.org/)
 * A compiler like g++ or MSVC depending on your OS
