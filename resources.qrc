@@ -25,6 +25,12 @@
         <file alias="led_c">resources/glyphs/phone2a/led_c.svg</file>
         <file alias="center_part">resources/glyphs/phone2a/center_part.svg</file>
     </qresource>
+    <qresource prefix="/glyphs/phone3a">
+        <file alias="led_a_zones">resources/glyphs/phone3a/led_a_zones.svg</file>
+        <file alias="led_b_zones">resources/glyphs/phone3a/led_b_zones.svg</file>
+        <file alias="led_c_zones">resources/glyphs/phone3a/led_c_zones.svg</file>
+        <file alias="center_part">resources/glyphs/phone3a/center_part.svg</file>
+    </qresource>
     <qresource prefix="/icons">
         <file alias="media_pause">resources/icons/media/media_pause.svg</file>
         <file alias="media_play">resources/icons/media/media_play.svg</file>

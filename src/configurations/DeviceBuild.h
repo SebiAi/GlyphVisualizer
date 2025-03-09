@@ -30,14 +30,16 @@ namespace DeviceBuildNS {
         Spacewar = 0,
         Pong = 1,
         Pacman = 2,
-        PacmanPro = 3
+        PacmanPro = 3,
+        Asteroids = 4
     };
     Q_ENUM_NS(DeviceBuild)
 
     const static QMap<QString, DeviceBuild> mapNglyphToDeviceBuild{
         {QStringLiteral("PHONE1"), DeviceBuild::Spacewar},
         {QStringLiteral("PHONE2"), DeviceBuild::Pong},
-        {QStringLiteral("PHONE2A"), DeviceBuild::Pacman}
+        {QStringLiteral("PHONE2A"), DeviceBuild::Pacman},
+        {QStringLiteral("PHONE3A"), DeviceBuild::Asteroids}
     };
 }
 

@@ -33,6 +33,7 @@ ConfigurationManager::ConfigurationManager()
     configurations[Phone1Configuration::staticBuild] = QSharedPointer<Phone1Configuration>::create(offColor);
     configurations[Phone2Configuration::staticBuild] = QSharedPointer<Phone2Configuration>::create(offColor);
     configurations[Phone2aConfiguration::staticBuild] = QSharedPointer<Phone2aConfiguration>::create(offColor);
+    configurations[Phone3aConfiguration::staticBuild] = QSharedPointer<Phone3aConfiguration>::create(offColor);
 }
 
 IConfiguration* ConfigurationManager::getConfiguration(DeviceBuild device) {
