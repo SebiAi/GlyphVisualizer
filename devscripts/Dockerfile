@@ -55,8 +55,9 @@ RUN apt-get update && apt-get install -y \
     libpulse-dev \
 ## AppImage packaging of multimedia module fails
     libxrandr2 \
-# linuxdeploy dependencies (appstreamcli)
-    appstream
+# linuxdeploy dependencies (appstreamcli, zsyncmake - warning when embedding update data)
+    appstream \
+    zsync
 
 # Clean
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
