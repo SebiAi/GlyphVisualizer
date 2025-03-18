@@ -84,9 +84,8 @@ This repo is in no way, shape or form affiliated with Nothing Technology Limited
 # :rocket: How to use
 Only the composition itself is needed:
 1. Open *GlyphVisualizer*
-2. Go to *File*->*Open Composition* OR press <kbd>CTRL</kbd> + <kbd>O</kbd>
-3. Make sure ***Audio file (ogg)*** is selected
-4. Select your composition and hit *Open*
+2. Drag and drop your composition :eyes:
+3. Done :tada:
 
 ***
 
