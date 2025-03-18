@@ -41,7 +41,7 @@
 <!-- oneshot: False -->
 <!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
 
-- [:grey_question: What is this? Why would I need that?](#heading-grey_question-what-is-this-why-would-i-need-that)
+- [:star2: Features](#heading-star2-features)
 - [:pushpin: Disclaimer](#heading-pushpin-disclaimer)
 - [:rocket: How to use](#heading-rocket-how-to-use)
 - [:inbox_tray: Installation](#heading-inbox_tray-installation)
@@ -65,11 +65,21 @@
 
 ***
 
-<!-- TOC --><a name="heading-grey_question-what-is-this-why-would-i-need-that"></a>
-# :grey_question: What is this? Why would I need that?
-This is a tool that is meant to be used in combination with my [custom-nothing-glyph-tools](https://github.com/SebiAi/custom-nothing-glyph-tools/) scripts (*GlyphTranslator*, *GlyphModder*). When you create a custom ringtone or notification tone with these scripts, you want to test them as often as possible. You can use this tool to visualize your composition and rapidly iterate on it - no file transfer to your phone is needed.
+<!-- TOC --><a name="heading-star2-features"></a>
+# :star2: Features
+* View any composition - an audio file with light data embeded in the metadata - on your desktop, on your OS of choice (Windows, Linux, MacOS)
+* Render the composition to a mp4 video file and share it with your friends ([ffmpeg](<https://ffmpeg.org/download.html>) required)
+* Plays compositions from all current Nothing devices
+  * Nothing Phone (1)
+  * Nothing Phone (2)
+  * Nothing Phone (2a) / Nothing Phone (2a) Plus
+  * Nothing Phone (3a) / Nothing Phone (3a) Pro
 
-**And apart from that, you can use it if you want to view the composition without having access to a Nothing Phone.**
+> [!IMPORTANT]
+> This is not a composition generator! It is a viewer - like a photo viewer. It does not create images, it just displays them.
+
+> [!TIP]
+> This is a tool that is meant to be used in combination with my [custom-nothing-glyph-tools](https://github.com/SebiAi/custom-nothing-glyph-tools/) scripts (*GlyphTranslator*, *GlyphModder*). When you create a custom ringtone or notification tone with these scripts, you want to test them as often as possible. You can use this tool to visualize your composition and rapidly iterate on it - no file transfer to your phone is needed.
 
 ***
 
