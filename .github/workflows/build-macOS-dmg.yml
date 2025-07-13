@@ -10,15 +10,15 @@ jobs:
     runs-on: macos-13
     steps:
       # Install build dependencies
-      - name: Install Qt6.8.1
+      - name: Install Qt6.8.3
         uses: jurplel/install-qt-action@v4
         with:
           # See https://ddalcino.github.io/aqt-list-server/
           aqtversion: '==3.1.*'
-          version: '6.8.1'
+          version: '6.8.3'
           modules: 'qtmultimedia'
           cache: true
-          cache-key-prefix: install-qt-6.8.1-action-${{ runner.os }}
+          cache-key-prefix: install-qt-6.8.3-action-${{ runner.os }}
       - name: Install Ninja Build System
         run: brew install ninja
 
