@@ -40,7 +40,7 @@ jobs:
       - name: Build TagLib
         if: steps.cache-taglib.outputs.cache-hit != 'true'
         run: |
-          git clone -b v2.0.2 --depth 1 https://github.com/taglib/taglib.git taglib
+          git clone -b v2.1.1 --depth 1 https://github.com/taglib/taglib.git taglib
           cmake -B taglib/build -DBUILD_SHARED_LIBS=OFF -DVISIBILITY_HIDDEN=ON -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF -DCMAKE_BUILD_TYPE=Release taglib
           cmake --build taglib/build --config Release -j$(sysctl -n hw.ncpu)
       - name: Install TagLib
