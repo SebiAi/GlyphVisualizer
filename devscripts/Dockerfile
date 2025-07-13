@@ -67,8 +67,8 @@ ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 RUN locale-gen en_US.UTF-8
 
-# Install TagLib v2.0.2 (static) (https://github.com/taglib/taglib/blob/master/INSTALL.md)
-RUN git clone -b v2.0.2 --depth=1 https://github.com/taglib/taglib.git taglib && \
+# Install TagLib v2.1.1 (static) (https://github.com/taglib/taglib/blob/master/INSTALL.md)
+RUN git clone -b v2.1.1 --depth=1 https://github.com/taglib/taglib.git taglib && \
     cmake -B taglib/build -DCMAKE_INSTALL_PREFIX=/usr/local -DBUILD_SHARED_LIBS=OFF -DVISIBILITY_HIDDEN=ON -DCMAKE_BUILD_TYPE=Release taglib && \
     cmake --build taglib/build -j$(nproc) && \
     cmake --install taglib/build --strip && \
