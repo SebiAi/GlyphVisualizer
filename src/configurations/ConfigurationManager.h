@@ -46,6 +46,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "Phone2aConfiguration.h"
 #include "Phone2Configuration.h"
 #include "Phone3aConfiguration.h"
+#include "Phone3Configuration.h"
 #include "../Utils.h"
 
 // Logging

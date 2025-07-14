@@ -31,7 +31,8 @@ namespace DeviceBuildNS {
         Pong = 1,
         Pacman = 2,
         PacmanPro = 3,
-        Asteroids = 4
+        Asteroids = 4,
+        Metroid = 5
     };
     Q_ENUM_NS(DeviceBuild)
 
@@ -39,7 +40,8 @@ namespace DeviceBuildNS {
         {QStringLiteral("PHONE1"), DeviceBuild::Spacewar},
         {QStringLiteral("PHONE2"), DeviceBuild::Pong},
         {QStringLiteral("PHONE2A"), DeviceBuild::Pacman},
-        {QStringLiteral("PHONE3A"), DeviceBuild::Asteroids}
+        {QStringLiteral("PHONE3A"), DeviceBuild::Asteroids},
+        {QStringLiteral("PHONE3"), DeviceBuild::Metroid}
     };
 }
 

@@ -48,6 +48,7 @@ set(SOURCES
     src/configurations/Phone2Configuration.h
     src/configurations/Phone2aConfiguration.h
     src/configurations/Phone3aConfiguration.h
+    src/configurations/Phone3Configuration.h
     src/configurations/ConfigurationManager.h src/configurations/ConfigurationManager.cpp
     src/configurations/DeviceBuild.h
     src/MySvgRenderer.h src/MySvgRenderer.cpp

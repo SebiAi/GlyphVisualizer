@@ -31,6 +31,10 @@
         <file alias="led_c_zones">resources/glyphs/phone3a/led_c_zones.svg</file>
         <file alias="center_part">resources/glyphs/phone3a/center_part.svg</file>
     </qresource>
+    <qresource prefix="/glyphs/phone3">
+        <file alias="matrix">resources/glyphs/phone3/Matrix.svg</file>
+        <file alias="matrix_background">resources/glyphs/phone3/Matrix Background.svg</file>
+    </qresource>
     <qresource prefix="/icons">
         <file alias="media_pause">resources/icons/media/media_pause.svg</file>
         <file alias="media_play">resources/icons/media/media_play.svg</file>
