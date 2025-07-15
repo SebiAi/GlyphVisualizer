@@ -73,7 +73,7 @@ DeviceBuild ConfigurationManager::loadCompositionFromAudio(const QString& audioP
     if (!tags.contains("AUTHOR") || tags["AUTHOR"].size() != 1)
         throw InvalidLightDataException("Malformed light data! Could not extract the 'AUTHOR' tag.");
     QByteArray author{tags.value("AUTHOR").front().to8Bit().c_str()};
-    qCInfo(configurationManagerVerbose) << "Author raw:" << author;
+    //qCInfo(configurationManagerVerbose) << "Author raw:" << author;
     if (!tags.contains("COMPOSER") || tags["COMPOSER"].size() != 1)
         throw InvalidLightDataException("Malformed light data! Could not extract the 'COMPOSER' tag.");
     QString composer{tags.value("COMPOSER").front().to8Bit().c_str()};
@@ -110,7 +110,7 @@ DeviceBuild ConfigurationManager::loadCompositionFromAudio(const QString& audioP
     if (authorBase64Result.decodingStatus != QByteArray::Base64DecodingStatus::Ok)
         throw InvalidLightDataException("Malformed light data! Could not decode data.");
     author = authorBase64Result.decoded;
-    qCInfo(configurationManagerVerbose) << "Author decoded:" << author;
+    //qCInfo(configurationManagerVerbose) << "Author decoded:" << author;
 
     // Decompress
     // Prepend the 4 byte header indicating the expected size (we use 200k bytes = 0x030D40) and uncompress the data
@@ -119,7 +119,7 @@ DeviceBuild ConfigurationManager::loadCompositionFromAudio(const QString& audioP
     QString decodedAuthor{qUncompress(author)};
     if (decodedAuthor.trimmed().isEmpty())
         throw InvalidLightDataException("Malformed light data! Could not uncompress data.\nAre you sure that you selected the right entry in the dropdown?");
-    qCInfo(configurationManagerVerbose) << "Author csv:" << decodedAuthor;
+    //qCInfo(configurationManagerVerbose) << "Author csv:" << decodedAuthor;
 
     // Parse the data
     QList<QList<int>> lightData{parseLightData(decodedAuthor)};
