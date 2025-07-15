@@ -34,24 +34,19 @@ void Glyph::renderColored(QPainter* painter, const QColor& color) {
     // Render the svg to a transparent image and then color it
     // We don't know if the painter passed in draws on a transparent surface so we need to take this detour
 
-    this->svgImage.fill(Qt::GlobalColor::transparent); // Make sure the image is transparent or the coloring won't work properly
-
-    // Draw the svg onto the image
-    QRectF savedAlignedBounds{this->scaledAlignedBounds};
-    this->scaledAlignedBounds = this->svgImage.rect().toRectF();
-    QPainter svgPainter(&this->svgImage);
-    MySvgRenderer::render(&svgPainter);
-    this->scaledAlignedBounds = savedAlignedBounds;
+    // Copy svgImage that already has the svg prerendered with a transparent background for coloring
+    QImage copiedSvgImage = this->svgImage.copy();
+    QPainter svgPainter(&copiedSvgImage);
 
     // Color the svg with the requested color
     svgPainter.setCompositionMode(QPainter::CompositionMode::CompositionMode_SourceAtop);
-    svgPainter.fillRect(this->svgImage.rect(), color);
+    svgPainter.fillRect(copiedSvgImage.rect(), color);
 
     // Stop painting on the image and draw the image to the original painter
     svgPainter.end();
     painter->save();
     painter->setRenderHints(QPainter::RenderHint::Antialiasing | QPainter::RenderHint::SmoothPixmapTransform);
-    painter->drawImage(this->scaledAlignedBounds, svgImage);
+    painter->drawImage(this->scaledAlignedBounds, copiedSvgImage);
     painter->restore();
 }
 
@@ -63,4 +58,12 @@ void Glyph::calcBounds(const QRect& drawingArea, qreal scale) {
     // Also make sure that we have an valid image of at least size 1x1. We get a QPainter error spam otherwise
     // We double the scale to make the rendered SVG look good after rendering the image to the passed in painter
     this->svgImage = QImage(this->scaledAlignedBounds.size().toSize().expandedTo(QSize(1, 1)) * 2, QImage::Format::Format_ARGB32_Premultiplied);
+
+    // Pre render svg to the image to save on processing. Svg rendering is expensive...
+    this->svgImage.fill(Qt::GlobalColor::transparent); // Make sure the image is transparent or the coloring won't work properly
+    QRectF savedAlignedBounds{this->scaledAlignedBounds};
+    this->scaledAlignedBounds = this->svgImage.rect().toRectF();
+    QPainter svgPainter(&this->svgImage);
+    MySvgRenderer::render(&svgPainter);
+    this->scaledAlignedBounds = savedAlignedBounds;
 }
