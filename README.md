@@ -74,6 +74,7 @@
   * Nothing Phone (2)
   * Nothing Phone (2a) / Nothing Phone (2a) Plus
   * Nothing Phone (3a) / Nothing Phone (3a) Pro
+  * Nothing Phone (3)
 
 > [!IMPORTANT]
 > This is not a composition generator! It is a viewer - like a photo viewer. It does not create images, it just displays them.
