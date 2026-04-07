@@ -61,7 +61,7 @@ def build_arguments_parser() -> argparse.ArgumentParser:
 
     # Add the arguments
     parser.add_argument('-h', '--help', action='help', help='Show this help message and exit.') # help
-    parser.add_argument('TAG_NAME', help="Name of the tag this release note is for. Must be in the form of ^v\d+\.\d+\.\d+$", type=str, nargs=1) # TAG_NAME
+    parser.add_argument('TAG_NAME', help="Name of the tag this release note is for. Must be in the form of " + r"^v\d+\.\d+\.\d+$", type=str, nargs=1) # TAG_NAME
 
     return parser
 
