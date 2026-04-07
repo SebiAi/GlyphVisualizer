@@ -32,6 +32,7 @@ import re
 import subprocess
 import shutil
 import time
+from dataclasses import dataclass
 
 
 # +------------------------------------+
@@ -46,8 +47,19 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 # Relative path to the repository
 REPO_PATH = os.path.join(SCRIPT_DIR, '../')
 
-BUGFIX_CATEGORY_REGEX = re.compile(r'^fix(\(.*\))?!?: (.*)$')
-FEATURE_CATEGORY_REGEX = re.compile(r'^feat(\(.*\))?!?: (.*)$')
+@dataclass
+class Category:
+    display_heading: str
+    _commit_matching_string: str
+
+    def __post_init__(self):
+        self.regex = re.compile(r'^' + re.escape(self._commit_matching_string) + r'(\(.*\))?!?: (.*)$')
+
+CATEGORIES = [
+    Category(display_heading="Bug Fixes", _commit_matching_string="fix"),
+    Category(display_heading="Features", _commit_matching_string="feat"),
+    Category(display_heading="Misc", _commit_matching_string="misc")
+]
 
 # +------------------------------------+
 # |                                    |
@@ -146,36 +158,24 @@ def main() -> int:
     release_notes: str = f"# [{TAG_NAME.removeprefix('v')}]({repo_url}/compare/{latest_tag}...{TAG_NAME}) ({CURRENT_DATE})" if latest_tag else f"# {TAG_NAME.removeprefix('v')} ({CURRENT_DATE})"
     release_notes += "\n\n"
 
-    ## Bug Fixes
-    fix_commits = [x for x in [(commit[0], BUGFIX_CATEGORY_REGEX.match(commit[1])) for commit in COMMIT_LOGS] if x[1]]
-    print_info(f"Found {len(fix_commits)} bug fix commits.")
-    if fix_commits:
-        print_debug("\n" + str('\n'.join(["\t" + x[1].group(0) for x in fix_commits])))
-        release_notes += f"### Bug Fixes\n"
-        for commit in fix_commits:
-            release_notes += "* "
-            if (commit[1].group(1)):
-                release_notes += f"**{commit[1].group(1).removeprefix('(').removesuffix(')')}:** "
-            release_notes += commit[1].group(2) + f" ([{commit[0]}]({repo_url}/commit/{commit[0]}))" + "\n"
+    total_commits_found = 0
+    for category in CATEGORIES:
+        category_commits = [match_tuple for match_tuple in [(commit[0], category.regex.match(commit[1])) for commit in COMMIT_LOGS] if match_tuple[1]]
+        total_commits_found += len(category_commits)
+        print_info(f"Found {len(category_commits)} commits for category '{category.display_heading}'.")
+        if category_commits:
+            print_debug("\n" + str('\n'.join(["\t" + x[1].group(0) for x in category_commits])))
+            release_notes += f"### {category.display_heading}\n"
+            for commit in category_commits:
+                release_notes += "* "
+                if (commit[1].group(1)):
+                    release_notes += f"**{commit[1].group(1).removeprefix('(').removesuffix(')')}:** "
+                release_notes += commit[1].group(2) + f" ([{commit[0]}]({repo_url}/commit/{commit[0]}))" + "\n"
 
-        release_notes += "\n"
-    
-    ## Features
-    feat_commits = [x for x in [(commit[0], FEATURE_CATEGORY_REGEX.match(commit[1])) for commit in COMMIT_LOGS] if x[1]]
-    print_info(f"Found {len(feat_commits)} feature commits.")
-    if feat_commits:
-        print_debug("\n" + str('\n'.join(["\t" + x[1].group(0) for x in feat_commits])))
-        release_notes += f"### Features\n"
-        for commit in feat_commits:
-            release_notes += "* "
-            if (commit[1].group(1)):
-                release_notes += f"**{commit[1].group(1).removeprefix('(').removesuffix(')')}:** "
-            release_notes += commit[1].group(2) + f" ([{commit[0]}]({repo_url}/commit/{commit[0]}))" + "\n"
-
-        release_notes += "\n"
+            release_notes += "\n"
     
     # Check if there are any commits left
-    if not fix_commits and not feat_commits:
+    if total_commits_found == 0:
         print_critical_error("No commits found since the last tag. Skipping the release notes generation.")
     
 
