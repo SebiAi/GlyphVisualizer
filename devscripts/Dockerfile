@@ -87,7 +87,7 @@ RUN python3 -m venv venv && \
 ENV QT_ROOT_DIR=/opt/Qt/${VERSION_QT}/gcc_64
 ENV QT_PLUGIN_PATH=${QT_ROOT_DIR}/plugins
 ENV QML2_IMPORT_PATH=${QT_ROOT_DIR}/qml
-ENV LD_LIBRARY_PATH=${QT_ROOT_DIR}/lib:$LD_LIBRARY_PATH
+ENV LD_LIBRARY_PATH=${QT_ROOT_DIR}/lib
 ENV PATH=${QT_ROOT_DIR}/bin:$PATH
 
 # Set environment variables for AppImages - libfuse does not work per default in docker
