@@ -48,7 +48,15 @@ cd "${BUILD_DIR}" # We need to change directory so the dmg volume name is correc
 macdeployqt "GlyphVisualizer.app" -dmg
 
 # Rename the dmg file
-GV_DMG_NAME="GlyphVisualizer-${VERSION}_macOS-13-x64.dmg"
+MACHINE_ARCH=$(uname -m)
+if [ "${MACHINE_ARCH}" = "x86_64" ]; then
+    echo "Detected x86_64 architecture."
+elif [ "${MACHINE_ARCH}" = "arm64" ]; then
+    echo "Detected arm64 architecture."
+else
+    echo "Unknown architecture: ${MACHINE_ARCH}"
+fi
+GV_DMG_NAME="GlyphVisualizer-${VERSION}_macOS-14-${MACHINE_ARCH}.dmg"
 mv "GlyphVisualizer.dmg" "${GV_DMG_NAME}"
 
 # Create checksum file

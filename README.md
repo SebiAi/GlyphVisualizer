@@ -122,8 +122,8 @@ Only the composition itself is needed:
 
 <!-- TOC --><a name="heading-macos"></a>
 ## <img src="https://www.vectorlogo.zone/logos/apple/apple-tile.svg" height="20"/> MacOS
-1. Download the latest version (`GlyphVisualizer-*_macOS-13-x64.dmg`) from [the latest release](https://github.com/SebiAi/GlyphVisualizer/releases/latest).
-2. (Optional) Verify file integrity by downloading `GlyphVisualizer-*_macOS-13-x64.dmg.sha256` to the same directory as the disk image file and running `shasum -a 256 -c ./GlyphVisualizer-*_macOS-13-x64.dmg.sha256`. If it outputs 'OK', you are good.
+1. Download the latest version (`GlyphVisualizer-*_macOS-*.dmg`) from [the latest release](https://github.com/SebiAi/GlyphVisualizer/releases/latest).
+2. (Optional) Verify file integrity by downloading `GlyphVisualizer-*_macOS-*.dmg.sha256` to the same directory as the disk image file and running `shasum -a 256 -c ./GlyphVisualizer-*_macOS-*.dmg.sha256`. If it outputs 'OK', you are good.
 3. Run the application
 
 ***
@@ -208,7 +208,7 @@ PATH="${CMAKE_PREFIX_PATH}/bin:${PATH}"
 ./devscripts/clean-build.sh
 ./devscripts/make-dmg.sh
 ```
-The disk image file `build/GlyphVisualizer-*_macOS-13-x64.dmg` is the final result.
+The disk image file `build/GlyphVisualizer-*_macOS-*.dmg` is the final result.
 
 <!-- TOC --><a name="heading-interrobang-troubleshooting"></a>
 # :interrobang: Troubleshooting
