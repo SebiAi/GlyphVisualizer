@@ -5,7 +5,8 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - "devscripts/Dockerfile"
+      - '.github/workflows/docker-image-build-and-publish.yml'
+      - 'devscripts/Dockerfile'
 
 concurrency:
   group: docker-publish-group

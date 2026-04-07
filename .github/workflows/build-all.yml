@@ -6,11 +6,21 @@ on:
   push:
     branches:
       - main
-    paths-ignore: devscripts/Dockerfile
+    paths:
+      - '**'
+      - '!**.md'
+      - '!.github/**'
+      - '.github/workflows/build-*.yml'
+      - '!devscripts/Dockerfile'
   pull_request:
     branches:
       - main
-    paths-ignore: devscripts/Dockerfile
+    paths:
+      - '**'
+      - '!**.md'
+      - '!.github/**'
+      - '.github/workflows/build-*.yml'
+      - '!devscripts/Dockerfile'
 
 jobs:
   call-build-windows:
