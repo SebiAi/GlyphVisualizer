@@ -36,9 +36,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <QString>
 #include <QStringLiteral>
 
-#include <taglib/fileref.h>
-#include <taglib/tpropertymap.h>
-#include <taglib/opusfile.h>
+#include <fileref.h>
+#include <toolkit/tpropertymap.h>
+#include <ogg/opus/opusfile.h>
 
 #include "DeviceBuild.h"
 #include "IConfiguration.h"

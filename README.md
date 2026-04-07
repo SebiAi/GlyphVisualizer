@@ -155,8 +155,10 @@ You can use the Qt Online Installer to install Qt, Ninja, CMake and a C++ compil
 * [Ninja](https://ninja-build.org/)
 * [CMake](https://cmake.org/)
 * A compiler like g++ or MSVC depending on your OS
-* [TagLib 2.0 or higher](https://github.com/taglib/taglib/tree/v2.1.1) - currently using v2.1.1
 * [git](https://git-scm.com/)
+
+> [!NOTE]
+> TagLib 2.0.0 or higher is technically also a dependency but is automatically downloaded and configured via CMake.
 
 <!-- TOC --><a name="heading-hammer_and_pick-build"></a>
 ## :hammer_and_pick: Build

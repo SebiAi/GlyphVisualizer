@@ -26,25 +26,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
-      # Build and install TagLib dependency (static) (https://github.com/taglib/taglib/blob/master/INSTALL.md)
-      - name: Cache TagLib build
-        id: cache-taglib
-        uses: actions/cache@v4
-        with:
-          path: taglib
-          key: taglib-${{ runner.os }}-${{ hashFiles('.github/workflows/build-macOS-dmg.yml') }}
-      # No need to install zlib as it is already included in macOS
-      - name: Install TagLib build dependencies
-        if: steps.cache-taglib.outputs.cache-hit != 'true'
-        run: brew install utf8cpp
-      - name: Build TagLib
-        if: steps.cache-taglib.outputs.cache-hit != 'true'
-        run: |
-          git clone -b v2.1.1 --depth 1 https://github.com/taglib/taglib.git taglib
-          cmake -B taglib/build -DBUILD_SHARED_LIBS=OFF -DVISIBILITY_HIDDEN=ON -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF -DCMAKE_BUILD_TYPE=Release taglib
-          cmake --build taglib/build --config Release -j$(sysctl -n hw.ncpu)
-      - name: Install TagLib
-        run: cmake --install taglib/build --strip
 
       - name: Build and package
         run: |

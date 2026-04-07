@@ -33,8 +33,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <QStringLiteral>
 #include <QThread>
 
-#include <taglib/fileref.h>
-#include <taglib/audioproperties.h>
+#include <fileref.h>
+#include <audioproperties.h>
 
 #include "CompositionManager.h"
 #include "configurations/IConfiguration.h"
