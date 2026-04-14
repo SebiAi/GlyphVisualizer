@@ -48,6 +48,10 @@ mkdir -p "${BUILD_DIR}/GlyphVisualizer.app/Contents/Frameworks/"
 cd "${BUILD_DIR}"
 macdeployqt "${APP_NAME}"
 
+# macdeployqt copies Qt dylibs/frameworks that may not match the app signature; dyld then
+# terminates with CODESIGNING / Invalid Page. Deep ad-hoc sign unifies the bundle.
+codesign --force --deep --sign - "${APP_NAME}"
+
 # Rename the dmg file
 MACHINE_ARCH=$(uname -m)
 if [ "${MACHINE_ARCH}" = "x86_64" ]; then
