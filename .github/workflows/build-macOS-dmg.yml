@@ -9,7 +9,7 @@ jobs:
     name: Build MacOS DMG
     strategy:
       matrix:
-        os: [macos-14, macos-14-large] # try macos-14-large in hope it is not part of the large runners not covered by gh pro sub
+        os: [macos-14, macos-15-intel]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Determine architecture
