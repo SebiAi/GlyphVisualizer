@@ -9,7 +9,7 @@ jobs:
     name: Build MacOS DMG
     strategy:
       matrix:
-        os: [macos-14-large, macos-14-xlarge]
+        os: [macos-14, macos-15-intel]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Determine architecture
